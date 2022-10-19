@@ -3,3 +3,7 @@ http://pixelartmaker.com/art/b956f82739a0e47
 
 Key press detection:
 https://stackoverflow.com/questions/5203407/how-to-detect-if-multiple-keys-are-pressed-at-once-using-javascript
+
+Helped with the animation:
+https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Basic_animations
+https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Advanced_animations
