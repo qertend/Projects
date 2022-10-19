@@ -41,9 +41,9 @@ function renderFrame() { // renders the current frame when called
     ctx.translate(redX, redY); // places 0,0 at tank
     ctx.rotate(redRotation*Math.PI/180); // rotates to tank direction
     ctx.drawImage(redTank, -redTank.width/2, -redTank.height/2, redTank.width, redTank.height); // draws image
-    ctx.fillStyle = "yellow"; //[creates-
-    ctx.beginPath();//yellow-
-    ctx.ellipse(0, 0, 5, 5, 0, 0, Math.PI * 2);//debug-
-    ctx.fill();//circle]
+    ctx.fillStyle = "yellow"; //lines 44 to 47: creates temporary debug circle
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 5, 5, 0, 0, Math.PI * 2);
+    ctx.fill();
 }
 
