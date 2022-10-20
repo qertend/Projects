@@ -66,6 +66,7 @@ function redMovement(direction) { //converts the tanks movements to X and Y coor
     if (redY + direction * Math.cos(-redRotation*Math.PI/180) < canvas.height && redY + direction * Math.cos(-redRotation*Math.PI/180) > 0) {
         redY += direction * Math.cos(-redRotation*Math.PI/180);
     }
+    // insert wall collision detection here
 }
 
 function renderFrame() { // renders the current frame when called
