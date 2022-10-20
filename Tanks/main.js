@@ -27,8 +27,8 @@ console.log(vWalls);
 renderFrame();
 
 function generateLabyrinth() {
-    ctx2.clearRect(0,0,canvas2.width, canvas2.height)
-    for (i=0; i<grid**2; i++) {
+    ctx2.clearRect(0,0,canvas2.width, canvas2.height); //resets hidden labyrinth canvas
+    for (i=0; i<grid**2; i++) { //generates random walls and puts them in arrays
         if (Math.random() < 0.1) {
             hWalls[i] = true;
         }
@@ -42,23 +42,19 @@ function generateLabyrinth() {
             vWalls[i] = false;
         }
     }
-    ctx2.strokeStyle = "black";
-    for (i=0; i<grid; i++) {
+    ctx2.fillRect(0, 0, canvas2.width, 3); // fills in the 4 edges
+    ctx2.fillRect(0, 0, 3, canvas2.height);
+    ctx2.fillRect(canvas2.width-3, 0, canvas2.width, canvas.height);
+    ctx2.fillRect(0, canvas2.height-3, canvas2.width, canvas2.height);
+
+    for (i=0; i<grid; i++) { // draws labyrinth on hidden canvas
         for (j=0; j<grid; j++) {
             if (hWalls[i+j*grid]){
-                ctx2.beginPath();
                 ctx2.fillRect(j*(canvas2.width/grid),i*(canvas2.width/grid)-3, (j+1)*canvas2.width/grid, 6);
             }
-
-        }
-    }
-    for (i=0; i<grid; i++) {
-        for (j=0; j<grid; j++) {
             if (vWalls[i+j*grid]){
-                ctx2.beginPath();
                 ctx2.fillRect(j*(canvas2.width/grid)-3,i*(canvas2.width/grid), 6, (i+1)*canvas2.width/grid );
             }
-
         }
     }
 }
