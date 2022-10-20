@@ -8,6 +8,9 @@ let redX = canvas.width/2-redTank.width/2; // places starting X coordinates in t
 let redY = canvas.height/2-redTank.height/2; // places starting Y coordinates in the canvas center
 let redRotation = 0;
 let keyBuffer = {};
+let grid = 10; // number of rows and coloumns in labyrinth, will be modifiable by user
+let hWalls = {}; // array of horizontal walls
+let vWalls = {}; // array of vertical walls
 
 //initialize event listeners
 window.addEventListener("keydown", keyDown);
@@ -15,7 +18,21 @@ window.addEventListener("keyup", keyDown);
 window.addEventListener("keydown", renderFrame);
 
 // render first frame
+generateLabyrinth();
+console.log(hWalls);
+
 renderFrame();
+
+function generateLabyrinth() {
+    for (i=0; i<grid**2; i++) {
+        if (Math.random() > 0.4) {
+        hWalls[i] = true;
+        }
+        else {
+            hWalls[i] = false;
+        }
+    }
+}
 
 function redConvToXY(direction) { //converts the tanks movements to X and Y coordinates
     if (redX + direction * Math.sin(-redRotation*Math.PI/180) < canvas.width && redX + direction * Math.sin(-redRotation*Math.PI/180) > 0) {
