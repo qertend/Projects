@@ -26,10 +26,16 @@ renderFrame();
 function generateLabyrinth() {
     for (i=0; i<grid**2; i++) {
         if (Math.random() > 0.4) {
-        hWalls[i] = true;
+            hWalls[i] = true;
         }
         else {
             hWalls[i] = false;
+        }
+        if (Math.random() > 0.4) {
+            vWalls[i] = true;
+        }
+        else {
+            vWalls[i] = false;
         }
     }
 }
