@@ -8,7 +8,6 @@ let rectY = 400;
 let x = 330;
 let l1y, l2y, l;
 
-
 renderFrame();
 
 function compute() {
@@ -16,9 +15,11 @@ function compute() {
     document.getElementById('rotateOutput').innerHTML = rotation;
     x = document.getElementById('xSlider').value;
     document.getElementById('xOutput').innerHTML = x;
+    rotationRad = rotation*Math.PI/180;
+
     if (rotation <=180 || rotation > 180) { // 45 to 90 degrees, or 180 to 225 degrees
         l = width/Math.cos((90-rotation)*Math.PI/180);
-        l1y = rectY-(l/2-Math.sin(rotation*Math.PI/180)*(Math.abs(rectX-x)*Math.tan(rotation*Math.PI/180)));
+        l1y = rectY-(l/2-(Math.abs(rectX-x)*Math.sin(rotationRad)*Math.cos(rotationRad)));
         if (rotation == 90){
             l1y = -l/2
         }
@@ -28,7 +29,7 @@ function compute() {
     document.getElementById('l1y').innerHTML = l1y;
     document.getElementById('l2y').innerHTML = l2y;
     document.getElementById('l').innerHTML = l;
-    document.getElementById('tan').innerHTML = Math.tan(rotation*Math.PI/180);
+    document.getElementById('subtractant').innerHTML = Math.abs(rectX-x)*Math.sin(rotationRad)*Math.cos(rotationRad);
     document.getElementById('Lx-R').innerHTML = Math.abs(rectX-x);
 }
 
@@ -37,14 +38,21 @@ function renderFrame() { // renders the current frame on main canvas when called
     ctx.setTransform(1, 0, 0, 1, 0, 0); // resets rotation and translate
     ctx.clearRect(0,0, canvas.width, canvas.height); // resets image on canvas
     compute();
+    ctx.strokeStyle = "blue";
     ctx.beginPath(); //draws x axis of contact
     ctx.moveTo(x, 0);
     ctx.lineTo(x, l1y);
     ctx.stroke();
     ctx.beginPath(); //draws y axis of contact
     ctx.moveTo(0, l1y);
-    ctx.lineTo(x, l1y);
+    ctx.lineTo(canvas.width, l1y);
     ctx.stroke();
+    ctx.strokeStyle = "red";
+    ctx.beginPath(); //draws vertical line at rectX
+    ctx.moveTo(rectX, 0);
+    ctx.lineTo(rectX, canvas.height);
+    ctx.stroke();
+    ctx.strokeStyle = "black";
     ctx.translate(rectX, rectY);
     ctx.rotate(rotation*Math.PI/180); // rotates to direction
     ctx.strokeRect(-width/2, -height/2, width, height);
