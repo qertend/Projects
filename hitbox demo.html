@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <canvas id="canvas" width="800" height="800" style="border:1px solid grey;">Looks like this browser doesn't support canvas, try a different one</canvas>
+    <div style="width: 300px; float: right;">
+        <h2>Menu</h2>
+        <p>Rotation</p>
+        <input type='range' min='0' max='359' value='0' id='rotateSlider'> <span id="rotateOutput"></span>
+        <p>x</p>
+        <input type='range' min='0' max='800' value='330' id='xSlider'> <span id="xOutput"></span>
+        <p>L1: <span id="l1y"></span></p>
+        <p> L2: <span id="l2y"></span></p>
+        <p> l: <span id="l"></span></p>
+        <p> tan(rotation): <span id="tan"></span></p>
+        <p> Lx-R: <span id="Lx-R"></span></p>
+    </div>
+</body>
+<script src="hitbox script.js"></script>
+</html>

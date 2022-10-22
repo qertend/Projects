@@ -1,6 +1,6 @@
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext("2d");
-const canvas2 = document.getElementById('labyrinthTest');
+const canvas2 = document.getElementById('labyrinthGen');
 const ctx2 = canvas2.getContext("2d");
 let grid = 8; // number of rows and coloumns in labyrinth, will be modifiable by user
 let speed = 0.01; // sets the movement and turn speed of the tanks, will be modifiable by user
@@ -74,14 +74,14 @@ function redMovement(direction) { //converts the tanks movements to X and Y coor
 }
 
 function renderFrame() { // renders the current frame on main canvas when called
-    requestAnimationFrame(renderFrame)
+    requestAnimationFrame(renderFrame);
     if (keyBuffer[87]) { redMovement(-speed);} // W
     if (keyBuffer[65]) { redRotation-=speed;} // A
     if (keyBuffer[83]) { redMovement(speed);} // S
     if (keyBuffer[68]) { redRotation+=speed;} // D
     ctx.setTransform(1, 0, 0, 1, 0, 0); // resets rotation and translate
     ctx.clearRect(0,0, canvas.width, canvas.height); // resets image on canvas
-    ctx.drawImage(document.getElementById("labyrinthTest"),0,0); // draws labyrinth
+    ctx.drawImage(document.getElementById("labyrinthGen"),0,0); // draws labyrinth
     ctx.translate(redX, redY); // places 0,0 at tank
     ctx.rotate(redRotation*Math.PI/180); // rotates to tank direction
     ctx.drawImage(redTank, -redTank.width/2, -redTank.height/2, redTank.width, redTank.height); // draws image
