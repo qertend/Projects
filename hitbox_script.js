@@ -46,7 +46,7 @@ function compute() {
 
     //X
     l = width/Math.sin((rotation)*Math.PI/180);
-    l1y = rectY-((l/2)-((rectX-x)/Math.sin(rotationRad)*Math.cos(rotationRad)));
+    l1y = rectY-((l/2)-(((rectX-x)/Math.sin(rotationRad))*Math.cos(rotationRad)));
    if (rotation == 90 && rotation == 270){
         l1y = rectX-l/2;
     }
@@ -58,7 +58,7 @@ function compute() {
 
     //Y
     l = height/Math.sin((rotation)*Math.PI/180);
-    l1x = rectX-((l/2)-((rectX-x)/Math.sin(rotationRad)*Math.cos(rotationRad)));
+    l1x = rectX-((l/2)-(((rectX-x)/Math.sin(rotationRad))*Math.cos(rotationRad)));
    if (rotation == 0 && rotation == 180){
         l1x = rectY-l/2;
     }
