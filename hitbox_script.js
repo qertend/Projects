@@ -7,7 +7,7 @@ let rectX = 400;
 let rectY = 400;
 let x = 330;
 let y = 330;
-let l1y, l2y, l;
+let l1y, l2y, l, l1x, l2x;
 let debugCircles = new Array;
 
 canvas.addEventListener("click", debugCirlce);
@@ -44,16 +44,26 @@ function compute() {
         document.getElementById("noCollisionY").innerHTML = "";
     }
 
+    //X
     l = width/Math.sin((rotation)*Math.PI/180);
     l1y = rectY-((l/2)-((rectX-x)/Math.sin(rotationRad)*Math.cos(rotationRad)));
-   if (rotation == 90){
-        l1y = -l/2
+   if (rotation == 90 && rotation == 270){
+        l1y = rectX-l/2;
     }
     l2y = l1y + l;
 
     document.getElementById('l1y').innerHTML = l1y;
     document.getElementById('l2y').innerHTML = l2y;
-    document.getElementById('l').innerHTML = l;
+    document.getElementById('ly').innerHTML = l;
+
+    //Y
+    l = height/Math.cos((rotation)*Math.PI/180);
+    l1x = rectX-((l/2)-((rectX-x)/Math.sin(rotationRad)*Math.cos(rotationRad)));
+   if (rotation == 0 && rotation == 180){
+        l1x = rectY-l/2;
+    }
+    l2x = l1x + l;
+
     document.getElementById('distanceX').innerHTML = rectX-x;
     document.getElementById('distanceY').innerHTML = rectY-y;
 }
@@ -64,22 +74,28 @@ function renderFrame() { // renders the current frame on main canvas when called
     ctx.clearRect(0,0, canvas.width, canvas.height); // resets image on canvas
     compute();
     ctx.strokeStyle = "blue";
-    //draws y axis of contact
+    //draws y axis of contact (blue)
     ctx.beginPath();
     ctx.moveTo(x, 0);
     ctx.lineTo(x, canvas.height);
-    //draws x1 axis of contact
+    //draws x1 axis of contact (blue)
     ctx.moveTo(0, l1y);
     ctx.lineTo(x, l1y);
-    //draws x2 axis of contact
+    //draws x2 axis of contact (blue)
     ctx.moveTo(canvas.width, l2y);
     ctx.lineTo(x, l2y);
     ctx.stroke();
     ctx.strokeStyle = "red";
-    //draws vertical line at rectX
+    //draws x axis of contact (red)
     ctx.beginPath(); 
-    ctx.moveTo(rectX, 0);
-    ctx.lineTo(rectX, canvas.height);
+    ctx.moveTo(0, y);
+    ctx.lineTo(canvas.width, y);
+    //draws y1 axis of contact  (red)
+    ctx.moveTo(l1x, 0);
+    ctx.lineTo(l1x, y)
+    //draws y2 axis of contact  (red)
+    ctx.moveTo(l2x, 0);
+    ctx.lineTo(l2x, y)
     ctx.stroke();
     //draws debug circles
     ctx.fillStyle = "yellow";
