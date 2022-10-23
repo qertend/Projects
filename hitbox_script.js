@@ -6,6 +6,7 @@ let height = 200;
 let rectX = 400;
 let rectY = 400;
 let x = 330;
+let y = 330;
 let l1y, l2y, l;
 let debugCircles = new Array;
 
@@ -26,13 +27,21 @@ function compute() {
     document.getElementById('rotateOutput').innerHTML = rotation;
     x = document.getElementById('xSlider').value;
     document.getElementById('xOutput').innerHTML = x;
+    y = document.getElementById('ySlider').value;
+    document.getElementById('yOutput').innerHTML = y;
     rotationRad = rotation*Math.PI/180; // rotation in radians
 
     if (Math.abs(rectX-x) > Math.sqrt((width/2)**2 + (height/2)**2)) {
-        document.getElementById("noCollision").innerHTML = "No collision";
+        document.getElementById("noCollisionX").innerHTML = "No collision on X";
     }
     else {
-        document.getElementById("noCollision").innerHTML = "";
+        document.getElementById("noCollisionX").innerHTML = "";
+    }
+    if (Math.abs(rectY-y) > Math.sqrt((width/2)**2 + (height/2)**2)) {
+        document.getElementById("noCollisionY").innerHTML = "No collision on Y";
+    }
+    else {
+        document.getElementById("noCollisionY").innerHTML = "";
     }
 
     l = width/Math.sin((rotation)*Math.PI/180);
@@ -45,8 +54,8 @@ function compute() {
     document.getElementById('l1y').innerHTML = l1y;
     document.getElementById('l2y').innerHTML = l2y;
     document.getElementById('l').innerHTML = l;
-    document.getElementById('subtractant').innerHTML = (rectX-x)*Math.sin(rotationRad)*Math.cos(rotationRad);
     document.getElementById('distanceX').innerHTML = rectX-x;
+    document.getElementById('distanceY').innerHTML = rectY-y;
 }
 
 function renderFrame() { // renders the current frame on main canvas when called
