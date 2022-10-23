@@ -9,18 +9,25 @@
 <body>
     <canvas id="canvas" width="800" height="800" style="border:1px solid grey;">Looks like this browser doesn't support canvas, try a different one</canvas>
     <div style="width: 300px; float: right;">
-        <h2>Menu</h2>
-        <button onclick="debugCircles = new Array;">Reset debug points</button>
-        <button onclick="debugCircles.pop();">Delete last debug points</button>
+        <h1>Menu</h1>
+        <h2>Rectangle properties</h2>
+        <span>width:</span><input type="number" min="0" max="400" value="100" id="rectWidth"> <br>
+        <span>height:</span><input type="number" min="0" max="400" value="200" id="rectHeight">
         <p>Rotation</p>
         <input type='range' min='0' max='359' value='0' id='rotateSlider'> <span id="rotateOutput"></span>
-        <p>x</p>
+        <h2>Collision</h2>
+        <p>Collision x</p>
         <input type='range' min='0' max='800' value='330' id='xSlider'> <span id="xOutput"></span>
+        <h2>Debug & info</h2>
+        <p>Debug points</p>
+        <button onclick="debugCircles = new Array;">Reset debug points</button>
+        <button onclick="debugCircles.pop();">Delete last debug points</button>
+        <p id="noCollision"></p>
         <p>L1: <span id="l1y"></span></p>
         <p> L2: <span id="l2y"></span></p>
         <p> l: <span id="l"></span></p>
         <p> Subtractant: <span id="subtractant"></span></p>
-        <p> Lx-R: <span id="Lx-R"></span></p>
+        <p> X Distance from collision: <span id="distanceX"></span></p>
     </div>
 </body>
 <script src="hitbox_script.js"></script>

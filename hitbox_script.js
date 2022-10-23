@@ -20,11 +20,20 @@ function debugCirlce(event) {
 }
 
 function compute() {
+    width = document.getElementById('rectWidth').value;
+    height = document.getElementById('rectHeight').value;
     rotation = document.getElementById('rotateSlider').value;
     document.getElementById('rotateOutput').innerHTML = rotation;
     x = document.getElementById('xSlider').value;
     document.getElementById('xOutput').innerHTML = x;
     rotationRad = rotation*Math.PI/180; // rotation in radians
+
+    if (Math.abs(rectX-x) > Math.sqrt((width/2)**2 + (height/2)**2)) {
+        document.getElementById("noCollision").innerHTML = "No collision";
+    }
+    else {
+        document.getElementById("noCollision").innerHTML = "";
+    }
 
     l = width/Math.sin((rotation)*Math.PI/180);
     l1y = rectY-((l/2)-((rectX-x)/Math.sin(rotationRad)*Math.cos(rotationRad)));
@@ -37,7 +46,7 @@ function compute() {
     document.getElementById('l2y').innerHTML = l2y;
     document.getElementById('l').innerHTML = l;
     document.getElementById('subtractant').innerHTML = (rectX-x)*Math.sin(rotationRad)*Math.cos(rotationRad);
-    document.getElementById('Lx-R').innerHTML = Math.abs(rectX-x);
+    document.getElementById('distanceX').innerHTML = rectX-x;
 }
 
 function renderFrame() { // renders the current frame on main canvas when called
@@ -46,29 +55,31 @@ function renderFrame() { // renders the current frame on main canvas when called
     ctx.clearRect(0,0, canvas.width, canvas.height); // resets image on canvas
     compute();
     ctx.strokeStyle = "blue";
-    ctx.beginPath(); //draws y axis of contact
+    //draws y axis of contact
+    ctx.beginPath();
     ctx.moveTo(x, 0);
     ctx.lineTo(x, canvas.height);
-    ctx.stroke();
-    ctx.beginPath(); //draws x1 axis of contact
+    //draws x1 axis of contact
     ctx.moveTo(0, l1y);
     ctx.lineTo(x, l1y);
-    ctx.stroke();
-    ctx.beginPath(); //draws x2 axis of contact
+    //draws x2 axis of contact
     ctx.moveTo(canvas.width, l2y);
     ctx.lineTo(x, l2y);
     ctx.stroke();
     ctx.strokeStyle = "red";
-    ctx.beginPath(); //draws vertical line at rectX
+    //draws vertical line at rectX
+    ctx.beginPath(); 
     ctx.moveTo(rectX, 0);
     ctx.lineTo(rectX, canvas.height);
     ctx.stroke();
+    //draws debug circles
     ctx.fillStyle = "yellow";
     for (i in debugCircles) {
         ctx.beginPath();
         ctx.ellipse(debugCircles[i][0]-8, debugCircles[i][1]-8, 5, 5, 0, 0, Math.PI * 2);
         ctx.fill();
     }
+    //draws rectangle
     ctx.strokeStyle = "black";
     ctx.translate(rectX, rectY);
     ctx.rotate(rotation*Math.PI/180); // rotates to direction
