@@ -57,7 +57,7 @@ function compute() {
     document.getElementById('ly').innerHTML = l;
 
     //Y
-    l = height/Math.cos((rotation)*Math.PI/180);
+    l = height/Math.sin((rotation)*Math.PI/180);
     l1x = rectX-((l/2)-((rectX-x)/Math.sin(rotationRad)*Math.cos(rotationRad)));
    if (rotation == 0 && rotation == 180){
         l1x = rectY-l/2;
@@ -91,7 +91,7 @@ function renderFrame() { // renders the current frame on main canvas when called
     ctx.moveTo(0, y);
     ctx.lineTo(canvas.width, y);
     //draws y1 axis of contact  (red)
-    ctx.moveTo(l1x, 0);
+    ctx.moveTo(l1x, canvas.height);
     ctx.lineTo(l1x, y)
     //draws y2 axis of contact  (red)
     ctx.moveTo(l2x, 0);
