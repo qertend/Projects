@@ -27,7 +27,7 @@ function compute() {
     rotationRad = rotation*Math.PI/180; // rotation in radians
 
     l = width/Math.sin((rotation)*Math.PI/180);
-    l1y = rectY-((l/2)+(Math.abs(rectX-x)*Math.sin(rotationRad)*Math.cos(rotationRad)));
+    l1y = rectY-((l/2)-((rectX-x)/Math.sin(rotationRad)*Math.cos(rotationRad)));
    if (rotation == 90){
         l1y = -l/2
     }
@@ -36,7 +36,7 @@ function compute() {
     document.getElementById('l1y').innerHTML = l1y;
     document.getElementById('l2y').innerHTML = l2y;
     document.getElementById('l').innerHTML = l;
-    document.getElementById('subtractant').innerHTML = Math.abs(rectX-x)*Math.sin(rotationRad)*Math.cos(rotationRad);
+    document.getElementById('subtractant').innerHTML = (rectX-x)*Math.sin(rotationRad)*Math.cos(rotationRad);
     document.getElementById('Lx-R').innerHTML = Math.abs(rectX-x);
 }
 
