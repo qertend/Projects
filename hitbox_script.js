@@ -110,6 +110,7 @@ function renderFrame() { // renders the current frame on main canvas when called
     ctx.rotate(rotation*Math.PI/180); // rotates to direction
     ctx.strokeRect(-width/2, -height/2, width, height);
     ctx.fillStyle = "black";
+    //draws center point
     ctx.beginPath();
     ctx.ellipse(0, 0, 5, 5, 0, 0, Math.PI * 2);
     ctx.fill();
