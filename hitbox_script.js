@@ -7,24 +7,32 @@ let rectX = 400;
 let rectY = 400;
 let x = 330;
 let l1y, l2y, l;
+let debugCircles = new Array;
+
+canvas.addEventListener("click", debugCirlce);
+window.addEventListener("keydown", function() {rotation++; console.log("key pressed");});
 
 renderFrame();
+
+function debugCirlce(event) {
+    console.log("x:", event.clientX, "y:", event.clientY );
+    debugCircles.push([event.clientX, event.clientY]);
+    console.log(debugCircles);
+}
 
 function compute() {
     rotation = document.getElementById('rotateSlider').value;
     document.getElementById('rotateOutput').innerHTML = rotation;
     x = document.getElementById('xSlider').value;
     document.getElementById('xOutput').innerHTML = x;
-    rotationRad = rotation*Math.PI/180;
+    rotationRad = rotation*Math.PI/180; // rotation in radians
 
-    if (rotation <=180 || rotation > 180) { // 45 to 90 degrees, or 180 to 225 degrees
-        l = width/Math.cos((90-rotation)*Math.PI/180);
-        l1y = rectY-(l/2-(Math.abs(rectX-x)*Math.sin(rotationRad)*Math.cos(rotationRad)));
-        if (rotation == 90){
-            l1y = -l/2
-        }
-        l2y = l1y + l;
+    l = width/Math.sin((rotation)*Math.PI/180);
+    l1y = rectY-((l/2)+(Math.abs(rectX-x)*Math.sin(rotationRad)*Math.cos(rotationRad)));
+   if (rotation == 90){
+        l1y = -l/2
     }
+    l2y = l1y + l;
 
     document.getElementById('l1y').innerHTML = l1y;
     document.getElementById('l2y').innerHTML = l2y;
@@ -41,7 +49,7 @@ function renderFrame() { // renders the current frame on main canvas when called
     ctx.strokeStyle = "blue";
     ctx.beginPath(); //draws x axis of contact
     ctx.moveTo(x, 0);
-    ctx.lineTo(x, l1y);
+    ctx.lineTo(x, canvas.height);
     ctx.stroke();
     ctx.beginPath(); //draws y axis of contact
     ctx.moveTo(0, l1y);
@@ -52,6 +60,12 @@ function renderFrame() { // renders the current frame on main canvas when called
     ctx.moveTo(rectX, 0);
     ctx.lineTo(rectX, canvas.height);
     ctx.stroke();
+    ctx.fillStyle = "yellow";
+    for (i in debugCircles) {
+        ctx.beginPath();
+        ctx.ellipse(debugCircles[i][0]-8, debugCircles[i][1]-8, 5, 5, 0, 0, Math.PI * 2);
+        ctx.fill();
+    }
     ctx.strokeStyle = "black";
     ctx.translate(rectX, rectY);
     ctx.rotate(rotation*Math.PI/180); // rotates to direction
