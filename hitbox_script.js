@@ -32,6 +32,7 @@ function compute() {
     rotationRad = rotation*Math.PI/180; // rotation in radians
 
     if (Math.abs(rectX-x) > Math.sqrt((width/2)**2 + (height/2)**2)) {
+        //rudimentary "no collision" solition, to be improved
         document.getElementById("noCollisionX").innerHTML = "No collision on X";
     }
     else {
@@ -115,3 +116,8 @@ function renderFrame() { // renders the current frame on main canvas when called
     ctx.ellipse(0, 0, 5, 5, 0, 0, Math.PI * 2);
     ctx.fill();
 }
+
+/*
+TODO
+improve no collision detection
+*/
