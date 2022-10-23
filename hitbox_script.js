@@ -46,13 +46,17 @@ function renderFrame() { // renders the current frame on main canvas when called
     ctx.clearRect(0,0, canvas.width, canvas.height); // resets image on canvas
     compute();
     ctx.strokeStyle = "blue";
-    ctx.beginPath(); //draws x axis of contact
+    ctx.beginPath(); //draws y axis of contact
     ctx.moveTo(x, 0);
     ctx.lineTo(x, canvas.height);
     ctx.stroke();
-    ctx.beginPath(); //draws y axis of contact
+    ctx.beginPath(); //draws x1 axis of contact
     ctx.moveTo(0, l1y);
-    ctx.lineTo(canvas.width, l1y);
+    ctx.lineTo(x, l1y);
+    ctx.stroke();
+    ctx.beginPath(); //draws x2 axis of contact
+    ctx.moveTo(canvas.width, l2y);
+    ctx.lineTo(x, l2y);
     ctx.stroke();
     ctx.strokeStyle = "red";
     ctx.beginPath(); //draws vertical line at rectX
