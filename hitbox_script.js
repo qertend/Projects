@@ -10,7 +10,6 @@ let l1y, l2y, l;
 let debugCircles = new Array;
 
 canvas.addEventListener("click", debugCirlce);
-window.addEventListener("keydown", function() {rotation++; console.log("key pressed");});
 
 renderFrame();
 
