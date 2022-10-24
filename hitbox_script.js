@@ -115,6 +115,11 @@ function renderFrame() { // renders the current frame on main canvas when called
     ctx.beginPath();
     ctx.ellipse(0, 0, 5, 5, 0, 0, Math.PI * 2);
     ctx.fill();
+    //draws basic "collision" zone
+    ctx.strokeStyle = "purple";
+    ctx.beginPath();
+    ctx.ellipse(0, 0, Math.sqrt((width/2)**2 + (height/2)**2), Math.sqrt((width/2)**2 + (height/2)**2), 0, 0, Math.PI * 2);
+    ctx.stroke();
 }
 
 /*
