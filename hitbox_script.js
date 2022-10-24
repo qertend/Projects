@@ -45,7 +45,7 @@ function compute() {
         document.getElementById("noCollisionY").innerHTML = "";
     }
 
-    //X
+    //X (blue)
     l = width/Math.sin((rotation)*Math.PI/180);
     l1y = rectY-((l/2)-(((rectX-x)/Math.sin(rotationRad))*Math.cos(rotationRad)));
    if (rotation == 90 && rotation == 270){
@@ -57,13 +57,13 @@ function compute() {
     document.getElementById('l2y').innerHTML = l2y;
     document.getElementById('ly').innerHTML = l;
 
-    //Y
+    //Y (red)
     l = height/Math.sin((rotation)*Math.PI/180);
-    l1x = rectX-((l/2)-(((rectX-x)/Math.sin(rotationRad))*Math.cos(rotationRad)));
+    l1x = rectX+((l/2)-(((rectY-y)/Math.sin(rotationRad))*Math.cos(rotationRad)));
    if (rotation == 0 && rotation == 180){
         l1x = rectY-l/2;
     }
-    l2x = l1x + l;
+    l2x = l1x - l;
 
     document.getElementById('distanceX').innerHTML = rectX-x;
     document.getElementById('distanceY').innerHTML = rectY-y;
@@ -92,10 +92,10 @@ function renderFrame() { // renders the current frame on main canvas when called
     ctx.moveTo(0, y);
     ctx.lineTo(canvas.width, y);
     //draws y1 axis of contact  (red)
-    ctx.moveTo(l1x, canvas.height);
+    ctx.moveTo(l1x, 0);
     ctx.lineTo(l1x, y)
     //draws y2 axis of contact  (red)
-    ctx.moveTo(l2x, 0);
+    ctx.moveTo(l2x, canvas.height);
     ctx.lineTo(l2x, y)
     ctx.stroke();
     //draws debug circles
