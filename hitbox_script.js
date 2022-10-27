@@ -48,7 +48,7 @@ function compute() {
     //X (blue)
     opt1 = width/Math.sin((rotation)*Math.PI/180); //across parallel walls
     opt2 = (height/2-(rectX-x)/Math.sin(rotationRad)-width/2/Math.tan(rotationRad))/Math.cos(rotationRad); // across adjacent walls
-    if (Math.abs(opt2) < Math.abs(opt1)) {
+    if (opt2*Math.sin(rotationRad) < width) {
         console.log(opt2);
         l = opt2;
         l1y = rectY + (Math.sin(rotationRad)*width/2)+((rectX-x)*Math.cos(rotationRad)/Math.sin(rotationRad))+width/2*Math.cos(rotationRad)**2/Math.sin(rotationRad);
@@ -96,8 +96,8 @@ function renderFrame() { // renders the current frame on main canvas when called
     ctx.moveTo(canvas.width, l2y);
     ctx.lineTo(x, l2y);
     ctx.stroke();
-    ctx.strokeStyle = "red";
     //draws x axis of contact (red)
+    ctx.strokeStyle = "red";
     ctx.beginPath(); 
     ctx.moveTo(0, y);
     ctx.lineTo(canvas.width, y);
