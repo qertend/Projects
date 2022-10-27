@@ -46,8 +46,16 @@ function compute() {
     }
 
     //X (blue)
-    l = width/Math.sin((rotation)*Math.PI/180);
-    l1y = rectY-((l/2)-(((rectX-x)/Math.sin(rotationRad))*Math.cos(rotationRad)));
+    opt1 = width/Math.sin((rotation)*Math.PI/180); //across parallel walls
+    opt2 = (height*-Math.sin(rotationRad)-2*(rectX-x)+width*Math.cos(rotationRad))/Math.sin(2*rotationRad); // across adjacent walls
+    console.log(opt2);
+    if (opt2 < opt1) {
+        l = opt2;
+    }
+    else {
+        l = opt1
+        l1y = rectY-((l/2)-(((rectX-x)/Math.sin(rotationRad))*Math.cos(rotationRad)));
+    }
    if (rotation == 90 && rotation == 270){
         l1y = rectX-l/2;
     }
