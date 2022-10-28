@@ -7,7 +7,7 @@ let rectX = 400;
 let rectY = 400;
 let x = 330;
 let y = 330;
-let l1y, l2y, l, l1x, l2x = Number;
+let l1, l2, l = Number;
 let debugCircles = new Array;
 
 canvas.addEventListener("click", debugCirlce);
@@ -20,32 +20,34 @@ function debugCirlce(event) {
     console.log(debugCircles);
 }
 
-function compute() {
-    width = document.getElementById('rectWidth').value;
-    height = document.getElementById('rectHeight').value;
-    rotation = document.getElementById('rotateSlider').value;
-    x = document.getElementById('xSlider').value;
-    y = document.getElementById('ySlider').value;
-    rotation %= 360;
+function compute(direction) {
+    /*Input str:"v" for vertical, str:"h" for horizontal collision points */
+    switch (direction) {
+        case "v":
+            width = Number(document.getElementById('rectWidth').value);
+            height = Number(document.getElementById('rectHeight').value);
+            rotation = Number(document.getElementById('rotateSlider').value);
+            x = Number(document.getElementById('xSlider').value);
+            break;
+        case "h":
+            height = Number(document.getElementById('rectWidth').value);
+            width = Number(document.getElementById('rectHeight').value);
+            rotation = Number(document.getElementById('rotateSlider').value) + 270;
+            x = Number(document.getElementById('xSlider').value);
+    }
 
-    //documentation
-    document.getElementById('rotateOutput').innerHTML = rotation;
-    document.getElementById('xOutput').innerHTML = x;
-    document.getElementById('yOutput').innerHTML = y;
-    
-/* Implement no collision by detecting if 'l' is negative*/
 
-    // VERTICAL (blue)
+    // at angles 0 or 180
     if (rotation == 0 || rotation == 180) {
         if (rectX-x <= width/2) {
-            l = Number(height); // JS just decided 'height' is a string here for no reason, so we need to counter that
-            l1y = rectY - l/2;
-            l2y = l1y + l;
+            l = height;
+            l1 = rectY - l/2;
+            l2 = l1 + l;
         }
         else {
             l = -1;
-            l1y = 0;
-            l2y = 0;
+            l1 = 0;
+            l2 = 0;
         }
     }
     // at angles 0 - 90 OR angles 180 - 270
@@ -54,27 +56,27 @@ function compute() {
         l = (height/2-(rectX-x)/Math.sin(rotationRad)+width/2/Math.tan(rotationRad))/Math.cos(rotationRad);
         // across adjacent walls
         if (l*Math.sin(rotationRad) < width) {
-            l1y = rectY-((width/Math.sin(rotationRad))/2-(((rectX-x)/Math.sin(rotationRad))*Math.cos(rotationRad)));
-            l2y = l1y + l ;
+            l1 = rectY-((width/Math.sin(rotationRad))/2-(((rectX-x)/Math.sin(rotationRad))*Math.cos(rotationRad)));
+            l2 = l1 + l ;
         }
         // across parallel walls
         else {
             l = width/Math.sin(rotationRad)
-            l1y = rectY-((l/2)-(((rectX-x)/Math.sin(rotationRad))*Math.cos(rotationRad)));
-            l2y = l1y + l;
+            l1 = rectY-((l/2)-(((rectX-x)/Math.sin(rotationRad))*Math.cos(rotationRad)));
+            l2 = l1 + l;
         }
     }
     // at angles 90 or 270
     else if (rotation == 90 || rotation == 270) {
         if (rectX-x <= height/2) {
-            l = Number(width); // JS just decided 'width' is a string here for no reason, so we need to counter that
-            l1y = rectY - l/2;
-            l2y = l1y + l;
+            l = width;
+            l1 = rectY - l/2;
+            l2 = l1 + l;
         }
         else {
             l = -1;
-            l1y = 0;
-            l2y = 0;
+            l1 = 0;
+            l2 = 0;
         }
     }
     // at angles 90 - 180 OR angles 270 - 360
@@ -83,61 +85,56 @@ function compute() {
         l = (width/2-(rectX-x)/Math.sin(rotationRad)+height/2/Math.tan(rotationRad))/Math.cos(rotationRad);
         // across adjacent walls
         if (l*Math.cos(rotationRad) < width) {
-            l1y = rectY - ((height/Math.sin(rotationRad))/2-(((rectX-x)/Math.sin(rotationRad))*Math.cos(rotationRad)));
-            l2y = l1y + l;
+            l1 = rectY - ((height/Math.sin(rotationRad))/2-(((rectX-x)/Math.sin(rotationRad))*Math.cos(rotationRad)));
+            l2 = l1 + l;
         }
         // across parallel walls
         else {
             rotationRad = (rotation % 180)*Math.PI/180;
             l = width/Math.sin(rotationRad);
-            l1y = rectY - ((l/2)-(((rectX-x)/Math.sin(rotationRad))*Math.cos(rotationRad)));
-            l2y = l1y + l;
+            l1 = rectY - ((l/2)-(((rectX-x)/Math.sin(rotationRad))*Math.cos(rotationRad)));
+            l2 = l1 + l;
         }
     }
     
-    //VERTICAL COLLISION DETECT
+    // COLLISION DETECT
     if (l < 0) {
-        l1y = 0;
-        l2y = 0;
+        l1 = 0;
+        l2 = 0;
         document.getElementById('noCollisionVertical').innerHTML = "No collision on vertical axis";
     }
     else {
         document.getElementById('noCollisionVertical').innerHTML = "";
     }
 
-    document.getElementById('l1y').innerHTML = l1y;
-    document.getElementById('l2y').innerHTML = l2y;
-    document.getElementById('ly').innerHTML = l;
-
-    // HORIZONTAL (red)
-    rotationRad = rotation*Math.PI/180;
-    l = height/Math.sin((rotation)*Math.PI/180);
-    l1x = rectX+((l/2)-(((rectY-y)/Math.sin(rotationRad))*Math.cos(rotationRad)));
-   if (rotation == 0 && rotation == 180){
-        l1x = rectY-l/2;
-    }
-    l2x = l1x - l;
-
-    document.getElementById('distanceX').innerHTML = rectX-x;
-    document.getElementById('distanceY').innerHTML = rectY-y;
+    //data for debug menu
+    document.getElementById('rotateOutput').innerHTML = Number(document.getElementById('rotateSlider').value);
+    document.getElementById('xOutput').innerHTML = x;
+    document.getElementById('yOutput').innerHTML = y;
+    document.getElementById('l1').innerHTML = l1;
+    document.getElementById('l2').innerHTML = l2;
+    document.getElementById('l').innerHTML = l;
+    
+    return [l1, l2];
 }
 
 function renderFrame() { // renders the current frame on main canvas when called
     requestAnimationFrame(renderFrame);
     ctx.setTransform(1, 0, 0, 1, 0, 0); // resets rotation and translate
     ctx.clearRect(0,0, canvas.width, canvas.height); // resets image on canvas
-    compute();
+    coordsV = compute("v");
+    coordsH = compute("h");
     ctx.strokeStyle = "blue";
     //draws horizontal axis of contact (blue)
     ctx.beginPath();
     ctx.moveTo(x, 0);
     ctx.lineTo(x, canvas.height);
     //draws x1 axis of contact (blue)
-    ctx.moveTo(0, l1y);
-    ctx.lineTo(x, l1y);
+    ctx.moveTo(0, coordsV[0]);
+    ctx.lineTo(x, coordsV[0]);
     //draws x2 axis of contact (blue)
-    ctx.moveTo(canvas.width, l2y);
-    ctx.lineTo(x, l2y);
+    ctx.moveTo(canvas.width, coordsV[1]);
+    ctx.lineTo(x, coordsV[1]);
     ctx.stroke();
     //draws vertical axis of contact (red)
     ctx.strokeStyle = "red";
@@ -145,11 +142,11 @@ function renderFrame() { // renders the current frame on main canvas when called
     ctx.moveTo(0, y);
     ctx.lineTo(canvas.width, y);
     //draws y1 axis of contact  (red)
-    ctx.moveTo(l1x, 0);
-    ctx.lineTo(l1x, y)
+    ctx.moveTo(coordsH[0], 0);
+    ctx.lineTo(coordsH[0], y)
     //draws y2 axis of contact  (red)
-    ctx.moveTo(l2x, canvas.height);
-    ctx.lineTo(l2x, y)
+    ctx.moveTo(coordsH[1], canvas.height);
+    ctx.lineTo(coordsH[1], y)
     ctx.stroke();
     //draws debug circles
     ctx.fillStyle = "yellow";
