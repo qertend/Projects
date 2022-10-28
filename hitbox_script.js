@@ -24,47 +24,56 @@ function compute() {
     width = document.getElementById('rectWidth').value;
     height = document.getElementById('rectHeight').value;
     rotation = document.getElementById('rotateSlider').value;
-    document.getElementById('rotateOutput').innerHTML = rotation;
     x = document.getElementById('xSlider').value;
-    document.getElementById('xOutput').innerHTML = x;
     y = document.getElementById('ySlider').value;
+    rotation %= 360;
+
+    //documentation
+    document.getElementById('rotateOutput').innerHTML = rotation;
+    document.getElementById('xOutput').innerHTML = x;
     document.getElementById('yOutput').innerHTML = y;
-    rotationRad = rotation*Math.PI/180; // rotation in radians
+    
+/* Implement no collision by detecting if 'l' is negative*/
 
-    if (Math.abs(rectX-x) > Math.sqrt((width/2)**2 + (height/2)**2)) {
-        //rudimentary "no collision" solition, to be improved
-        document.getElementById("noCollisionX").innerHTML = "No collision on X";
-    }
-    else {
-        document.getElementById("noCollisionX").innerHTML = "";
-    }
-    if (Math.abs(rectY-y) > Math.sqrt((width/2)**2 + (height/2)**2)) {
-        document.getElementById("noCollisionY").innerHTML = "No collision on Y";
-    }
-    else {
-        document.getElementById("noCollisionY").innerHTML = "";
-    }
-
-    //VERTICAL (blue)
-    if (rotation % 360 < 90) {
+    // VERTICAL (blue)
+    // at angles 0 - 90
+    if (rotation < 90) {
+        rotationRad = rotation*Math.PI/180;
         l = (height/2-(rectX-x)/Math.sin(rotationRad)+width/2/Math.tan(rotationRad))/Math.cos(rotationRad);
+        // across adjacent walls
         if (l*Math.sin(rotationRad) < width) {
             l1y = rectY-((width/Math.sin(rotationRad))/2-(((rectX-x)/Math.sin(rotationRad))*Math.cos(rotationRad)));
             l2y = l1y + l ;
         }
+        // across parallel walls
         else {
             l = width/Math.sin(rotationRad)
             l1y = rectY-((l/2)-(((rectX-x)/Math.sin(rotationRad))*Math.cos(rotationRad)));
             l2y = l1y + l;
         }
     }
-   else if (rotation % 360 == 90 || rotation % 360 == 270) {
+    // at angles 90 or 270
+    else if (rotation == 90 || rotation == 270) {
         l = Number(width); // JS just decided 'width' is a string here for no reason, so we need to counter that
         l1y = rectY-l/2;
         l2y = l1y + l;
     }
-    else if (rotation % 360 > 90 && rotation % 360 < 180) {
-
+    // at angles 90 - 180
+    else if (rotation > 90 && rotation < 180) {
+        rotationRad = (rotation-90)*Math.PI/180;
+        l = (width/2-(rectX-x)/Math.sin(rotationRad)+height/2/Math.tan(rotationRad))/Math.cos(rotationRad);
+        // across adjacent walls
+        if (l*Math.cos(rotationRad) < width) {
+            l1y = rectY - ((height/Math.sin(rotationRad))/2-(((rectX-x)/Math.sin(rotationRad))*Math.cos(rotationRad)));
+            l2y = l1y + l;
+        }
+        // across parallel walls
+        else {
+            rotationRad = rotation*Math.PI/180;
+            l = width/Math.sin(rotationRad);
+            l1y = rectY - ((l/2)-(((rectX-x)/Math.sin(rotationRad))*Math.cos(rotationRad)));
+            l2y = l1y + l;
+        }
     }
     
 
@@ -72,7 +81,8 @@ function compute() {
     document.getElementById('l2y').innerHTML = l2y;
     document.getElementById('ly').innerHTML = l;
 
-    //HORIZONTAL (red)
+    // HORIZONTAL (red)
+    rotationRad = rotation*Math.PI/180;
     l = height/Math.sin((rotation)*Math.PI/180);
     l1x = rectX+((l/2)-(((rectY-y)/Math.sin(rotationRad))*Math.cos(rotationRad)));
    if (rotation == 0 && rotation == 180){
@@ -130,14 +140,9 @@ function renderFrame() { // renders the current frame on main canvas when called
     ctx.beginPath();
     ctx.ellipse(0, 0, 5, 5, 0, 0, Math.PI * 2);
     ctx.fill();
-    //draws basic "collision possible" zone
-    ctx.strokeStyle = "purple";
-    ctx.beginPath();
-    ctx.ellipse(0, 0, Math.sqrt((width/2)**2 + (height/2)**2), Math.sqrt((width/2)**2 + (height/2)**2), 0, 0, Math.PI * 2);
-    ctx.stroke();
 }
 
 /*
 TODO
-improve no collision detection
+implement no collision detection
 */
