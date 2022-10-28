@@ -7,7 +7,7 @@ let rectX = 400;
 let rectY = 400;
 let x = 330;
 let y = 330;
-let l1y, l2y, l, l1x, l2x;
+let l1y, l2y, l, l1x, l2x = Number;
 let debugCircles = new Array;
 
 canvas.addEventListener("click", debugCirlce);
@@ -45,34 +45,34 @@ function compute() {
         document.getElementById("noCollisionY").innerHTML = "";
     }
 
-    //X (blue)
-    opt1 = width/Math.sin((rotation)*Math.PI/180); //across parallel walls
-    opt2 = (height/2-(rectX-x)/Math.sin(rotationRad)+width/2/Math.tan(rotationRad))/Math.cos(rotationRad); // across adjacent walls
+    //VERTICAL (blue)
     if (rotation % 360 < 90) {
-        if (opt2*Math.sin(rotationRad) < width) {
-            console.log(opt2);
-            l = opt2;
+        l = (height/2-(rectX-x)/Math.sin(rotationRad)+width/2/Math.tan(rotationRad))/Math.cos(rotationRad);
+        if (l*Math.sin(rotationRad) < width) {
             l1y = rectY-((width/Math.sin(rotationRad))/2-(((rectX-x)/Math.sin(rotationRad))*Math.cos(rotationRad)));
             l2y = l1y + l ;
         }
         else {
-            l = opt1;
+            l = width/Math.sin(rotationRad)
             l1y = rectY-((l/2)-(((rectX-x)/Math.sin(rotationRad))*Math.cos(rotationRad)));
             l2y = l1y + l;
         }
     }
-   else if (rotation % 360 == 90 || rotation % 360 == 270){
-        l = width;
+   else if (rotation % 360 == 90 || rotation % 360 == 270) {
+        l = Number(width); // JS just decided 'width' is a string here for no reason, so we need to counter that
         l1y = rectY-l/2;
         l2y = l1y + l;
     }
+    else if (rotation % 360 > 90 && rotation % 360 < 180) {
 
+    }
+    
 
     document.getElementById('l1y').innerHTML = l1y;
     document.getElementById('l2y').innerHTML = l2y;
     document.getElementById('ly').innerHTML = l;
 
-    //Y (red)
+    //HORIZONTAL (red)
     l = height/Math.sin((rotation)*Math.PI/180);
     l1x = rectX+((l/2)-(((rectY-y)/Math.sin(rotationRad))*Math.cos(rotationRad)));
    if (rotation == 0 && rotation == 180){
@@ -90,7 +90,7 @@ function renderFrame() { // renders the current frame on main canvas when called
     ctx.clearRect(0,0, canvas.width, canvas.height); // resets image on canvas
     compute();
     ctx.strokeStyle = "blue";
-    //draws y axis of contact (blue)
+    //draws horizontal axis of contact (blue)
     ctx.beginPath();
     ctx.moveTo(x, 0);
     ctx.lineTo(x, canvas.height);
@@ -101,7 +101,7 @@ function renderFrame() { // renders the current frame on main canvas when called
     ctx.moveTo(canvas.width, l2y);
     ctx.lineTo(x, l2y);
     ctx.stroke();
-    //draws x axis of contact (red)
+    //draws vertical axis of contact (red)
     ctx.strokeStyle = "red";
     ctx.beginPath(); 
     ctx.moveTo(0, y);
