@@ -36,9 +36,21 @@ function compute() {
 /* Implement no collision by detecting if 'l' is negative*/
 
     // VERTICAL (blue)
-    // at angles 0 - 90
-    if (rotation < 90) {
-        rotationRad = rotation*Math.PI/180;
+    if (rotation == 0 || rotation == 180) {
+        if (rectX-x <= width/2) {
+            l = Number(height); // JS just decided 'height' is a string here for no reason, so we need to counter that
+            l1y = rectY - l/2;
+            l2y = l1y + l;
+        }
+        else {
+            l = -1;
+            l1y = 0;
+            l2y = 0;
+        }
+    }
+    // at angles 0 - 90 OR angles 180 - 270
+    else if (rotation < 90 || (rotation > 180 && rotation < 270)) {
+        rotationRad = (rotation % 180)*Math.PI/180;
         l = (height/2-(rectX-x)/Math.sin(rotationRad)+width/2/Math.tan(rotationRad))/Math.cos(rotationRad);
         // across adjacent walls
         if (l*Math.sin(rotationRad) < width) {
@@ -54,13 +66,20 @@ function compute() {
     }
     // at angles 90 or 270
     else if (rotation == 90 || rotation == 270) {
-        l = Number(width); // JS just decided 'width' is a string here for no reason, so we need to counter that
-        l1y = rectY-l/2;
-        l2y = l1y + l;
+        if (rectX-x <= height/2) {
+            l = Number(width); // JS just decided 'width' is a string here for no reason, so we need to counter that
+            l1y = rectY - l/2;
+            l2y = l1y + l;
+        }
+        else {
+            l = -1;
+            l1y = 0;
+            l2y = 0;
+        }
     }
-    // at angles 90 - 180
-    else if (rotation > 90 && rotation < 180) {
-        rotationRad = (rotation-90)*Math.PI/180;
+    // at angles 90 - 180 OR angles 270 - 360
+    else if ((rotation > 90 && rotation < 180) || (rotation > 270 && rotation < 360)) {
+        rotationRad = ((rotation % 180)-90)*Math.PI/180;
         l = (width/2-(rectX-x)/Math.sin(rotationRad)+height/2/Math.tan(rotationRad))/Math.cos(rotationRad);
         // across adjacent walls
         if (l*Math.cos(rotationRad) < width) {
@@ -76,6 +95,15 @@ function compute() {
         }
     }
     
+    //VERTICAL COLLISION DETECT
+    if (l < 0) {
+        l1y = 0;
+        l2y = 0;
+        document.getElementById('noCollisionVertical').innerHTML = "No collision on vertical axis";
+    }
+    else {
+        document.getElementById('noCollisionVertical').innerHTML = "";
+    }
 
     document.getElementById('l1y').innerHTML = l1y;
     document.getElementById('l2y').innerHTML = l2y;
