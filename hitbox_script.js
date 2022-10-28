@@ -88,7 +88,7 @@ function compute() {
         }
         // across parallel walls
         else {
-            rotationRad = rotation*Math.PI/180;
+            rotationRad = (rotation % 180)*Math.PI/180;
             l = width/Math.sin(rotationRad);
             l1y = rectY - ((l/2)-(((rectX-x)/Math.sin(rotationRad))*Math.cos(rotationRad)));
             l2y = l1y + l;
