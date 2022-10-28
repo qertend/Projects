@@ -47,24 +47,26 @@ function compute() {
 
     //X (blue)
     opt1 = width/Math.sin((rotation)*Math.PI/180); //across parallel walls
-    opt2 = (height/2-(rectX-x)/Math.sin(rotationRad)-width/2/Math.tan(rotationRad))/Math.cos(rotationRad); // across adjacent walls
-    if (opt2*Math.sin(rotationRad) < width) {
-        console.log(opt2);
-        l = opt2;
-        l1y = rectY-((width/Math.sin(rotationRad))/2-(((rectX-x)/Math.sin(rotationRad))*Math.cos(rotationRad)));
-        l2y = rectY + (Math.sin(rotationRad)*width/2)+((rectX-x)*Math.cos(rotationRad)/Math.sin(rotationRad))+width/2*Math.cos(rotationRad)**2/Math.sin(rotationRad);
+    opt2 = (height/2-(rectX-x)/Math.sin(rotationRad)+width/2/Math.tan(rotationRad))/Math.cos(rotationRad); // across adjacent walls
+    if (rotation % 360 < 90) {
+        if (opt2*Math.sin(rotationRad) < width) {
+            console.log(opt2);
+            l = opt2;
+            l1y = rectY-((width/Math.sin(rotationRad))/2-(((rectX-x)/Math.sin(rotationRad))*Math.cos(rotationRad)));
+            l2y = l1y + l ;
+        }
+        else {
+            l = opt1;
+            l1y = rectY-((l/2)-(((rectX-x)/Math.sin(rotationRad))*Math.cos(rotationRad)));
+            l2y = l1y + l;
+        }
     }
-    else {
-        l = opt1;
-        l1y = rectY-((l/2)-(((rectX-x)/Math.sin(rotationRad))*Math.cos(rotationRad)));
-        l2y = l1y + l;
-        
-    }
-   if (rotation == 90 && rotation == 270){
+   else if (rotation % 360 == 90 || rotation % 360 == 270){
         l = width;
-        l1y = rectX-l/2;
+        l1y = rectY-l/2;
         l2y = l1y + l;
     }
+
 
     document.getElementById('l1y').innerHTML = l1y;
     document.getElementById('l2y').innerHTML = l2y;
