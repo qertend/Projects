@@ -7,7 +7,6 @@ let rectX = 400;
 let rectY = 400;
 let x = 330;
 let y = 330;
-let l1, l2, l = Number;
 let debugCircles = new Array;
 
 canvas.addEventListener("click", debugCirlce);
@@ -22,7 +21,7 @@ function debugCirlce(event) {
 
 function compute(direction) {
     //Input str:"v" for vertical, str:"h" for horizontal collision points 
-    let width_, height_, rotation_, x_, y_
+    let width_, height_, rotation_, x_, l1, l2, l;
     switch (direction) {
         case "v":
             width_ = width;
@@ -88,6 +87,16 @@ function compute(direction) {
                     l2 = l1 + l;
                 }
             }
+
+            // COLLISION DETECT
+            if (l < 0) {
+                l1 = 0;
+                l2 = 0;
+                document.getElementById('noCollisionVertical').innerHTML = "No collision on vertical axis";
+            }
+            else {
+                document.getElementById('noCollisionVertical').innerHTML = "";
+            }
             break;
             
             
@@ -99,20 +108,7 @@ function compute(direction) {
                 break;
             }
             
-            
-            
-            
             // COLLISION DETECT
-    if (direction == "v") {
-        if (l < 0) {
-            l1 = 0;
-            l2 = 0;
-            document.getElementById('noCollisionVertical').innerHTML = "No collision on vertical axis";
-        }
-        else {
-            document.getElementById('noCollisionVertical').innerHTML = "";
-        }
-    }
     if (direction == "h") {   
         if (l < 0 && direction == "h") {
             document.getElementById('noCollisionHorizontal').innerHTML = "No collision on horizontal axis";
@@ -137,6 +133,7 @@ function renderFrame() { // renders the current frame on main canvas when called
     requestAnimationFrame(renderFrame);
     ctx.setTransform(1, 0, 0, 1, 0, 0); // resets rotation and translate
     ctx.clearRect(0,0, canvas.width, canvas.height); // resets image on canvas
+    // update variables
     width = Number(document.getElementById('rectWidth').value);
     height = Number(document.getElementById('rectHeight').value);
     rotation = Number(document.getElementById('rotateSlider').value);
@@ -144,8 +141,8 @@ function renderFrame() { // renders the current frame on main canvas when called
     y = Number(document.getElementById('ySlider').value);
     coordsV = compute("v");
     coordsH = compute("h");
-    ctx.strokeStyle = "blue";
     //draws horizontal axis of contact (blue)
+    ctx.strokeStyle = "blue";
     ctx.beginPath();
     ctx.moveTo(x, 0);
     ctx.lineTo(x, canvas.height);
