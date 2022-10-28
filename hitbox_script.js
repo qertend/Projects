@@ -26,8 +26,16 @@ function compute(direction) {
         case "v":
             width_ = width;
             height_ = height;
-            rotation_ = rotation;
+            rotation_ = rotation % 360;
             x_ = rectX - x;
+            break;
+        case "h":
+            width_ = width;
+            height_ = height;
+            rotation_ = (rotation + 270) % 360;
+            x_ = rectY - y;
+            break;
+        }
             // at angles 0 or 180
             if (rotation_ == 0 || rotation_ == 180) {
                 if (Math.abs(x_) <= width_/2) {
@@ -97,18 +105,8 @@ function compute(direction) {
             else {
                 document.getElementById('noCollisionVertical').innerHTML = "";
             }
-            break;
-            
-            
-            case "h":
-                width_ = width;
-                height_ = height;
-                rotation_ = rotation;
-                x_ = rectY - y;
-                break;
-            }
-            
-            // COLLISION DETECT
+
+    // COLLISION DETECT
     if (direction == "h") {   
         if (l < 0 && direction == "h") {
             document.getElementById('noCollisionHorizontal').innerHTML = "No collision on horizontal axis";
