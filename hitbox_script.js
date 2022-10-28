@@ -21,90 +21,105 @@ function debugCirlce(event) {
 }
 
 function compute(direction) {
-    /*Input str:"v" for vertical, str:"h" for horizontal collision points */
+    //Input str:"v" for vertical, str:"h" for horizontal collision points 
+    let width_, height_, rotation_, x_, y_
     switch (direction) {
         case "v":
-            width = Number(document.getElementById('rectWidth').value);
-            height = Number(document.getElementById('rectHeight').value);
-            rotation = Number(document.getElementById('rotateSlider').value);
-            x = Number(document.getElementById('xSlider').value);
+            width_ = width;
+            height_ = height;
+            rotation_ = rotation;
+            x_ = rectX - x;
+            // at angles 0 or 180
+            if (rotation_ == 0 || rotation_ == 180) {
+                if (Math.abs(x_) <= width_/2) {
+                    l = height_;
+                    l1 = rectY - l/2;
+                    l2 = l1 + l;
+                }
+                else {
+                    l = -1;
+                    l1 = 0;
+                    l2 = 0;
+                }
+            }
+            // at angles 0 - 90 OR angles 180 - 270
+            else if (rotation_ < 90 || (rotation_ > 180 && rotation_ < 270)) {
+                rotationRad = (rotation_ % 180)*Math.PI/180;
+                l = (height_/2-(x_)/Math.sin(rotationRad)+width_/2/Math.tan(rotationRad))/Math.cos(rotationRad);
+                // across adjacent walls
+                if (l*Math.sin(rotationRad) < width_) {
+                    l1 = rectY-((width_/Math.sin(rotationRad))/2-(((x_)/Math.sin(rotationRad))*Math.cos(rotationRad)));
+                    l2 = l1 + l ;
+                }
+                // across parallel walls
+                else {
+                    l = width_/Math.sin(rotationRad)
+                    l1 = rectY-((l/2)-(((x_)/Math.sin(rotationRad))*Math.cos(rotationRad)));
+                    l2 = l1 + l;
+                }
+            }
+            // at angles 90 or 270
+            else if (rotation_ == 90 || rotation_ == 270) {
+                if (Math.abs(x_) <= height_/2) {
+                    l = width_;
+                    l1 = rectY - l/2;
+                    l2 = l1 + l;
+                }
+                else {
+                    l = -1;
+                    l1 = 0;
+                    l2 = 0;
+                }
+            }
+            // at angles 90 - 180 OR angles 270 - 360
+            else if ((rotation_ > 90 && rotation_ < 180) || (rotation_ > 270 && rotation_ < 360)) {
+                rotationRad = ((rotation_ % 180)-90)*Math.PI/180;
+                l = (width_/2-(x_)/Math.sin(rotationRad)+height_/2/Math.tan(rotationRad))/Math.cos(rotationRad);
+                // across adjacent walls
+                if (l*Math.cos(rotationRad) < width_) {
+                    l1 = rectY - ((height_/Math.sin(rotationRad))/2-(((x_)/Math.sin(rotationRad))*Math.cos(rotationRad)));
+                    l2 = l1 + l;
+                }
+                // across parallel walls
+                else {
+                    rotationRad = (rotation_ % 180)*Math.PI/180;
+                    l = width_/Math.sin(rotationRad);
+                    l1 = rectY - ((l/2)-(((x_)/Math.sin(rotationRad))*Math.cos(rotationRad)));
+                    l2 = l1 + l;
+                }
+            }
             break;
-        case "h":
-            height = Number(document.getElementById('rectWidth').value);
-            width = Number(document.getElementById('rectHeight').value);
-            rotation = Number(document.getElementById('rotateSlider').value) + 270;
-            x = Number(document.getElementById('xSlider').value);
-    }
-
-
-    // at angles 0 or 180
-    if (rotation == 0 || rotation == 180) {
-        if (rectX-x <= width/2) {
-            l = height;
-            l1 = rectY - l/2;
-            l2 = l1 + l;
-        }
-        else {
-            l = -1;
+            
+            
+            case "h":
+                width_ = width;
+                height_ = height;
+                rotation_ = rotation;
+                x_ = rectY - y;
+                break;
+            }
+            
+            
+            
+            
+            // COLLISION DETECT
+    if (direction == "v") {
+        if (l < 0) {
             l1 = 0;
             l2 = 0;
-        }
-    }
-    // at angles 0 - 90 OR angles 180 - 270
-    else if (rotation < 90 || (rotation > 180 && rotation < 270)) {
-        rotationRad = (rotation % 180)*Math.PI/180;
-        l = (height/2-(rectX-x)/Math.sin(rotationRad)+width/2/Math.tan(rotationRad))/Math.cos(rotationRad);
-        // across adjacent walls
-        if (l*Math.sin(rotationRad) < width) {
-            l1 = rectY-((width/Math.sin(rotationRad))/2-(((rectX-x)/Math.sin(rotationRad))*Math.cos(rotationRad)));
-            l2 = l1 + l ;
-        }
-        // across parallel walls
-        else {
-            l = width/Math.sin(rotationRad)
-            l1 = rectY-((l/2)-(((rectX-x)/Math.sin(rotationRad))*Math.cos(rotationRad)));
-            l2 = l1 + l;
-        }
-    }
-    // at angles 90 or 270
-    else if (rotation == 90 || rotation == 270) {
-        if (rectX-x <= height/2) {
-            l = width;
-            l1 = rectY - l/2;
-            l2 = l1 + l;
+            document.getElementById('noCollisionVertical').innerHTML = "No collision on vertical axis";
         }
         else {
-            l = -1;
-            l1 = 0;
-            l2 = 0;
+            document.getElementById('noCollisionVertical').innerHTML = "";
         }
     }
-    // at angles 90 - 180 OR angles 270 - 360
-    else if ((rotation > 90 && rotation < 180) || (rotation > 270 && rotation < 360)) {
-        rotationRad = ((rotation % 180)-90)*Math.PI/180;
-        l = (width/2-(rectX-x)/Math.sin(rotationRad)+height/2/Math.tan(rotationRad))/Math.cos(rotationRad);
-        // across adjacent walls
-        if (l*Math.cos(rotationRad) < width) {
-            l1 = rectY - ((height/Math.sin(rotationRad))/2-(((rectX-x)/Math.sin(rotationRad))*Math.cos(rotationRad)));
-            l2 = l1 + l;
+    if (direction == "h") {   
+        if (l < 0 && direction == "h") {
+            document.getElementById('noCollisionHorizontal').innerHTML = "No collision on horizontal axis";
         }
-        // across parallel walls
         else {
-            rotationRad = (rotation % 180)*Math.PI/180;
-            l = width/Math.sin(rotationRad);
-            l1 = rectY - ((l/2)-(((rectX-x)/Math.sin(rotationRad))*Math.cos(rotationRad)));
-            l2 = l1 + l;
+            document.getElementById('noCollisionHorizontal').innerHTML = "";
         }
-    }
-    
-    // COLLISION DETECT
-    if (l < 0) {
-        l1 = 0;
-        l2 = 0;
-        document.getElementById('noCollisionVertical').innerHTML = "No collision on vertical axis";
-    }
-    else {
-        document.getElementById('noCollisionVertical').innerHTML = "";
     }
 
     //data for debug menu
@@ -122,6 +137,11 @@ function renderFrame() { // renders the current frame on main canvas when called
     requestAnimationFrame(renderFrame);
     ctx.setTransform(1, 0, 0, 1, 0, 0); // resets rotation and translate
     ctx.clearRect(0,0, canvas.width, canvas.height); // resets image on canvas
+    width = Number(document.getElementById('rectWidth').value);
+    height = Number(document.getElementById('rectHeight').value);
+    rotation = Number(document.getElementById('rotateSlider').value);
+    x = Number(document.getElementById('xSlider').value);
+    y = Number(document.getElementById('ySlider').value);
     coordsV = compute("v");
     coordsH = compute("h");
     ctx.strokeStyle = "blue";
