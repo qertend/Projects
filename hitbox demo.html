@@ -13,48 +13,71 @@
         canvas {
             background-color: gray;
             border: 2px solid dark-gray;
+            float: left;
+        }
+        #menuDiv {
+            width: auto;
+            float: inline-start;
+            margin-left: 20px;
         }
         .menu {
+            width: 300px;
             border: 2px solid gray;
-             padding: 5px;
-             padding-top: 0;
+            padding: 5px;
+            padding-top: 0;
+        }
+        #debug {
+            float: right;
         }
         h2 {
             text-align: center;
+            text-decoration: underline;
+        }
+        h3 {
             text-decoration: underline;
         }
     </style>
 </head>
 <body>
     <canvas id="canvas" width="800" height="800">Looks like this browser doesn't support canvas, try a different one</canvas>
-    <div style="width: 300px; float: right;">
+    <div id="menuDiv">
         <h1>Menu</h1>
-        <div class="menu">
-            <h2>Rectangle properties</h2>
-            <span>width:</span><input type="number" min="0" max="400" value="100" id="rectWidth"> <br>
-            <span>height:</span><input type="number" min="0" max="400" value="200" id="rectHeight">
-            <p>Rotation</p>
-            <input type='range' min='0' max='359' value='0' id='rotateSlider'> <span id="rotateOutput"></span>
+        <div style="float: left;">
+            <div class="menu">
+                <h2>Rectangle properties</h2>
+                <span>width:</span><input type="number" min="0" max="400" value="100" id="rectWidth"> <br>
+                <span>height:</span><input type="number" min="0" max="400" value="200" id="rectHeight">
+                <p>Rotation</p>
+                <input type='range' min='0' max='359' value='0' id='rotateSlider'> <span id="rotateOutput"></span>
+            </div>
+            <div class="menu">
+                <h2>Collision</h2>
+                <p>Collision x (blue)</p>
+                <input type='range' min='0' max='800' value='330' id='xSlider'> <span id="xOutput"></span>
+                <p>Collision y (red)</p>
+                <input type='range' min='0' max='800' value='330' id='ySlider'> <span id="yOutput"></span>
+            </div>
         </div>
-        <div class="menu">
-            <h2>Collision</h2>
-            <p>Collision x (blue)</p>
-            <input type='range' min='0' max='800' value='330' id='xSlider'> <span id="xOutput"></span>
-            <p>Collision y (red)</p>
-            <input type='range' min='0' max='800' value='330' id='ySlider'> <span id="yOutput"></span>
-        </div>
-        <div class="menu">
+        <div id="debug" class ="menu">
             <h2>Debug & info</h2>
             <p>Debug points</p>
             <button onclick="debugCircles = new Array;">Reset debug points</button>
             <button onclick="debugCircles.pop();">Delete last debug points</button>
-            <p id="noCollisionVertical"></p>
             <p id="noCollisionHorizontal"></p>
-            <p>L1: <span id="l1"></span></p>
-            <p> L2: <span id="l2"></span></p>
-            <p> l: <span id="l"></span></p>
-            <p> X Distance from collision: <span id="distanceX"></span></p>
-            <p> Y Distance from collision: <span id="distanceY"></span></p>
+            <hr>
+            <h3>Vertical axis</h3>
+            <p id="noCollisionVertical"></p>
+            <p>L1: <span id="l1V"></span></p>
+            <p> L2: <span id="l2V"></span></p>
+            <p> l: <span id="lV"></span></p>
+            <p> Distance from collision: <span id="distanceV"></span></p>
+            <hr>
+            <h3>Horizontal axis</h3>
+            <p id="noCollisionHorizontal"></p>
+            <p>L1: <span id="l1H"></span></p>
+            <p> L2: <span id="l2H"></span></p>
+            <p> l: <span id="lH"></span></p>
+            <p> Distance from collision: <span id="distanceH"></span></p>
         </div>
     </div>
 </body>
