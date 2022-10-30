@@ -25,11 +25,11 @@ function compute(direction) {
     height_ = height;
     switch (direction) {
         case "v":
-            rotation_ = rotation % 360;
+            rotation_ = (rotation % 360 + 360) % 360;
             x_ = rectX - x;
             break;
         case "h":
-            rotation_ = (rotation + 270) % 360;
+            rotation_ = (rotation % 360 + 630) % 360;
             x_ = rectY - y;
             break;
         }
@@ -53,10 +53,10 @@ function compute(direction) {
         l = (height_/2-(x_)/Math.sin(rotationRad)+width_/2/Math.tan(rotationRad))/Math.cos(rotationRad);
         // across adjacent walls
         if (l*Math.sin(rotationRad) < width_) {
-            if (x_ < width_/2 && l > Math.cos(rotationRad)*height_) { // behave different if collision is not dependent on rotation, aka it always collides
-                console.log("hello");
+            if (x_ < width_/2 && l > Math.cos(rotationRad)*height_) { // behaves different 
+                console.log("hello", l);
                 l = height_/Math.cos(rotationRad);
-                l1 = rectY + ((l/2)-(((x_)/Math.sin(rotationRad))*Math.cos(rotationRad)));
+                l1 = rectY - ((l/2)-(((x_)/Math.sin(rotationRad))*Math.cos(rotationRad)));
                 l2 = l1 + l;
             }
             else { //actually across adjacent walls
@@ -67,20 +67,12 @@ function compute(direction) {
         }
         // across parallel walls
         else {
-            if (x_ < width_/2 && l > Math.cos(rotationRad)*height_) {
-                console.log("hello 2");
-                l = height_/Math.cos(rotationRad);
-                l1 = rectY-((l/2)-(((x_)/Math.sin(rotationRad))*Math.cos(rotationRad)));
-                l2 = l1 + l;
-            }
-        else {
-
             console.log("0-90 else branch 2");
             l = width_/Math.sin(rotationRad)
             l1 = rectY-((l/2)-(((x_)/Math.sin(rotationRad))*Math.cos(rotationRad)));
             l2 = l1 + l;
         }
-        }
+        
     }
     // at angles 90 or 270
     else if (rotation_ == 90 || rotation_ == 270) {
