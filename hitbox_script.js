@@ -1,13 +1,13 @@
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext("2d");
-let rotation = 0;
-let width = 100;
-let height = 200;
-let rectX = 400;
-let rectY = 400;
-let x = 330;
-let y = 330;
-let debugCircles = new Array;
+let rotation = 0, //rectangle angle of rotation in degrees
+width = 100, //rectangle width
+height = 200, //rectangle height
+rectX = 400, // rectangle center X coord
+rectY = 400, // rectangle center Y coord
+x = 330, // vertical collision line X coord
+y = 330, // horizontal collision line Y coord
+debugCircles = new Array; // array of user made debug circles
 
 renderFrame();
 
@@ -21,16 +21,14 @@ function debugCirlce(event) {
 function compute(direction) {
     //Input str:"v" for vertical, str:"h" for horizontal collision points 
     let width_, height_, rotation_, x_, l1, l2, l, rectCoord;
+    width_ = width;
+    height_ = height;
     switch (direction) {
         case "v":
-            width_ = width;
-            height_ = height;
             rotation_ = rotation % 360;
             x_ = rectX - x;
             break;
         case "h":
-            width_ = width;
-            height_ = height;
             rotation_ = (rotation + 270) % 360;
             x_ = rectY - y;
             break;
@@ -135,7 +133,7 @@ function compute(direction) {
         document.getElementById('l2H').innerHTML = l2;
         document.getElementById('lH').innerHTML = l;
         document.getElementById('distanceH').innerHTML = x_;
-        //it works like tihs, idc why
+        //it works like tihs, cause math
         l1 = canvas.width - l1;
         l2 = canvas.width - l2;
         // COLLISION DETECT
@@ -164,8 +162,8 @@ function renderFrame() { // renders the current frame on main canvas when called
     y = Number(document.getElementById('ySlider').value);
     document.getElementById('yOutput').innerHTML = y;
     coordsV = compute("v");
-    //coordsH = [0, 0]; 
-    coordsH = compute("h");
+    coordsH = [0, 0]; 
+    //coordsH = compute("h");
     //draws horizontal axis of contact (blue)
     ctx.strokeStyle = "blue";
     ctx.beginPath();
