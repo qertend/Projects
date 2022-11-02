@@ -20,25 +20,35 @@ function debugCirlce(event) {
 
 function compute(direction) {
     //Input str:"v" for vertical, str:"h" for horizontal collision points 
-    let width_, height_, rotation_, x_, l1, l2, l, rectCoord;
+    let width_, height_, rotation_, x_, l1, l2, l, rectCoord, canvasWidth;
+    let mirror = false;
     width_ = width;
     height_ = height;
     switch (direction) {
         case "v":
             rotation_ = (rotation % 360 + 360) % 360;
             x_ = rectX - x;
+            rectCoord = rectY;
+            canvasWidth = canvas.height;
             break;
         case "h":
             rotation_ = (rotation % 360 + 630) % 360;
             x_ = rectY - y;
+            rectCoord = rectX;
+            canvasWidth = canvas.width;
             break;
         }
 
+    
+    if (x_ < 0) {
+        mirror = true;
+        x_ = -x_;
+    }
     // at angles 0 or 180
     if (rotation_ == 0 || rotation_ == 180) {
-        if (Math.abs(x_) <= width_/2) {
+        if (x_ <= width_/2) {
             l = height_;
-            l1 = rectY - l/2;
+            l1 = rectCoord - l/2;
             l2 = l1 + l;
         }
         else {
@@ -53,32 +63,33 @@ function compute(direction) {
         l = (height_/2-(x_)/Math.sin(rotationRad)+width_/2/Math.tan(rotationRad))/Math.cos(rotationRad);
         // across adjacent walls
         if (l*Math.sin(rotationRad) < width_) {
-            if (x_ < width_/2 && l > Math.cos(rotationRad)*height_) { // behaves different 
+            if (x_ < width_/2 && x_ > 0 && l > Math.cos(rotationRad)*height_) { // behaves different 
                 console.log("hello", l);
                 l = height_/Math.cos(rotationRad);
-                l1 = rectY - ((l/2)-(((x_)/Math.sin(rotationRad))*Math.cos(rotationRad)));
+                l1 = rectCoord - ((l/2)-(((x_)/Math.sin(rotationRad))*Math.cos(rotationRad)));
                 l2 = l1 + l;
             }
             else { //actually across adjacent walls
                 console.log("0-90 true branch");
-                l1 = rectY-((width_/Math.sin(rotationRad))/2-(((x_)/Math.sin(rotationRad))*Math.cos(rotationRad)));
-                l2 = l1 + l ;
+                l1 = rectCoord-((width_/Math.sin(rotationRad))/2-(((x_)/Math.sin(rotationRad))*Math.cos(rotationRad)));
+                l2 = l1 + l;
             }
+
         }
         // across parallel walls
         else {
             console.log("0-90 else branch 2");
             l = width_/Math.sin(rotationRad)
-            l1 = rectY-((l/2)-(((x_)/Math.sin(rotationRad))*Math.cos(rotationRad)));
+            l1 = rectCoord-((l/2)-(((x_)/Math.sin(rotationRad))*Math.cos(rotationRad)));
             l2 = l1 + l;
         }
         
     }
     // at angles 90 or 270
     else if (rotation_ == 90 || rotation_ == 270) {
-        if (Math.abs(x_) <= height_/2) {
+        if (x_ <= height_/2) {
             l = width_;
-            l1 = rectY - l/2;
+            l1 = rectCoord - l/2;
             l2 = l1 + l;
         }
         else {
@@ -93,16 +104,21 @@ function compute(direction) {
         l = (width_/2-(x_)/Math.sin(rotationRad)+height_/2/Math.tan(rotationRad))/Math.cos(rotationRad);
         // across adjacent walls
         if (l*Math.cos(rotationRad) < width_) {
-            l1 = rectY - ((height_/Math.sin(rotationRad))/2-(((x_)/Math.sin(rotationRad))*Math.cos(rotationRad)));
+            l1 = rectCoord - ((height_/Math.sin(rotationRad))/2-(((x_)/Math.sin(rotationRad))*Math.cos(rotationRad)));
             l2 = l1 + l;
         }
         // across parallel walls
         else {
             rotationRad = (rotation_ % 180)*Math.PI/180;
             l = width_/Math.sin(rotationRad);
-            l1 = rectY - ((l/2)-(((x_)/Math.sin(rotationRad))*Math.cos(rotationRad)));
+            l1 = rectCoord - ((l/2)-(((x_)/Math.sin(rotationRad))*Math.cos(rotationRad)));
             l2 = l1 + l;
         }
+    }
+
+    if (mirror) {
+        l1 = canvasWidth - l1;
+        l2 = canvasWidth -l2;
     }
 
     if (direction == "v") {
@@ -114,9 +130,11 @@ function compute(direction) {
         // COLLISION DETECT
         if (l < 0) {
             document.getElementById('noCollisionVertical').innerHTML = "No collision on vertical axis";
+            return [0,0];
         }
         else {
             document.getElementById('noCollisionVertical').innerHTML = "";
+            return [l1, l2];
         }
     }
     else if (direction == "h") {
@@ -126,18 +144,18 @@ function compute(direction) {
         document.getElementById('lH').innerHTML = l;
         document.getElementById('distanceH').innerHTML = x_;
         //it works like tihs, cause math
-        l1 = canvas.width - l1;
-        l2 = canvas.width - l2;
+        l1 = canvasWidth - l1;
+        l2 = canvasWidth - l2;
         // COLLISION DETECT
         if (l < 0) {
             document.getElementById('noCollisionHorizontal').innerHTML = "No collision on horizontal axis";
+            return [0, 0];
         }
         else {
             document.getElementById('noCollisionHorizontal').innerHTML = "";
+            return [l1, l2];
         }
     }
-    
-    return [l1, l2];
 }
 
 function renderFrame() { // renders the current frame on main canvas when called
