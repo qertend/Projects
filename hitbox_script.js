@@ -39,7 +39,6 @@ function compute(direction) {
             break;
         }
 
-    
     if (x_ < 0) {
         mirror = true;
         x_ = -x_;
@@ -63,27 +62,22 @@ function compute(direction) {
         l = (height_/2-(x_)/Math.sin(rotationRad)+width_/2/Math.tan(rotationRad))/Math.cos(rotationRad);
         // across adjacent walls
         if (l*Math.sin(rotationRad) < width_) {
-            if (x_ < width_/2 && x_ > 0 && l > Math.cos(rotationRad)*height_) { // behaves different 
-                console.log("hello", l);
+            if (x_ < width_/2 && l > Math.cos(rotationRad)*height_) { // across parallel walls
                 l = height_/Math.cos(rotationRad);
-                l1 = rectCoord - ((l/2)-(((x_)/Math.sin(rotationRad))*Math.cos(rotationRad)));
+                l1 = rectCoord - (l/2 + x_*Math.tan(rotationRad));
                 l2 = l1 + l;
             }
             else { //actually across adjacent walls
-                console.log("0-90 true branch");
                 l1 = rectCoord-((width_/Math.sin(rotationRad))/2-(((x_)/Math.sin(rotationRad))*Math.cos(rotationRad)));
                 l2 = l1 + l;
             }
-
         }
         // across parallel walls
         else {
-            console.log("0-90 else branch 2");
-            l = width_/Math.sin(rotationRad)
+            l = width_/Math.sin(rotationRad);
             l1 = rectCoord-((l/2)-(((x_)/Math.sin(rotationRad))*Math.cos(rotationRad)));
             l2 = l1 + l;
         }
-        
     }
     // at angles 90 or 270
     else if (rotation_ == 90 || rotation_ == 270) {
@@ -104,8 +98,15 @@ function compute(direction) {
         l = (width_/2-(x_)/Math.sin(rotationRad)+height_/2/Math.tan(rotationRad))/Math.cos(rotationRad);
         // across adjacent walls
         if (l*Math.cos(rotationRad) < width_) {
-            l1 = rectCoord - ((height_/Math.sin(rotationRad))/2-(((x_)/Math.sin(rotationRad))*Math.cos(rotationRad)));
-            l2 = l1 + l;
+            if (x_ < width_/2 && l > Math.sin(rotationRad)*height_) { // across parallel walls
+                l = height_/Math.sin(rotationRad);
+                l1 = rectCoord - (l/2 - x_/Math.tan(rotationRad));
+                l2 = l1 + l;
+            }
+            else { //actually across adjacent walls
+                l1 = rectCoord-((height_/Math.sin(rotationRad))/2-(((x_)/Math.sin(rotationRad))*Math.cos(rotationRad)));
+                l2 = l1 + l;
+            }
         }
         // across parallel walls
         else {
@@ -216,8 +217,3 @@ function renderFrame() { // renders the current frame on main canvas when called
     ctx.ellipse(0, 0, 5, 5, 0, 0, Math.PI * 2);
     ctx.fill();
 }
-
-/*
-TODO
-implement no collision detection
-*/
