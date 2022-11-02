@@ -45,6 +45,9 @@ function compute(direction) {
             rectCoord = rectX;
             canvasWidth = canvas.width;
             break;
+        default:
+            console.error("incorrect direction: " + direction);
+            return;
         }
 
     if (x_ < 0) {
@@ -166,7 +169,6 @@ function compute(direction) {
         }
     }
 }
-
 function renderFrame() { // renders the current frame on main canvas when called
     requestAnimationFrame(renderFrame);
     ctx.setTransform(1, 0, 0, 1, 0, 0); // resets rotation and translate
@@ -181,7 +183,6 @@ function renderFrame() { // renders the current frame on main canvas when called
     y = Number(document.getElementById('ySlider').value);
     document.getElementById('yOutput').innerHTML = y;
     coordsV = compute("v");
-    //coordsH = [0, 0]; 
     coordsH = compute("h");
     //draws horizontal axis of contact (blue)
     ctx.strokeStyle = "blue";
