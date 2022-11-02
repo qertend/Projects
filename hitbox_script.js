@@ -20,8 +20,16 @@ function debugCirlce(event) {
 
 function compute(direction) {
     //Input str:"v" for vertical, str:"h" for horizontal collision points 
-    let width_, height_, rotation_, x_, l1, l2, l, rectCoord, canvasWidth;
-    let mirror = false;
+    let width_, //rectangle width (horizontal side at 0 degrees)
+    height_, //rectangle height (vertical side at 0 degrees)
+    rotation_, // rectangle angle of rotation in degrees
+    x_, //offset between collision line and rectangle center point
+    l1, //collision point one (return 0 if no collision is detected)
+    l2, //collision point two (same here)
+    l, //distance betwwen l1 and l2 (isn't returned)
+    rectCoord, //relevant coordinate of rectangle center
+    canvasWidth; //relevant dimension of canvas
+    let mirror = false; //true if x_ is negative
     width_ = width;
     height_ = height;
     switch (direction) {
@@ -32,7 +40,7 @@ function compute(direction) {
             canvasWidth = canvas.height;
             break;
         case "h":
-            rotation_ = (rotation % 360 + 630) % 360;
+            rotation_ = (rotation % 360 + 450) % 360;
             x_ = rectY - y;
             rectCoord = rectX;
             canvasWidth = canvas.width;
@@ -173,8 +181,8 @@ function renderFrame() { // renders the current frame on main canvas when called
     y = Number(document.getElementById('ySlider').value);
     document.getElementById('yOutput').innerHTML = y;
     coordsV = compute("v");
-    coordsH = [0, 0]; 
-    //coordsH = compute("h");
+    //coordsH = [0, 0]; 
+    coordsH = compute("h");
     //draws horizontal axis of contact (blue)
     ctx.strokeStyle = "blue";
     ctx.beginPath();
