@@ -64,10 +64,6 @@ class Tank {
         if (keyBuffer[this.keyBackward]) { this.move(speed);} // Backwards
         if (keyBuffer[this.keyLeft]) { this.rotate(-speed);} // Left
         if (keyBuffer[this.keyRight]) { this.rotate(speed);} // Right
-        //horizontal pos in grid Math.floor(this.x / (canvas.width/grid))
-        //vertical pos in grid Math.floor(this.y / (canvas.height/grid))
-
-        this.move();
     }
 
     check(direction, rotation_, x_) {
@@ -90,6 +86,11 @@ class Tank {
                     return true;
                 }
                 else {
+                    console.log((x_ % (canvas.height/grid)-(canvas.height/grid)));
+                    ls = mcd("h", this.width, this.height, rotation_, this.x, (x_ % (canvas.height/grid)-(canvas.height/grid)));
+                    if (!ls) {
+                        return true;
+                    }
                     return false;
                 }
         }
@@ -110,10 +111,11 @@ class Tank {
         if (this.y + speed * Math.cos(-rotationRad) < canvas.height && this.y + speed * Math.cos(-rotationRad ) > 0 && this.check("h", this.rotation, this.y + speed * Math.cos(-rotationRad))) {
             this.y += speed * Math.cos(-rotationRad);
         }
-        this.check();
     }
     rotate(speed) {
-        this.rotation += speed;
+        if (this.check("v", this.rotation + speed, this.x) && this.check("h", this.rotation + speed, this.x)) {
+            this.rotation += speed;
+        }
     }
 }
 
@@ -122,7 +124,7 @@ redTankImg.src = "redTank.png";
 redTankImg.width /= grid*1.5; // adjusts Tank image X size to half of grid size
 redTankImg.height /= grid*1.5; // adjusts Tank image Y size to half of grid size
 
-redTank = new Tank(redTankImg.width, redTankImg.height, 350, 350, "KeyW", "KeyS", "KeyA", "KeyD", "Space"); // replace static values with variables e.g. p1Forward
+const redTank = new Tank(redTankImg.width, redTankImg.height, 350, 350, "KeyW", "KeyS", "KeyA", "KeyD", "Space"); // replace static values with variables e.g. p1Forward
 
 //DO NOT ASK HOW IT WORKS, IT JUST DOES. I SPENT WAY TOO MUCH TIME ON IT TO KNOW ANYMORE
 function mcd(direction, width_, height_, rotation, rectCoord, x_) { //mcd stands for Magic Collision Detector
