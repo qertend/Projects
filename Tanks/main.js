@@ -1,7 +1,7 @@
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext("2d");
-const canvas2 = document.getElementById('labyrinthGen');
-const ctx2 = canvas2.getContext("2d");
+const canvasLab = document.getElementById('labyrinthGen');
+const ctxLab = canvasLab.getContext("2d");
 let grid = 8; // number of rows and coloumns in labyrinth, will be modifiable by user
 let speed = 0.3; // sets the movement and turn speed of the tanks, will be modifiable by user
 let bulletLifetime = 3500; //bullet lifetime in milliseconds
@@ -73,7 +73,7 @@ redTankImg.height /= grid*1.5; // adjusts Tank image Y size to half of grid size
 redTank = new Tank(redTankImg.width, redTankImg.height, 400, 400); //replace 400, 400 with random points on map
 
 function generateLabyrinth() {
-    ctx2.clearRect(0,0,canvas2.width, canvas2.height); //resets hidden labyrinth canvas
+    ctxLab.clearRect(0,0,canvasLab.width, canvasLab.height); //resets hidden labyrinth canvas
     for (i=0; i<grid**2; i++) { //generates random walls and puts them in arrays
         if (Math.random() < 0.1) {
             hWalls[i] = true;
@@ -89,19 +89,19 @@ function generateLabyrinth() {
         }
     }
     // fills in the 4 edges
-    ctx2.fillRect(0, 0, canvas2.width, 3);
-    ctx2.fillRect(0, 0, 3, canvas2.height);
-    ctx2.fillRect(canvas2.width-3, 0, canvas2.width, canvas.height);
-    ctx2.fillRect(0, canvas2.height-3, canvas2.width, canvas2.height);
+    ctxLab.fillRect(0, 0, canvasLab.width, 3);
+    ctxLab.fillRect(0, 0, 3, canvasLab.height);
+    ctxLab.fillRect(canvasLab.width-3, 0, canvasLab.width, canvas.height);
+    ctxLab.fillRect(0, canvasLab.height-3, canvasLab.width, canvasLab.height);
 
     // draws labyrinth on hidden canvas
     for (i=0; i<grid; i++) {
         for (j=0; j<grid; j++) {
             if (hWalls[i+j*grid]){
-                ctx2.fillRect(j*(canvas2.width/grid),i*(canvas2.width/grid)-3, (j+1)*canvas2.width/grid, 6);
+                ctxLab.fillRect(j*(canvasLab.width/grid),i*(canvasLab.width/grid)-3, (j+1)*canvasLab.width/grid, 6);
             }
             if (vWalls[i+j*grid]){
-                ctx2.fillRect(j*(canvas2.width/grid)-3,i*(canvas2.width/grid), 6, (i+1)*canvas2.width/grid );
+                ctxLab.fillRect(j*(canvasLab.width/grid)-3,i*(canvasLab.width/grid), 6, (i+1)*canvasLab.width/grid );
             }
         }
     }
@@ -143,3 +143,10 @@ function renderFrame() {
     ctx.ellipse(0, 0, 5, 5, 0, 0, Math.PI * 2);
     ctx.fill();
 }
+/* 
+TODO
+create Game Settings menu
+-create mode where labyrinth changes every so often
+
+
+*/
