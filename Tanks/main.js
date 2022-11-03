@@ -66,16 +66,21 @@ class Tank {
         if (keyBuffer[this.keyRight]) { this.rotate(speed);} // Right
     }
     check(direction, rotation_, x_) {
-        let ls1, ls2;
+        let ls, ls1, ls2;
         switch (direction) {
             //collisions with vertical lines
             case "v":
                 ls1 = mcd("v", this.width, this.height, rotation_, this.y, (x_ % (canvas.width/grid)));
-                ls2 = mcd("v", this.width, this.height, rotation_, this.x, (x_ % (canvas.width/grid)-(canvas.width/grid)));
+                ls2 = mcd("v", this.width, this.height, rotation_, this.y, (x_ % (canvas.width/grid)-(canvas.width/grid)));
                 if (!ls1 && !ls2) {
                     return true;
                 }
                 else {
+                    if (!ls1) {ls = ls2;} else { ls = ls1;} //selects the colliding line
+                    if (ls[0] > ls[1]) { ls[2] = ls[0]; ls[0] = ls[1]; ls[1] = ls[0];}//makes sure the smaller number has index 0
+
+                    //Math.floor(x_ / (canvas.width/grid))
+
                     return false;
                 }
             //collisions with horizontal lines
@@ -270,7 +275,6 @@ function generateLabyrinth() {
     ctxLab.fillRect(0, 0, 3, canvasLab.height);
     ctxLab.fillRect(canvasLab.width-3, 0, canvasLab.width, canvas.height);
     ctxLab.fillRect(0, canvasLab.height-3, canvasLab.width, canvasLab.height);
-    ctxLab.fillRect(300, 300, 100, 100);
 
     // draws labyrinth on hidden canvas
     for (i=0; i<grid; i++) {
