@@ -129,8 +129,8 @@ function compute(direction) {
     }
 
     if (mirror) {
-        l1 = canvasWidth - l1;
-        l2 = canvasWidth -l2;
+        l1 -= 2*(l1-rectCoord);
+        l2 -= 2*(l2-rectCoord);
     }
 
     if (direction == "v") {
@@ -156,8 +156,8 @@ function compute(direction) {
         document.getElementById('lH').innerHTML = l;
         document.getElementById('distanceH').innerHTML = x_;
         //it works like tihs, cause math
-        l1 = canvasWidth - l1;
-        l2 = canvasWidth - l2;
+        l1 -= 2*(l1-rectCoord);
+        l2 -= 2*(l2-rectCoord);
         // COLLISION DETECT
         if (l < 0) {
             document.getElementById('noCollisionHorizontal').innerHTML = "No collision on horizontal axis";
