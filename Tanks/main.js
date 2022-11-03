@@ -65,36 +65,30 @@ class Tank {
         if (keyBuffer[this.keyLeft]) { this.rotate(-speed);} // Left
         if (keyBuffer[this.keyRight]) { this.rotate(speed);} // Right
     }
-
     check(direction, rotation_, x_) {
-        let ls;
+        let ls1, ls2;
         switch (direction) {
             //collisions with vertical lines
             case "v":
-                ls = mcd("v", this.width, this.height, rotation_, this.y, (x_ % (canvas.width/grid)));
-                if (!ls) {
+                ls1 = mcd("v", this.width, this.height, rotation_, this.y, (x_ % (canvas.width/grid)));
+                ls2 = mcd("v", this.width, this.height, rotation_, this.x, (x_ % (canvas.width/grid)-(canvas.width/grid)));
+                if (!ls1 && !ls2) {
                     return true;
                 }
                 else {
                     return false;
                 }
-                break;
             //collisions with horizontal lines
             case "h":
-                ls = mcd("h", this.width, this.height, rotation_, this.x, (x_ % (canvas.height/grid)));
-                if (!ls) {
+                ls1 = mcd("h", this.width, this.height, rotation_, this.x, (x_ % (canvas.height/grid)));
+                ls2 = mcd("h", this.width, this.height, rotation_, this.x, (x_ % (canvas.height/grid)-(canvas.height/grid)));
+                if (!ls1 && !ls2) {
                     return true;
                 }
                 else {
-                    console.log((x_ % (canvas.height/grid)-(canvas.height/grid)));
-                    ls = mcd("h", this.width, this.height, rotation_, this.x, (x_ % (canvas.height/grid)-(canvas.height/grid)));
-                    if (!ls) {
-                        return true;
-                    }
                     return false;
                 }
         }
-
     }
     shoot() {
         if (this.bullets.size < maxBulletCount) {
@@ -113,7 +107,7 @@ class Tank {
         }
     }
     rotate(speed) {
-        if (this.check("v", this.rotation + speed, this.x) && this.check("h", this.rotation + speed, this.x)) {
+        if (this.check("v", this.rotation + speed, this.x) && this.check("h", this.rotation + speed, this.y)) {
             this.rotation += speed;
         }
     }
@@ -121,8 +115,8 @@ class Tank {
 
 const redTankImg = new Image(); // creates red tank sprite
 redTankImg.src = "redTank.png";
-redTankImg.width /= grid*1.5; // adjusts Tank image X size to half of grid size
-redTankImg.height /= grid*1.5; // adjusts Tank image Y size to half of grid size
+redTankImg.width /= (grid*1.5); // adjusts Tank image X size to half of grid size
+redTankImg.height /= (grid*1.5); // adjusts Tank image Y size to half of grid size
 
 const redTank = new Tank(redTankImg.width, redTankImg.height, 350, 350, "KeyW", "KeyS", "KeyA", "KeyD", "Space"); // replace static values with variables e.g. p1Forward
 
@@ -276,6 +270,7 @@ function generateLabyrinth() {
     ctxLab.fillRect(0, 0, 3, canvasLab.height);
     ctxLab.fillRect(canvasLab.width-3, 0, canvasLab.width, canvas.height);
     ctxLab.fillRect(0, canvasLab.height-3, canvasLab.width, canvasLab.height);
+    ctxLab.fillRect(300, 300, 100, 100);
 
     // draws labyrinth on hidden canvas
     for (i=0; i<grid; i++) {
@@ -308,10 +303,6 @@ function renderFrame() {
     ctx.translate(redTank.x, redTank.y); // places 0,0 at tank
     ctx.rotate(redTank.rotation*Math.PI/180); // rotates to tank direction
     ctx.drawImage(redTankImg, -redTank.width/2, -redTank.height/2, redTank.width, redTank.height); // draws image
-    ctx.fillStyle = "yellow"; // lines 44 to 47: creates temporary debug circle
-    ctx.beginPath();
-    ctx.ellipse(0, 0, 5, 5, 0, 0, Math.PI * 2);
-    ctx.fill();
 }
 /* 
 TODO
