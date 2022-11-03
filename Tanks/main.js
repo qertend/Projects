@@ -4,7 +4,10 @@ const canvasLab = document.getElementById('labyrinthGen');
 const ctxLab = canvasLab.getContext("2d");
 let grid = 8; // number of rows and coloumns in labyrinth, will be modifiable by user
 let speed = 0.3; // sets the movement and turn speed of the tanks, will be modifiable by user
+let p1Bullets = new Set();
+let p2Bullets = new Set();
 let bulletLifetime = 3500; // bullet lifetime in milliseconds
+let maxBulletCount = 3;
 let keyBuffer = {};
 let hWalls = {}; // array of horizontal walls
 let vWalls = {}; // array of vertical walls
@@ -14,10 +17,9 @@ window.addEventListener("keydown", function(event) {keyBuffer[event.code] = even
 window.addEventListener("keyup", function(event) {keyBuffer[event.code] = event.type == "keydown";});
 
 class Bullet { // very much incomplete and incorrect
-    constructor(direction, parent) {
+    constructor(direction) {
         this.direction = direction;
-        this.parent = parent;
-        this.timeLeft = bulletLifetime;
+        this.timeShot = Date.now();
     }
     verticalBounce() {
         this.direction = 360 - this.direction;
@@ -34,6 +36,7 @@ class Bullet { // very much incomplete and incorrect
 
 class Tank {
     constructor(width, height, x, y, keyForward, keyBackward, keyLeft, keyRight, keyShoot) {
+        this.bullets = new Set();
         this.width = width;
         this.height = height;
         this.x = x;
@@ -45,13 +48,8 @@ class Tank {
         this.keyRight = keyRight;
         this.keyShoot = keyShoot;
         this.keyShootPressed = false;
-        this.activeBulletCount = 0;
     }
     update() {
-        if (keyBuffer[this.keyForward]) { redMovement(-speed);} // Forwards
-        if (keyBuffer[this.keyBackward]) { redMovement(speed);} // Backwards
-        if (keyBuffer[this.keyLeft]) { this.rotation-=speed;} // Left
-        if (keyBuffer[this.keyRight]) { this.rotation+=speed;} // Right
         if (keyBuffer[this.keyShoot] && !this.keyShootPressed) { // Shoot
             this.shoot();
             this.keyShootPressed = true;
@@ -59,14 +57,24 @@ class Tank {
         else if (!keyBuffer[this.keyShoot]) {
             this.keyShootPressed = false;
         }
-        console.log(keyBuffer)
-        //this.move();
+        for (let x of this.bullets) {
+            if (Date.now() - x.timeShot > bulletLifetime) {
+                this.bullets.delete(x);
+            }
+        }
+
+        this.move();
     }
     shoot() {
-
+        if (this.bullets.size < maxBulletCount) {
+            this.bullets.add(new Bullet(this.rotation));
+        }
     }
     move() {
-
+        if (keyBuffer[this.keyForward]) { redMovement(-speed);} // Forwards
+        if (keyBuffer[this.keyBackward]) { redMovement(speed);} // Backwards
+        if (keyBuffer[this.keyLeft]) { this.rotation-=speed;} // Left
+        if (keyBuffer[this.keyRight]) { this.rotation+=speed;} // Right
     }
 }
 
