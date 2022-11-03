@@ -3,7 +3,7 @@ const ctx = canvas.getContext("2d");
 const canvas2 = document.getElementById('labyrinthGen');
 const ctx2 = canvas2.getContext("2d");
 let grid = 8; // number of rows and coloumns in labyrinth, will be modifiable by user
-let speed = 0.01; // sets the movement and turn speed of the tanks, will be modifiable by user
+let speed = 0.3; // sets the movement and turn speed of the tanks, will be modifiable by user
 let keyBuffer = {};
 let hWalls = {}; // array of horizontal walls
 let vWalls = {}; // array of vertical walls
@@ -11,7 +11,6 @@ let vWalls = {}; // array of vertical walls
 //initialize event listeners
 window.addEventListener("keydown", function() {keyBuffer[event.keyCode] = event.type == "keydown";});
 window.addEventListener("keyup", function() {keyBuffer[event.keyCode] = event.type == "keydown";});
-window.addEventListener("keydown", renderFrame);
 
 class Bullet { //very much incomplete and incorrect
     constructor(direction) {
@@ -37,6 +36,9 @@ class Tank {
         this.x = x;
         this.y = y;
         this.rotation = 0;
+    }
+    move() {
+
     }
 }
 
@@ -84,12 +86,12 @@ function generateLabyrinth() {
 
 function redMovement(direction) { //converts the tanks movements to X and Y coordinates
     // checks if out of bounds on X axis
-    if (redX + direction * Math.sin(-redRotation*Math.PI/180) < canvas.width && redX + direction * Math.sin(-redRotation*Math.PI/180) > 0) {
-        redX += direction * Math.sin(-redRotation*Math.PI/180);
+    if (redTank.x + direction * Math.sin(-redTank.rotation*Math.PI/180) < canvas.width && redTank.x + direction * Math.sin(-redTank.rotation*Math.PI/180) > 0) {
+        redTank.x += direction * Math.sin(-redTank.rotation*Math.PI/180);
     }
     // checks if out of bounds on Y axis   
-    if (redY + direction * Math.cos(-redRotation*Math.PI/180) < canvas.height && redY + direction * Math.cos(-redRotation*Math.PI/180) > 0) {
-        redY += direction * Math.cos(-redRotation*Math.PI/180);
+    if (redTank.y + direction * Math.cos(-redTank.rotation*Math.PI/180) < canvas.height && redTank.y + direction * Math.cos(-redTank.rotation*Math.PI/180) > 0) {
+        redTank.y += direction * Math.cos(-redTank.rotation*Math.PI/180);
     }
     // insert wall collision detection here
 }
@@ -104,15 +106,15 @@ renderFrame();
 function renderFrame() { 
     requestAnimationFrame(renderFrame);
     if (keyBuffer[87]) { redMovement(-speed);} // W
-    if (keyBuffer[65]) { redRotation-=speed;} // A
+    if (keyBuffer[65]) { redTank.rotation-=speed;} // A
     if (keyBuffer[83]) { redMovement(speed);} // S
-    if (keyBuffer[68]) { redRotation+=speed;} // D
+    if (keyBuffer[68]) { redTank.rotation+=speed;} // D
     ctx.setTransform(1, 0, 0, 1, 0, 0); // resets rotation and translate
     ctx.clearRect(0,0, canvas.width, canvas.height); // resets image on canvas
     ctx.drawImage(document.getElementById("labyrinthGen"),0,0); // draws labyrinth
-    ctx.translate(redX, redY); // places 0,0 at tank
-    ctx.rotate(redRotation*Math.PI/180); // rotates to tank direction
-    ctx.drawImage(redTank, -redTank.width/2, -redTank.height/2, redTank.width, redTank.height); // draws image
+    ctx.translate(redTank.x, redTank.y); // places 0,0 at tank
+    ctx.rotate(redTank.rotation*Math.PI/180); // rotates to tank direction
+    ctx.drawImage(redTankImg, -redTank.width/2, -redTank.height/2, redTank.width, redTank.height); // draws image
     ctx.fillStyle = "yellow"; //lines 44 to 47: creates temporary debug circle
     ctx.beginPath();
     ctx.ellipse(0, 0, 5, 5, 0, 0, Math.PI * 2);
