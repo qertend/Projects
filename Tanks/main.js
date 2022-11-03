@@ -70,13 +70,30 @@ class Tank {
         this.move();
     }
 
-    check() {
-        for (let x in []) {
-            if (mcd() == [0, 0]) {
-
-            }
-
+    check(direction, rotation_, x_) {
+        let ls;
+        switch (direction) {
+            //collisions with vertical lines
+            case "v":
+                ls = mcd("v", this.width, this.height, rotation_, this.y, (x_ % (canvas.width/grid)));
+                if (!ls) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+                break;
+            //collisions with horizontal lines
+            case "h":
+                ls = mcd("h", this.width, this.height, rotation_, this.x, (x_ % (canvas.height/grid)));
+                if (!ls) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
         }
+
     }
     shoot() {
         if (this.bullets.size < maxBulletCount) {
@@ -85,16 +102,18 @@ class Tank {
     }
     move(speed) {
         // checks if out of bounds on X axis
-        if (this.x + direction * Math.sin(-redTank.rotation*Math.PI/180) < canvas.width && this.x + direction * Math.sin(-redTank.rotation*Math.PI/180) > 0 && this.check()) {
-            this.x += direction * Math.sin(-redTank.rotation*Math.PI/180);
+        let rotationRad = redTank.rotation*Math.PI/180;
+        if (this.x + speed * Math.sin(-rotationRad) < canvas.width && this.x + speed * Math.sin(-rotationRad) > 0 && this.check("v", this.rotation, this.x + speed * Math.sin(-rotationRad))) {
+            this.x += speed * Math.sin(-rotationRad);
         }
         // checks if out of bounds on Y axis
-        if (this.y + direction * Math.cos(-redTank.rotation*Math.PI/180) < canvas.height && this.y + direction * Math.cos(-redTank.rotation*Math.PI/180 ) > 0 && this.check()) {
-            this.y += direction * Math.cos(-redTank.rotation*Math.PI/180);
+        if (this.y + speed * Math.cos(-rotationRad) < canvas.height && this.y + speed * Math.cos(-rotationRad ) > 0 && this.check("h", this.rotation, this.y + speed * Math.cos(-rotationRad))) {
+            this.y += speed * Math.cos(-rotationRad);
         }
+        this.check();
     }
     rotate(speed) {
-
+        this.rotation += speed;
     }
 }
 
@@ -212,42 +231,27 @@ function mcd(direction, width_, height_, rotation, rectCoord, x_) { //mcd stands
     }
 
     if (direction == "v") {
-        //data for debug menu
-        document.getElementById('l1V').innerHTML = l1;
-        document.getElementById('l2V').innerHTML = l2;
-        document.getElementById('lV').innerHTML = l;
-        document.getElementById('distanceV').innerHTML = x_;
         // COLLISION DETECT
         if (l < 0) {
-            document.getElementById('noCollisionVertical').innerHTML = "No collision on vertical axis";
-            return [0,0];
+            return false;
         }
         else {
-            document.getElementById('noCollisionVertical').innerHTML = "";
             return [l1, l2];
         }
     }
     else if (direction == "h") {
-        //data for debug menu
-        document.getElementById('l1H').innerHTML = l1;
-        document.getElementById('l2H').innerHTML = l2;
-        document.getElementById('lH').innerHTML = l;
-        document.getElementById('distanceH').innerHTML = x_;
         //it works like tihs, cause math
         l1 -= 2*(l1-rectCoord);
         l2 -= 2*(l2-rectCoord);
         // COLLISION DETECT
         if (l < 0) {
-            document.getElementById('noCollisionHorizontal').innerHTML = "No collision on horizontal axis";
-            return [0, 0];
+            return false;
         }
         else {
-            document.getElementById('noCollisionHorizontal').innerHTML = "";
             return [l1, l2];
         }
     }
 }
-
 
 function generateLabyrinth() {
     ctxLab.clearRect(0,0,canvasLab.width, canvasLab.height); // resets hidden labyrinth canvas
