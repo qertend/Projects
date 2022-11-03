@@ -4,17 +4,20 @@ const canvas2 = document.getElementById('labyrinthGen');
 const ctx2 = canvas2.getContext("2d");
 let grid = 8; // number of rows and coloumns in labyrinth, will be modifiable by user
 let speed = 0.3; // sets the movement and turn speed of the tanks, will be modifiable by user
+let bulletLifetime = 3500; //bullet lifetime in milliseconds
 let keyBuffer = {};
 let hWalls = {}; // array of horizontal walls
 let vWalls = {}; // array of vertical walls
 
 //initialize event listeners
-window.addEventListener("keydown", function() {keyBuffer[event.keyCode] = event.type == "keydown";});
-window.addEventListener("keyup", function() {keyBuffer[event.keyCode] = event.type == "keydown";});
+window.addEventListener("keydown", function(event) {keyBuffer[event.code] = event.type == "keydown";});
+window.addEventListener("keyup", function(event) {keyBuffer[event.code] = event.type == "keydown";});
 
 class Bullet { //very much incomplete and incorrect
-    constructor(direction) {
+    constructor(direction, parent) {
         this.direction = direction;
+        this.parent = parent;
+        this.timeLeft = bulletLifetime;
     }
     verticalBounce() {
         this.direction = 360 - this.direction;
@@ -30,12 +33,32 @@ class Bullet { //very much incomplete and incorrect
 }
 
 class Tank {
-    constructor(width, height, x, y) {
+    constructor(width, height, x, y, keyForward, keyBackward, keyLeft, keyRight, keyShoot) {
         this.width = width;
         this.height = height;
         this.x = x;
         this.y = y;
         this.rotation = 0;
+        this.keyForward = keyForward;
+        this.keyBackward = keyBackward;
+        this.keyLeft = keyLeft;
+        this.keyRight = keyRight;
+        this.keyShoot = keyShoot;
+        this.keyShootPressed = false;
+        this.activeBulletCount = 0;
+    }
+    update() {
+        if (keyBuffer[this.keyShoot] && !this.keyShootPressed) {
+            this.shoot();
+            this.keyShootPressed = true;
+        }
+        else if (!keyBuffer[this.keyShoot]) {
+            this.keyShootPressed = false;
+        }
+        this.move();
+    }
+    shoot() {
+
     }
     move() {
 
@@ -105,10 +128,10 @@ renderFrame();
 // renders the current frame on main canvas when called
 function renderFrame() { 
     requestAnimationFrame(renderFrame);
-    if (keyBuffer[87]) { redMovement(-speed);} // W
-    if (keyBuffer[65]) { redTank.rotation-=speed;} // A
-    if (keyBuffer[83]) { redMovement(speed);} // S
-    if (keyBuffer[68]) { redTank.rotation+=speed;} // D
+    if (keyBuffer["KeyW"]) { redMovement(-speed);} // W
+    if (keyBuffer["KeyA"]) { redTank.rotation-=speed;} // A
+    if (keyBuffer["KeyS"]) { redMovement(speed);} // S
+    if (keyBuffer["KeyD"]) { redTank.rotation+=speed;} // D
     ctx.setTransform(1, 0, 0, 1, 0, 0); // resets rotation and translate
     ctx.clearRect(0,0, canvas.width, canvas.height); // resets image on canvas
     ctx.drawImage(document.getElementById("labyrinthGen"),0,0); // draws labyrinth
