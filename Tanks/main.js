@@ -105,7 +105,7 @@ redTankImg.height /= grid*1.5; // adjusts Tank image Y size to half of grid size
 
 redTank = new Tank(redTankImg.width, redTankImg.height, 350, 350, "KeyW", "KeyS", "KeyA", "KeyD", "Space"); // replace static values with variables e.g. p1Forward
 
-//DO NOT ASK HOW IT WORKS, IT JUST DOES. I SPENT WAY TOO MUCH TIME MAKING IT
+//DO NOT ASK HOW IT WORKS, IT JUST DOES. I SPENT WAY TOO MUCH TIME ON IT TO KNOW ANYMORE
 function mcd(direction, width_, height_, rotation, rectCoord, x_) { //mcd stands for Magic Collision Detector
     //Input str:"v" for vertical, str:"h" for horizontal collision points 
     //x_ : offset between collision line and rectangle center point
