@@ -6,17 +6,19 @@ let grid = 8; // number of rows and coloumns in labyrinth, will be modifiable by
 let speed = 0.3; // sets the movement and turn speed of the tanks, will be modifiable by user
 let bulletLifetime = 3500; // bullet lifetime in milliseconds
 let maxBulletCount = 3;
-let keyBuffer = {};
-let hWalls = {}; // array of horizontal walls
-let vWalls = {}; // array of vertical walls
+let keyBuffer = [];
+let hWalls = []; // array of horizontal walls
+let vWalls = []; // array of vertical walls
 
 // initialize event listeners
 window.addEventListener("keydown", function(event) {keyBuffer[event.code] = event.type == "keydown";});
 window.addEventListener("keyup", function(event) {keyBuffer[event.code] = event.type == "keydown";});
 
 class Bullet { // very much incomplete and incorrect
-    constructor(direction) {
+    constructor(direction, x, y) {
         this.direction = direction;
+        this.x = x;
+        this.y = y;
         this.timeShot = Date.now();
     }
     verticalBounce() {
@@ -78,10 +80,12 @@ class Tank {
                 else {
                     if (!ls1) {ls = ls2;} else { ls = ls1;} //selects the colliding line
                     if (ls[0] > ls[1]) { ls[2] = ls[0]; ls[0] = ls[1]; ls[1] = ls[0];}//makes sure the smaller number has index 0
-
-                    //Math.floor(x_ / (canvas.width/grid))
-
+                    if (!vWalls[Math.round(x_ / (canvas.width/grid))][Math.round(this.y / (canvas.width/grid))*grid]) {
+                        return true;
+                    }
                     return false;
+
+
                 }
             //collisions with horizontal lines
             case "h":
@@ -256,18 +260,22 @@ function mcd(direction, width_, height_, rotation, rectCoord, x_) { //mcd stands
 
 function generateLabyrinth() {
     ctxLab.clearRect(0,0,canvasLab.width, canvasLab.height); // resets hidden labyrinth canvas
-    for (i=0; i<grid**2; i++) { // generates random walls and puts them in arrays
-        if (Math.random() < 0.1) {
-            hWalls[i] = true;
-        }
-        else {
-            hWalls[i] = false;
-        }
-        if (Math.random() < 0.1) {
-            vWalls[i] = true;
-        }
-        else {
-            vWalls[i] = false;
+    for (i=0; i<grid; i++) { // generates random walls and puts them in arrays
+        hWalls[i] = [];
+        vWalls[i] = [];
+        for (j=0; j<grid; j++) {
+            if (Math.random() < 0.1) {
+                hWalls[i][j] = true;
+            }
+            else {
+                hWalls[i][j] = false;
+            }
+            if (Math.random() < 0.1) {
+                vWalls[i][j] = true;
+            }
+            else {
+                vWalls[i][j] = false;
+            }
         }
     }
     // fills in the 4 edges
@@ -279,14 +287,15 @@ function generateLabyrinth() {
     // draws labyrinth on hidden canvas
     for (i=0; i<grid; i++) {
         for (j=0; j<grid; j++) {
-            if (hWalls[i+j*grid]){
-                ctxLab.fillRect(j*(canvasLab.width/grid),i*(canvasLab.width/grid)-3, (j+1)*canvasLab.width/grid, 6);
+            if (hWalls[i][j]){
+                ctxLab.fillRect(j*(canvasLab.width/grid),i*(canvasLab.height/grid)-3, (j+1)*canvasLab.width/grid, 6);
             }
-            if (vWalls[i+j*grid]){
-                ctxLab.fillRect(j*(canvasLab.width/grid)-3,i*(canvasLab.width/grid), 6, (i+1)*canvasLab.width/grid );
+            if (vWalls[i][j]){
+                ctxLab.fillRect(j*(canvasLab.width/grid)-3,i*(canvasLab.height/grid), 6, (i+1)*canvasLab.height/grid );
             }
         }
     }
+    console.log("hWalls:", hWalls, "vWalls:", vWalls);
 }
 
 // render first frame
