@@ -4,13 +4,6 @@ const canvas2 = document.getElementById('labyrinthGen');
 const ctx2 = canvas2.getContext("2d");
 let grid = 8; // number of rows and coloumns in labyrinth, will be modifiable by user
 let speed = 0.01; // sets the movement and turn speed of the tanks, will be modifiable by user
-const redTank = new Image(); // creates red tank sprite
-redTank.src = "redTank.png";
-redTank.width /= grid*1.5; // adjusts Tank X size to grid
-redTank.height /= grid*1.5; // adjusts Tank Y size to grid
-let redX = canvas.width/2-redTank.width/2; // places starting X coordinates in the canvas center
-let redY = canvas.height/2-redTank.height/2; // places starting Y coordinates in the canvas center
-let redRotation = 0;
 let keyBuffer = {};
 let hWalls = {}; // array of horizontal walls
 let vWalls = {}; // array of vertical walls
@@ -20,11 +13,39 @@ window.addEventListener("keydown", function() {keyBuffer[event.keyCode] = event.
 window.addEventListener("keyup", function() {keyBuffer[event.keyCode] = event.type == "keydown";});
 window.addEventListener("keydown", renderFrame);
 
-// render first frame
-generateLabyrinth();
-console.log(hWalls);
-console.log(vWalls);
-renderFrame();
+class Bullet { //very much incomplete and incorrect
+    constructor(direction) {
+        this.direction = direction;
+    }
+    verticalBounce() {
+        this.direction = 360 - this.direction;
+    }
+    horizontalBounce() {
+        if (this.direction < 180) {
+            this.direction = 180 - this.direction;
+        }
+        else {
+            this.direction = 540 - this.direction;
+        }
+    }
+}
+
+class Tank {
+    constructor(width, height, x, y) {
+        this.width = width;
+        this.height = height;
+        this.x = x;
+        this.y = y;
+        this.rotation = 0;
+    }
+}
+
+const redTankImg = new Image(); // creates red tank sprite
+redTankImg.src = "redTank.png";
+redTankImg.width /= grid*1.5; // adjusts Tank image X size to half of grid size
+redTankImg.height /= grid*1.5; // adjusts Tank image Y size to half of grid size
+
+redTank = new Tank(redTankImg.width, redTankImg.height, 400, 400); //replace 400, 400 with random points on map
 
 function generateLabyrinth() {
     ctx2.clearRect(0,0,canvas2.width, canvas2.height); //resets hidden labyrinth canvas
@@ -73,7 +94,14 @@ function redMovement(direction) { //converts the tanks movements to X and Y coor
     // insert wall collision detection here
 }
 
-function renderFrame() { // renders the current frame on main canvas when called
+// render first frame
+generateLabyrinth();
+console.log(hWalls);
+console.log(vWalls);
+renderFrame();
+
+// renders the current frame on main canvas when called
+function renderFrame() { 
     requestAnimationFrame(renderFrame);
     if (keyBuffer[87]) { redMovement(-speed);} // W
     if (keyBuffer[65]) { redRotation-=speed;} // A
