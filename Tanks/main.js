@@ -4,16 +4,16 @@ const canvasLab = document.getElementById('labyrinthGen');
 const ctxLab = canvasLab.getContext("2d");
 let grid = 8; // number of rows and coloumns in labyrinth, will be modifiable by user
 let speed = 0.3; // sets the movement and turn speed of the tanks, will be modifiable by user
-let bulletLifetime = 3500; //bullet lifetime in milliseconds
+let bulletLifetime = 3500; // bullet lifetime in milliseconds
 let keyBuffer = {};
 let hWalls = {}; // array of horizontal walls
 let vWalls = {}; // array of vertical walls
 
-//initialize event listeners
+// initialize event listeners
 window.addEventListener("keydown", function(event) {keyBuffer[event.code] = event.type == "keydown";});
 window.addEventListener("keyup", function(event) {keyBuffer[event.code] = event.type == "keydown";});
 
-class Bullet { //very much incomplete and incorrect
+class Bullet { // very much incomplete and incorrect
     constructor(direction, parent) {
         this.direction = direction;
         this.parent = parent;
@@ -48,14 +48,19 @@ class Tank {
         this.activeBulletCount = 0;
     }
     update() {
-        if (keyBuffer[this.keyShoot] && !this.keyShootPressed) {
+        if (keyBuffer[this.keyForward]) { redMovement(-speed);} // Forwards
+        if (keyBuffer[this.keyBackward]) { redMovement(speed);} // Backwards
+        if (keyBuffer[this.keyLeft]) { this.rotation-=speed;} // Left
+        if (keyBuffer[this.keyRight]) { this.rotation+=speed;} // Right
+        if (keyBuffer[this.keyShoot] && !this.keyShootPressed) { // Shoot
             this.shoot();
             this.keyShootPressed = true;
         }
         else if (!keyBuffer[this.keyShoot]) {
             this.keyShootPressed = false;
         }
-        this.move();
+        console.log(keyBuffer)
+        //this.move();
     }
     shoot() {
 
@@ -70,11 +75,11 @@ redTankImg.src = "redTank.png";
 redTankImg.width /= grid*1.5; // adjusts Tank image X size to half of grid size
 redTankImg.height /= grid*1.5; // adjusts Tank image Y size to half of grid size
 
-redTank = new Tank(redTankImg.width, redTankImg.height, 400, 400); //replace 400, 400 with random points on map
+redTank = new Tank(redTankImg.width, redTankImg.height, 400, 400, "KeyW", "KeyS", "KeyA", "KeyD", "Space"); // replace static values with variables
 
 function generateLabyrinth() {
-    ctxLab.clearRect(0,0,canvasLab.width, canvasLab.height); //resets hidden labyrinth canvas
-    for (i=0; i<grid**2; i++) { //generates random walls and puts them in arrays
+    ctxLab.clearRect(0,0,canvasLab.width, canvasLab.height); // resets hidden labyrinth canvas
+    for (i=0; i<grid**2; i++) { // generates random walls and puts them in arrays
         if (Math.random() < 0.1) {
             hWalls[i] = true;
         }
@@ -107,7 +112,7 @@ function generateLabyrinth() {
     }
 }
 
-function redMovement(direction) { //converts the tanks movements to X and Y coordinates
+function redMovement(direction) { // converts the tanks movements to X and Y coordinates
     // checks if out of bounds on X axis
     if (redTank.x + direction * Math.sin(-redTank.rotation*Math.PI/180) < canvas.width && redTank.x + direction * Math.sin(-redTank.rotation*Math.PI/180) > 0) {
         redTank.x += direction * Math.sin(-redTank.rotation*Math.PI/180);
@@ -128,17 +133,18 @@ renderFrame();
 // renders the current frame on main canvas when called
 function renderFrame() { 
     requestAnimationFrame(renderFrame);
-    if (keyBuffer["KeyW"]) { redMovement(-speed);} // W
-    if (keyBuffer["KeyA"]) { redTank.rotation-=speed;} // A
-    if (keyBuffer["KeyS"]) { redMovement(speed);} // S
-    if (keyBuffer["KeyD"]) { redTank.rotation+=speed;} // D
+    redTank.update();
+    document.getElementById("w").innerHTML = keyBuffer["KeyW"];
+    document.getElementById("s").innerHTML = keyBuffer["KeyS"];
+    document.getElementById("a").innerHTML = keyBuffer["KeyA"];
+    document.getElementById("d").innerHTML = keyBuffer["KeyD"];
     ctx.setTransform(1, 0, 0, 1, 0, 0); // resets rotation and translate
     ctx.clearRect(0,0, canvas.width, canvas.height); // resets image on canvas
     ctx.drawImage(document.getElementById("labyrinthGen"),0,0); // draws labyrinth
     ctx.translate(redTank.x, redTank.y); // places 0,0 at tank
     ctx.rotate(redTank.rotation*Math.PI/180); // rotates to tank direction
     ctx.drawImage(redTankImg, -redTank.width/2, -redTank.height/2, redTank.width, redTank.height); // draws image
-    ctx.fillStyle = "yellow"; //lines 44 to 47: creates temporary debug circle
+    ctx.fillStyle = "yellow"; // lines 44 to 47: creates temporary debug circle
     ctx.beginPath();
     ctx.ellipse(0, 0, 5, 5, 0, 0, Math.PI * 2);
     ctx.fill();
