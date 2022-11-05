@@ -75,42 +75,14 @@ class Tank {
             case "v":
                 ls1 = mcd("v", this.width, this.height, rotation_, this.y, (x_ % (canvas.width/grid))); //wall to the right
                 ls2 = mcd("v", this.width, this.height, rotation_, this.y, (x_ % (canvas.width/grid)-(canvas.width/grid))); //wall to the left
+                console.log("ls1", ls1, "ls2", ls2)
                 if (!ls1 && !ls2) {
                     return true;
                 }
                 else {
-                    //selects the colliding line
-                    if (!ls1) {
-                        //ls2 are the collision points
-                        ls = ls2;
-                        if (ls[0] > ls[1]) { ls[2] = ls[0]; ls[0] = ls[1]; ls[1] = ls[0];}//makes sure the smaller number has index 0
-                        //wall to the left
-                        if (x_ % (canvas.width/grid) >(canvas.width/grid)/2) {
-                            console.log("ls2: left")
-                            if (!vWalls[Math.floor(x_ / (canvas.width/grid))-1][Math.floor(this.y / (canvas.width/grid))]) {
-                                return true;
-                            }
-                            return false;
-                        }
-                        //wall to the right
-                        else {
-                            console.log("ls2: right")
-                            if (!vWalls[Math.floor(x_ / (canvas.width/grid))-1][Math.floor(this.y / (canvas.width/grid))]) {
-                                return true;
-                            }
-                            return false;
-                        }
-                    }
-                    else {
-                        //wall to the right, ls1 are the collision points
-                        ls = ls1;
-                        if (ls[0] > ls[1]) { ls[2] = ls[0]; ls[0] = ls[1]; ls[1] = ls[0];}//makes sure the smaller number has index 0
-                        if (!vWalls[Math.floor(x_ / (canvas.width/grid))][Math.floor(this.y / (canvas.width/grid))+1]) {
-                            console.log("ls1: true")
-                            return true;
-                        }
-                        console.log("ls1: false")
-                        return false;
+                    //ls1 has collision
+                    if (!ls2) {
+
                     }
                 }
             //collisions with horizontal lines
