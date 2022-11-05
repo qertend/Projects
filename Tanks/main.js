@@ -4,8 +4,8 @@ const canvasLab = document.getElementById('labyrinthGen');
 const ctxLab = canvasLab.getContext("2d");
 let grid = 8; // number of rows and coloumns in labyrinth, will be modifiable by user
 let speed = 0.3; // sets the movement and turn speed of the tanks, will be modifiable by user
-let bulletLifetime = 3500; // bullet lifetime in milliseconds
-let maxBulletCount = 3;
+let bulletLifetime = 3500; // bullet lifetime in milliseconds, will be modifiable by user
+let maxBulletCount = 3;//max number of bullets per player, will be modifiable by user
 let keyBuffer = [];
 let hWalls = []; // array of horizontal walls
 let vWalls = []; // array of vertical walls
@@ -130,22 +130,25 @@ redTankImg.height /= (grid*1.5); // adjusts Tank image Y size to half of grid si
 const redTank = new Tank(redTankImg.width, redTankImg.height, 350, 350, "KeyW", "KeyS", "KeyA", "KeyD", "Space"); // replace static values with variables e.g. p1Forward
 
 //DO NOT ASK HOW IT WORKS, IT JUST DOES. I SPENT WAY TOO MUCH TIME ON IT TO KNOW ANYMORE
-function mcd(direction, width_, height_, rotation, rectCoord, x_) { //mcd stands for Magic Collision Detector
-    //Input str:"v" for vertical, str:"h" for horizontal collision points 
-    //x_ : offset between collision line and rectangle center point
-    let rotation_, // rectangle angle of rotation in degrees
-    l1, //collision point one (return 0 if no collision is detected)
+function mcd(direction, width_, height_, rotation_, rectCoord, x_) { //mcd stands for Magic Collision Detector
+    /*direction: input str:"v" for vertical, str:"h" for horizontal collision points 
+    width_: rectangle's horizontal dimension at 0 degrees
+    height_: rectangle's vertical dimension at 0 degrees
+    rotation_: rectangle's rotation in degrees
+    rectCoord: rectangle's center coordinate (Y if direction is "v", X if direction is "h")
+    x_ : offset between collision line and rectangle center point*/
+    let l1, //collision point one (return 0 if no collision is detected)
     l2, //collision point two (same here)
     l; //distance betwwen l1 and l2 (isn't returned)
     let mirror = false; //true if x_ is negative
     switch (direction) {
         case "v":
             //rectCoord is Y
-            rotation_ = (rotation % 360 + 360) % 360;
+            rotation_ = (rotation_ % 360 + 360) % 360;
             break;
         case "h":
             //rectCoord is X
-            rotation_ = (rotation % 360 + 450) % 360;
+            rotation_ = (rotation_ % 360 + 450) % 360;
             break;
         default:
             console.error("incorrect direction: " + direction);
