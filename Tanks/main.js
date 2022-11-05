@@ -82,23 +82,11 @@ class Tank {
                 else {
                     //ls1 has collision, aka ls2 returns false
                     if (!ls2) {
-                        //if there is no wall
-                        if (!vWalls[Math.floor(x_ / (canvas.width/grid))][Math.floor(this.y/(canvasLab.height/grid))]) {
-                            return true;
-                        }
-                        else {
-                            return false;
-                        }
+                        
                     }
                     //ls2 has collision, aka ls1 returns false
                     else {
-                        //if there is no wall
-                        if (!vWalls[Math.floor(x_ / (canvas.width/grid))+1][Math.floor(this.y/(canvasLab.height/grid))]) {
-                            return true;
-                        }
-                        else {
-                            return false;
-                        }
+                        
                     }
                 }
             //collisions with horizontal lines
@@ -112,7 +100,7 @@ class Tank {
                     //ls1 has collision, aka ls2 returns false
                     if (!ls2) {
                         //if there is no wall
-                        if (!hWalls[Math.floor(this.x/(canvas.width/grid))][Math.floor(x_/(canvasLab.height/grid))]) {
+                        if (!hWalls[Math.floor(this.x/(canvas.width/grid))][Math.floor(x_/(canvas.height/grid))]) {
                             return true;
                         }
                         else {
@@ -122,7 +110,7 @@ class Tank {
                     //ls2 has collision, aka ls1 returns false
                     else {
                         //if there is no wall
-                        if (!hWalls[Math.floor(this.x/(canvas.width/grid))][Math.floor(x_/(canvasLab.height/grid))+1]) {
+                        if (!hWalls[Math.floor(this.x/(canvas.width/grid))][Math.floor(x_/(canvas.height/grid))+1]) {
                             return true;
                         }
                         else {
@@ -333,14 +321,12 @@ function generateLabyrinth() {
                 ctxLab.lineTo((i+1)*(canvasLab.width/grid), j*(canvasLab.height/grid));
             }
             if (vWalls[i][j]){
-                console.log("i", i, "j", j, "i1coord", i*(canvasLab.width/grid),"i2coord", i*(canvasLab.width/grid), "j1coord", j*(canvasLab.height/grid), "j2coord", (j+1)*(canvasLab.height/grid));
                 ctxLab.moveTo(i*(canvasLab.width/grid), j*(canvasLab.height/grid));
                 ctxLab.lineTo(i*(canvasLab.width/grid), (j+1)*(canvasLab.height/grid));
             }
         }
     }
     ctxLab.stroke();
-    console.log("hWalls:", hWalls, "vWalls:", vWalls);
 }
 
 // render first frame
