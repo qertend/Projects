@@ -206,7 +206,7 @@ function mcd(direction, width_, height_, rotation_, rectCoord, x_) { // mcd stan
         l = (height_/2-(x_)/Math.sin(rotationRad)+width_/2/Math.tan(rotationRad))/Math.cos(rotationRad);
         // across adjacent walls
         if (l*Math.sin(rotationRad) < width_) {
-            if (x_ < width_/2 && l > Math.cos(rotationRad)*height_) { // across parallel walls
+            if (x_ < width_/2 && l > height_/Math.cos(rotationRad)) { // across parallel walls
                 l = height_/Math.cos(rotationRad);
                 l1 = rectCoord - (l/2 + x_*Math.tan(rotationRad));
                 l2 = l1 + l;
@@ -242,7 +242,7 @@ function mcd(direction, width_, height_, rotation_, rectCoord, x_) { // mcd stan
         l = (width_/2-(x_)/Math.sin(rotationRad)+height_/2/Math.tan(rotationRad))/Math.cos(rotationRad);
         // across adjacent walls
         if (l*Math.cos(rotationRad) < width_) {
-            if (x_ < width_/2 && l > Math.sin(rotationRad)*height_) { // across parallel walls
+            if (x_ < width_/2 && l > height_/Math.sin(rotationRad)) { // across parallel walls
                 l = height_/Math.sin(rotationRad);
                 l1 = rectCoord - (l/2 - x_/Math.tan(rotationRad));
                 l2 = l1 + l;
