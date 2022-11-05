@@ -70,7 +70,7 @@ class Tank {
     }
     check(direction, rotation_, x_) {
         //returns true if move is valid, false if invalid
-        let ls, ls1, ls2;
+        let ls1, ls2;
         switch (direction) {
             //collisions with vertical lines
             case "v":
@@ -82,15 +82,36 @@ class Tank {
                 else {
                     //ls1 has collision, aka ls2 returns false
                     if (!ls2) {
-                        
+                        if (ls1[0] > ls1[1]) {ls1.reverse();}
+                        let i = Math.floor(x_/(canvas.width/grid));
+                        let j1 = Math.floor(ls1[0]/(canvas.width/grid));
+                        let j2 = Math.floor(ls1[1]/(canvas.width/grid));
+                        console.log("i", i, "j1", j1, "j2", j2, "p1", vWalls[i][j1], "p2", vWalls[i][j2])
+                        if (vWalls[i][j1] || vWalls[i][j2]) { // if there is a wall at either point
+                            return false;
+                        }
+                        else {
+                            return true;
+                        }
                     }
                     //ls2 has collision, aka ls1 returns false
                     else {
-                        
+                        if (ls2[0] > ls2[1]) {ls2.reverse();}
+                        let i = Math.floor(x_/(canvas.width/grid))+1;
+                        let j1 = Math.floor(ls2[0]/(canvas.width/grid));
+                        let j2 = Math.floor(ls2[1]/(canvas.width/grid));
+                        console.log("i", i, "j1", j1, "j2", j2, "p1", vWalls[i][j1], "p2", vWalls[i][j2])
+                        if (vWalls[i][j1] || vWalls[i][j2]) { // if there is a wall at either point
+                            return false;
+                        }
+                        else {
+                            return true;
+                        }
                     }
                 }
             //collisions with horizontal lines
             case "h":
+                return true
                 ls1 = mcd("h", this.width, this.height, rotation_, this.x, (x_ % (canvas.height/grid))); // wall above
                 ls2 = mcd("h", this.width, this.height, rotation_, this.x, (x_ % (canvas.height/grid)-(canvas.height/grid))); // wall below
                 if (!ls1 && !ls2) {
@@ -99,7 +120,7 @@ class Tank {
                 else {
                     //ls1 has collision, aka ls2 returns false
                     if (!ls2) {
-
+                        
                     }
                     //ls2 has collision, aka ls1 returns false
                     else {
