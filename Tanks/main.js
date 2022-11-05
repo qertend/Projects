@@ -86,7 +86,6 @@ class Tank {
                         let i = Math.floor(x_/(canvas.width/grid));
                         let j1 = Math.floor(ls1[0]/(canvas.width/grid));
                         let j2 = Math.floor(ls1[1]/(canvas.width/grid));
-                        console.log("i", i, "j1", j1, "j2", j2, "p1", vWalls[i][j1], "p2", vWalls[i][j2])
                         if (vWalls[i][j1] || vWalls[i][j2]) { // if there is a wall at either point
                             return false;
                         }
@@ -100,7 +99,6 @@ class Tank {
                         let i = Math.floor(x_/(canvas.width/grid))+1;
                         let j1 = Math.floor(ls2[0]/(canvas.width/grid));
                         let j2 = Math.floor(ls2[1]/(canvas.width/grid));
-                        console.log("i", i, "j1", j1, "j2", j2, "p1", vWalls[i][j1], "p2", vWalls[i][j2])
                         if (vWalls[i][j1] || vWalls[i][j2]) { // if there is a wall at either point
                             return false;
                         }
@@ -111,7 +109,6 @@ class Tank {
                 }
             //collisions with horizontal lines
             case "h":
-                return true
                 ls1 = mcd("h", this.width, this.height, rotation_, this.x, (x_ % (canvas.height/grid))); // wall above
                 ls2 = mcd("h", this.width, this.height, rotation_, this.x, (x_ % (canvas.height/grid)-(canvas.height/grid))); // wall below
                 if (!ls1 && !ls2) {
@@ -120,11 +117,31 @@ class Tank {
                 else {
                     //ls1 has collision, aka ls2 returns false
                     if (!ls2) {
-                        
+                        if (ls1[0] > ls1[1]) {ls1.reverse();}
+                        let i1 = Math.floor(ls1[0]/(canvas.height/grid));
+                        let i2 = Math.floor(ls1[1]/(canvas.height/grid));
+                        let j = Math.floor(x_/(canvas.height/grid));
+                        console.log(i1, i2, j, hWalls[i1][j], hWalls[i2][j])
+                        if (hWalls[i1][j] || hWalls[i2][j]) { // if there is a wall at either point
+                            return false;
+                        }
+                        else {
+                            return true;
+                        }
                     }
                     //ls2 has collision, aka ls1 returns false
                     else {
-
+                        if (ls2[0] > ls2[1]) {ls2.reverse();}
+                        let i1 = Math.floor(ls2[0]/(canvas.height/grid));
+                        let i2 = Math.floor(ls2[1]/(canvas.height/grid));
+                        let j = Math.floor(x_/(canvas.height/grid))+1;
+                        console.log(i1, i2, j, hWalls[i1][j], hWalls[i2][j])
+                        if (hWalls[i1][j] || hWalls[i2][j]) { // if there is a wall at either point
+                            return false;
+                        }
+                        else {
+                            return true;
+                        }
                     }
                 }
         }
@@ -136,13 +153,15 @@ class Tank {
     }
     move(speed) {
         let rotationRad = redTank.rotation*Math.PI/180;
-        // checks if out of bounds on X axis && if a wall is in the way
-        if (this.x + speed * Math.sin(-rotationRad) < canvas.width && this.x + speed * Math.sin(-rotationRad) > 0 && this.check("v", this.rotation, this.x + speed * Math.sin(-rotationRad))) {
-            this.x += speed * Math.sin(-rotationRad);
-        }
-        // checks if out of bounds on Y axis && if a wall is in the way
-        if (this.y + speed * Math.cos(-rotationRad) < canvas.height && this.y + speed * Math.cos(-rotationRad ) > 0 && this.check("h", this.rotation, this.y + speed * Math.cos(-rotationRad))) {
-            this.y += speed * Math.cos(-rotationRad);
+        if (this.check("v", this.rotation, this.x + speed * Math.sin(-rotationRad)) && this.check("h", this.rotation, this.y + speed * Math.cos(-rotationRad))) {
+            // checks if out of bounds on X axis
+            if (this.x + speed * Math.sin(-rotationRad) < canvas.width && this.x + speed * Math.sin(-rotationRad) > 0) {
+                this.x += speed * Math.sin(-rotationRad);
+            }
+            // checks if out of bounds on Y axis
+            if (this.y + speed * Math.cos(-rotationRad) < canvas.height && this.y + speed * Math.cos(-rotationRad ) > 0) {
+                this.y += speed * Math.cos(-rotationRad);
+            }
         }
     }
     rotate(speed) {
