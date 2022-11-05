@@ -63,20 +63,17 @@ function compute(direction, width_, height_, rotation_, rectCoord, x_) { // mcd 
         // across adjacent walls
         if (l*Math.sin(rotationRad) < width_) {
             if (x_ < width_/2 && l > height_/Math.cos(rotationRad)) { // across parallel walls
-                console.log("adjacent walls: across parallel walls")
                 l = height_/Math.cos(rotationRad);
                 l1 = rectCoord - (l/2 + x_*Math.tan(rotationRad));
                 l2 = l1 + l;
             }
             else { //actually across adjacent walls
-                console.log("adjacent walls: across adjacent walls")
                 l1 = rectCoord-((width_/Math.sin(rotationRad))/2-(((x_)/Math.sin(rotationRad))*Math.cos(rotationRad)));
                 l2 = l1 + l;
             }
         }
         // across parallel walls
         else {
-            console.log("across parallel walls")
             l = width_/Math.sin(rotationRad);
             l1 = rectCoord-((l/2)-(((x_)/Math.sin(rotationRad))*Math.cos(rotationRad)));
             l2 = l1 + l;
