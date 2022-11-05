@@ -13,6 +13,7 @@ let vWalls = []; // array of vertical walls
 // initialize event listeners
 window.addEventListener("keydown", function(event) {keyBuffer[event.code] = event.type == "keydown";});
 window.addEventListener("keyup", function(event) {keyBuffer[event.code] = event.type == "keydown";});
+document.getElementById("regen").addEventListener("click", generateLabyrinth);
 
 class Bullet { // very much incomplete and incorrect
     constructor(direction, x, y) {
@@ -72,23 +73,37 @@ class Tank {
         switch (direction) {
             //collisions with vertical lines
             case "v":
-                ls1 = mcd("v", this.width, this.height, rotation_, this.y, (x_ % (canvas.width/grid)));
-                ls2 = mcd("v", this.width, this.height, rotation_, this.y, (x_ % (canvas.width/grid)-(canvas.width/grid)));
+                ls1 = mcd("v", this.width, this.height, rotation_, this.y, (x_ % (canvas.width/grid))); //wall to the right
+                ls2 = mcd("v", this.width, this.height, rotation_, this.y, (x_ % (canvas.width/grid)-(canvas.width/grid))); //wall to the left
                 if (!ls1 && !ls2) {
                     return true;
                 }
                 else {
-                    if (!ls1) {ls = ls2;} else { ls = ls1;} //selects the colliding line
-                    if (ls[0] > ls[1]) { ls[2] = ls[0]; ls[0] = ls[1]; ls[1] = ls[0];}//makes sure the smaller number has index 0
-                    if (!vWalls[Math.round(x_ / (canvas.width/grid))][Math.round(this.y / (canvas.width/grid))*grid]) {
-                        return true;
+                    //selects the colliding line
+                    if (!ls1) {
+                        //wall to the left, ls2 are the collision points
+                        ls = ls2;
+                        if (ls[0] > ls[1]) { ls[2] = ls[0]; ls[0] = ls[1]; ls[1] = ls[0];}//makes sure the smaller number has index 0
+                        console.log("x:", this.x, "y:", this.y, "i:", Math.floor(x_ / (canvas.width/grid)), "j:", Math.floor(this.y / (canvas.width/grid)),"vWalls:", vWalls[Math.floor(x_ / (canvas.width/grid))][Math.floor(this.y / (canvas.width/grid))]);
+                        if (!vWalls[Math.floor(x_ / (canvas.width/grid))][Math.floor(this.y / (canvas.width/grid))]) {
+                            return true;
+                        }
+                        return false;
                     }
-                    return false;
-
-
+                    else {
+                        //wall to the right, ls1 are the collision points
+                        ls = ls1;
+                        if (ls[0] > ls[1]) { ls[2] = ls[0]; ls[0] = ls[1]; ls[1] = ls[0];}//makes sure the smaller number has index 0
+                        console.log("x:", this.x, "y:", this.y, "i:", Math.floor(x_ / (canvas.width/grid))+1, "j:", Math.floor(this.y / (canvas.width/grid))+1,"vWalls:", vWalls[Math.floor(x_ / (canvas.width/grid))][Math.floor(this.y / (canvas.width/grid))+1]);
+                        if (!vWalls[Math.floor(x_ / (canvas.width/grid))][Math.floor(this.y / (canvas.width/grid))+1]) {
+                            return true;
+                        }
+                        return false;
+                    }
                 }
             //collisions with horizontal lines
             case "h":
+                return true //REMOVE BEFORE PUBLISH
                 ls1 = mcd("h", this.width, this.height, rotation_, this.x, (x_ % (canvas.height/grid)));
                 ls2 = mcd("h", this.width, this.height, rotation_, this.x, (x_ % (canvas.height/grid)-(canvas.height/grid)));
                 if (!ls1 && !ls2) {
@@ -105,12 +120,12 @@ class Tank {
         }
     }
     move(speed) {
-        // checks if out of bounds on X axis
         let rotationRad = redTank.rotation*Math.PI/180;
+        // checks if out of bounds on X axis && if a wall is in the way
         if (this.x + speed * Math.sin(-rotationRad) < canvas.width && this.x + speed * Math.sin(-rotationRad) > 0 && this.check("v", this.rotation, this.x + speed * Math.sin(-rotationRad))) {
             this.x += speed * Math.sin(-rotationRad);
         }
-        // checks if out of bounds on Y axis
+        // checks if out of bounds on Y axis && if a wall is in the way
         if (this.y + speed * Math.cos(-rotationRad) < canvas.height && this.y + speed * Math.cos(-rotationRad ) > 0 && this.check("h", this.rotation, this.y + speed * Math.cos(-rotationRad))) {
             this.y += speed * Math.cos(-rotationRad);
         }
@@ -129,25 +144,23 @@ redTankImg.height /= (grid*1.5); // adjusts Tank image Y size to half of grid si
 
 const redTank = new Tank(redTankImg.width, redTankImg.height, 350, 350, "KeyW", "KeyS", "KeyA", "KeyD", "Space"); // replace static values with variables e.g. p1Forward
 
-//DO NOT ASK HOW IT WORKS, IT JUST DOES. I SPENT WAY TOO MUCH TIME ON IT TO KNOW ANYMORE
-function mcd(direction, width_, height_, rotation_, rectCoord, x_) { //mcd stands for Magic Collision Detector
+// DO NOT ASK HOW IT WORKS, IT JUST DOES. I SPENT WAY TOO MUCH TIME ON IT TO KNOW ANYMORE
+function mcd(direction, width_, height_, rotation_, rectCoord, x_) { // mcd stands for Magic Collision Detector
     /*direction: input str:"v" for vertical, str:"h" for horizontal collision points 
     width_: rectangle's horizontal dimension at 0 degrees
     height_: rectangle's vertical dimension at 0 degrees
     rotation_: rectangle's rotation in degrees
     rectCoord: rectangle's center coordinate (Y if direction is "v", X if direction is "h")
     x_ : offset between collision line and rectangle center point*/
-    let l1, //collision point one (return 0 if no collision is detected)
-    l2, //collision point two (same here)
-    l; //distance betwwen l1 and l2 (isn't returned)
-    let mirror = false; //true if x_ is negative
+    let l1, // collision point one (return 0 if no collision is detected)
+    l2, // collision point two (same here)
+    l; // distance betwwen l1 and l2 (isn't returned)
+    let mirror = false; // true if x_ is negative
     switch (direction) {
         case "v":
-            //rectCoord is Y
             rotation_ = (rotation_ % 360 + 360) % 360;
             break;
         case "h":
-            //rectCoord is X
             rotation_ = (rotation_ % 360 + 450) % 360;
             break;
         default:
@@ -248,7 +261,7 @@ function mcd(direction, width_, height_, rotation_, rectCoord, x_) { //mcd stand
         }
     }
     else if (direction == "h") {
-        //it works like tihs, cause math
+        // it works like tihs, cause math
         l1 -= 2*(l1-rectCoord);
         l2 -= 2*(l2-rectCoord);
         // COLLISION DETECT
@@ -263,17 +276,20 @@ function mcd(direction, width_, height_, rotation_, rectCoord, x_) { //mcd stand
 
 function generateLabyrinth() {
     ctxLab.clearRect(0,0,canvasLab.width, canvasLab.height); // resets hidden labyrinth canvas
+    ctx.beginPath();
+    hWalls = {};
+    vWalls = {};
     for (i=0; i<grid; i++) { // generates random walls and puts them in arrays
         hWalls[i] = [];
         vWalls[i] = [];
         for (j=0; j<grid; j++) {
-            if (Math.random() < 0.1) {
+            if (Math.random() < 0.3) {
                 hWalls[i][j] = true;
             }
             else {
                 hWalls[i][j] = false;
             }
-            if (Math.random() < 0.1) {
+            if (Math.random() < 0.3) {
                 vWalls[i][j] = true;
             }
             else {
@@ -288,16 +304,23 @@ function generateLabyrinth() {
     ctxLab.fillRect(0, canvasLab.height-3, canvasLab.width, canvasLab.height);
 
     // draws labyrinth on hidden canvas
+    ctxLab.lineWidth = canvasLab.width/grid/16;
+    ctxLab.lineCap = "round";
+    ctx.beginPath();
     for (i=0; i<grid; i++) {
         for (j=0; j<grid; j++) {
             if (hWalls[i][j]){
-                ctxLab.fillRect(j*(canvasLab.width/grid),i*(canvasLab.height/grid)-3, (j+1)*canvasLab.width/grid, 6);
+                ctxLab.moveTo(i*(canvasLab.width/grid), j*(canvasLab.height/grid));
+                ctxLab.lineTo((i+1)*(canvasLab.width/grid), j*(canvasLab.height/grid));
             }
             if (vWalls[i][j]){
-                ctxLab.fillRect(j*(canvasLab.width/grid)-3,i*(canvasLab.height/grid), 6, (i+1)*canvasLab.height/grid );
+                ctxLab.moveTo(i*(canvasLab.width/grid), j*(canvasLab.height/grid));
+                ctxLab.lineTo(i*(canvasLab.width/grid), (j+1)*(canvasLab.height/grid));
             }
         }
     }
+    ctxLab.stroke();
+    ctxLab.lineWidth = 1;
     console.log("hWalls:", hWalls, "vWalls:", vWalls);
 }
 
