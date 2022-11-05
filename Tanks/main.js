@@ -69,32 +69,66 @@ class Tank {
         if (keyBuffer[this.keyRight]) { this.rotate(speed);} // Right
     }
     check(direction, rotation_, x_) {
+        //returns true if move is valid, false if invalid
         let ls, ls1, ls2;
         switch (direction) {
             //collisions with vertical lines
             case "v":
-                ls1 = mcd("v", this.width, this.height, rotation_, this.y, (x_ % (canvas.width/grid))); //wall to the right
-                ls2 = mcd("v", this.width, this.height, rotation_, this.y, (x_ % (canvas.width/grid)-(canvas.width/grid))); //wall to the left
-                console.log("ls1", ls1, "ls2", ls2)
+                ls1 = mcd("v", this.width, this.height, rotation_, this.y, (x_ % (canvas.width/grid))); //wall to the left
+                ls2 = mcd("v", this.width, this.height, rotation_, this.y, (x_ % (canvas.width/grid)-(canvas.width/grid))); //wall to the right
                 if (!ls1 && !ls2) {
                     return true;
                 }
                 else {
-                    //ls1 has collision
+                    //ls1 has collision, aka ls2 returns false
                     if (!ls2) {
-
+                        //if there is no wall
+                        if (!vWalls[Math.floor(x_ / (canvas.width/grid))][Math.floor(this.y/(canvasLab.height/grid))]) {
+                            return true;
+                        }
+                        else {
+                            return false;
+                        }
+                    }
+                    //ls2 has collision, aka ls1 returns false
+                    else {
+                        //if there is no wall
+                        if (!vWalls[Math.floor(x_ / (canvas.width/grid))+1][Math.floor(this.y/(canvasLab.height/grid))]) {
+                            return true;
+                        }
+                        else {
+                            return false;
+                        }
                     }
                 }
             //collisions with horizontal lines
             case "h":
-                return true //REMOVE BEFORE PUBLISH
-                ls1 = mcd("h", this.width, this.height, rotation_, this.x, (x_ % (canvas.height/grid)));
-                ls2 = mcd("h", this.width, this.height, rotation_, this.x, (x_ % (canvas.height/grid)-(canvas.height/grid)));
+                ls1 = mcd("h", this.width, this.height, rotation_, this.x, (x_ % (canvas.height/grid))); // wall above
+                ls2 = mcd("h", this.width, this.height, rotation_, this.x, (x_ % (canvas.height/grid)-(canvas.height/grid))); // wall below
                 if (!ls1 && !ls2) {
                     return true;
                 }
                 else {
-                    return false;
+                    //ls1 has collision, aka ls2 returns false
+                    if (!ls2) {
+                        //if there is no wall
+                        if (!hWalls[Math.floor(this.x/(canvas.width/grid))][Math.floor(x_/(canvasLab.height/grid))]) {
+                            return true;
+                        }
+                        else {
+                            return false;
+                        }
+                    }
+                    //ls2 has collision, aka ls1 returns false
+                    else {
+                        //if there is no wall
+                        if (!hWalls[Math.floor(this.x/(canvas.width/grid))][Math.floor(x_/(canvasLab.height/grid))+1]) {
+                            return true;
+                        }
+                        else {
+                            return false;
+                        }
+                    }
                 }
         }
     }
@@ -299,6 +333,7 @@ function generateLabyrinth() {
                 ctxLab.lineTo((i+1)*(canvasLab.width/grid), j*(canvasLab.height/grid));
             }
             if (vWalls[i][j]){
+                console.log("i", i, "j", j, "i1coord", i*(canvasLab.width/grid),"i2coord", i*(canvasLab.width/grid), "j1coord", j*(canvasLab.height/grid), "j2coord", (j+1)*(canvasLab.height/grid));
                 ctxLab.moveTo(i*(canvasLab.width/grid), j*(canvasLab.height/grid));
                 ctxLab.lineTo(i*(canvasLab.width/grid), (j+1)*(canvasLab.height/grid));
             }
