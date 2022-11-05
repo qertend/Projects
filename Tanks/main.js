@@ -81,23 +81,35 @@ class Tank {
                 else {
                     //selects the colliding line
                     if (!ls1) {
-                        //wall to the left, ls2 are the collision points
+                        //ls2 are the collision points
                         ls = ls2;
                         if (ls[0] > ls[1]) { ls[2] = ls[0]; ls[0] = ls[1]; ls[1] = ls[0];}//makes sure the smaller number has index 0
-                        console.log("x:", this.x, "y:", this.y, "i:", Math.floor(x_ / (canvas.width/grid)), "j:", Math.floor(this.y / (canvas.width/grid)),"vWalls:", vWalls[Math.floor(x_ / (canvas.width/grid))][Math.floor(this.y / (canvas.width/grid))]);
-                        if (!vWalls[Math.floor(x_ / (canvas.width/grid))][Math.floor(this.y / (canvas.width/grid))]) {
-                            return true;
+                        //wall to the left
+                        if (x_ % (canvas.width/grid) >(canvas.width/grid)/2) {
+                            console.log("ls2: left")
+                            if (!vWalls[Math.floor(x_ / (canvas.width/grid))-1][Math.floor(this.y / (canvas.width/grid))]) {
+                                return true;
+                            }
+                            return false;
                         }
-                        return false;
+                        //wall to the right
+                        else {
+                            console.log("ls2: right")
+                            if (!vWalls[Math.floor(x_ / (canvas.width/grid))-1][Math.floor(this.y / (canvas.width/grid))]) {
+                                return true;
+                            }
+                            return false;
+                        }
                     }
                     else {
                         //wall to the right, ls1 are the collision points
                         ls = ls1;
                         if (ls[0] > ls[1]) { ls[2] = ls[0]; ls[0] = ls[1]; ls[1] = ls[0];}//makes sure the smaller number has index 0
-                        console.log("x:", this.x, "y:", this.y, "i:", Math.floor(x_ / (canvas.width/grid))+1, "j:", Math.floor(this.y / (canvas.width/grid))+1,"vWalls:", vWalls[Math.floor(x_ / (canvas.width/grid))][Math.floor(this.y / (canvas.width/grid))+1]);
                         if (!vWalls[Math.floor(x_ / (canvas.width/grid))][Math.floor(this.y / (canvas.width/grid))+1]) {
+                            console.log("ls1: true")
                             return true;
                         }
+                        console.log("ls1: false")
                         return false;
                     }
                 }
@@ -275,8 +287,9 @@ function mcd(direction, width_, height_, rotation_, rectCoord, x_) { // mcd stan
 }
 
 function generateLabyrinth() {
+    ctxLab.lineWidth = canvasLab.width/grid/16;
+    ctxLab.lineCap = "round";
     ctxLab.clearRect(0,0,canvasLab.width, canvasLab.height); // resets hidden labyrinth canvas
-    ctx.beginPath();
     hWalls = {};
     vWalls = {};
     for (i=0; i<grid; i++) { // generates random walls and puts them in arrays
@@ -298,15 +311,15 @@ function generateLabyrinth() {
         }
     }
     // fills in the 4 edges
-    ctxLab.fillRect(0, 0, canvasLab.width, 3);
-    ctxLab.fillRect(0, 0, 3, canvasLab.height);
-    ctxLab.fillRect(canvasLab.width-3, 0, canvasLab.width, canvas.height);
-    ctxLab.fillRect(0, canvasLab.height-3, canvasLab.width, canvasLab.height);
-
+    ctxLab.beginPath();
+    ctxLab.moveTo(0, 0);
+    ctxLab.lineTo(canvasLab.width, 0);
+    ctxLab.lineTo(canvasLab.width, canvasLab.height);
+    ctxLab.lineTo(0, canvasLab.height);
+    ctxLab.lineTo(0, 0);
+    ctxLab.stroke();
     // draws labyrinth on hidden canvas
-    ctxLab.lineWidth = canvasLab.width/grid/16;
-    ctxLab.lineCap = "round";
-    ctx.beginPath();
+    ctxLab.beginPath();
     for (i=0; i<grid; i++) {
         for (j=0; j<grid; j++) {
             if (hWalls[i][j]){
@@ -320,7 +333,6 @@ function generateLabyrinth() {
         }
     }
     ctxLab.stroke();
-    ctxLab.lineWidth = 1;
     console.log("hWalls:", hWalls, "vWalls:", vWalls);
 }
 
