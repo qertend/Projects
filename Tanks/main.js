@@ -99,23 +99,11 @@ class Tank {
                 else {
                     //ls1 has collision, aka ls2 returns false
                     if (!ls2) {
-                        //if there is no wall
-                        if (!hWalls[Math.floor(this.x/(canvas.width/grid))][Math.floor(x_/(canvas.height/grid))]) {
-                            return true;
-                        }
-                        else {
-                            return false;
-                        }
+
                     }
                     //ls2 has collision, aka ls1 returns false
                     else {
-                        //if there is no wall
-                        if (!hWalls[Math.floor(this.x/(canvas.width/grid))][Math.floor(x_/(canvas.height/grid))+1]) {
-                            return true;
-                        }
-                        else {
-                            return false;
-                        }
+
                     }
                 }
         }
