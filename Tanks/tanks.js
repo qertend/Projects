@@ -3,6 +3,7 @@ const ctx = canvas.getContext("2d");
 const canvasLab = document.getElementById('labyrinthGen');
 const ctxLab = canvasLab.getContext("2d");
 let grid = 8; // number of rows and coloumns in labyrinth
+let density = 0.3; //labyrinth density
 let speed = 0.3; // sets the movement and turn speed of the tanks
 bulletSpeedMultiplier = 1; //bullet speed relative to tank speed
 let bulletLifetime = 3500; // bullet lifetime in milliseconds
@@ -111,6 +112,9 @@ class Tank {
                         let j1 = Math.floor(ls1[0]/(canvas.width/grid));
                         let j2 = Math.floor(ls1[1]/(canvas.width/grid));
                         if (vWalls[i][j1] || vWalls[i][j2]) { // if there is a wall at either point
+                            if (hardcoreMode) {
+                                this.dead();
+                            }
                             return false;
                         }
                         else {
@@ -124,6 +128,9 @@ class Tank {
                         let j1 = Math.floor(ls2[0]/(canvas.width/grid));
                         let j2 = Math.floor(ls2[1]/(canvas.width/grid));
                         if (vWalls[i][j1] || vWalls[i][j2]) { // if there is a wall at either point
+                            if (hardcoreMode) {
+                                this.dead();
+                            }
                             return false;
                         }
                         else {
@@ -358,28 +365,30 @@ function generateLabyrinth() {
     ctxLab.clearRect(0,0,canvasLab.width, canvasLab.height); // resets hidden labyrinth canvas
     hWalls = {};
     hWalls[0] = [];
-    hWalls[grid+1] = [];
+    hWalls[grid] = [];
+
     vWalls = {};
     vWalls[0] = [];
-    vWalls[grid+1] = [];
+    vWalls[grid] = [];
+    //fills in outer walls
     for (i=0; i<grid; i++) {
+        hWalls[i] = [];
         hWalls[i][0] = true;
         vWalls[0][i] = true;
-        hWalls[i][grid+1] = true;
-        vWalls[grid+1][i] = true;
+        hWalls[i][grid] = true;
+        vWalls[grid][i] = true;
     }
 
     for (i=1; i<grid; i++) { // generates random walls and puts them in arrays
-        hWalls[i] = [];
         vWalls[i] = [];
         for (j=0; j<grid; j++) {
-            if (Math.random() < 0.3) {
-                hWalls[i][j] = true;
+            if (Math.random() < density) {
+                hWalls[j][i] = true;
             }
             else {
-                hWalls[i][j] = false;
+                hWalls[j][i] = false;
             }
-            if (Math.random() < 0.3) {
+            if (Math.random() < density) {
                 vWalls[i][j] = true;
             }
             else {
@@ -387,14 +396,7 @@ function generateLabyrinth() {
             }
         }
     }
-    // fills in the 4 edges
-    ctxLab.beginPath();
-    ctxLab.moveTo(0, 0);
-    ctxLab.lineTo(canvasLab.width, 0);
-    ctxLab.lineTo(canvasLab.width, canvasLab.height);
-    ctxLab.lineTo(0, canvasLab.height);
-    ctxLab.lineTo(0, 0);
-    ctxLab.stroke();
+
     // draws labyrinth on hidden canvas
     ctxLab.beginPath();
     for (i=0; i<grid; i++) {
@@ -419,6 +421,11 @@ function refreshSettings() {
     document.getElementById('bulletSpeedMultiplierOut').innerHTML = bulletSpeedMultiplier;
     if (Number(document.getElementById('grid').value) != grid) {
         grid = Number(document.getElementById('grid').value);
+        generateLabyrinth();
+    }
+    if (Number(document.getElementById('density').value) != density) {
+        density = Number(document.getElementById('density').value);
+        document.getElementById('densityOut').innerHTML = density;
         generateLabyrinth();
     }
     bulletLifetime = Number(document.getElementById('bulletLifetime').value);
@@ -510,6 +517,7 @@ renderFrame();
 // renders the current frame on main canvas when called
 function renderFrame() { 
     requestAnimationFrame(renderFrame);
+    refreshSettings();
     redTank.update();
     blueTank.update();
     ctx.setTransform(1, 0, 0, 1, 0, 0); // resets rotation and translate
