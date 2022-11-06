@@ -364,13 +364,10 @@ function generateLabyrinth() {
 generateLabyrinth();
 renderFrame();
 
-
-
-
 // renders the current frame on main canvas when called
 function renderFrame() { 
     requestAnimationFrame(renderFrame);
-    //redTank.update();
+    redTank.update();
     document.getElementById("w").innerHTML = keyBuffer["KeyW"];
     document.getElementById("s").innerHTML = keyBuffer["KeyS"];
     document.getElementById("a").innerHTML = keyBuffer["KeyA"];
