@@ -14,9 +14,9 @@
             <p>Use Mozilla Firefox for best experience</p>
         </div>
         <div id="sidebar">
-            <button onclick="gameSettings()"><img id="settings" class="sidebarIcon" src="cogwheel.svg"></button><br>
-            <button onclick="hardcoreModeToggle()"><img id="hardcoreMode" class="sidebarIcon" src="Hardocore-mode-icon.png"></button> <br>
-            <button id="regen" class="sidebarIcon">Regen map</button>
+            <button onclick="gameSettings()" title="Settings" id="settings"><img class="sidebarIcon" src="cogwheel.svg"></button><br>
+            <button onclick="hardcoreModeToggle()" title="Hardcore mode" id="hardcoreMode"><img class="sidebarIcon" src="Hardocore-mode-icon.png"></button> <br>
+            <button id="regen" title="Generate new map">Gen map</button>
         </div>
         <div id="gameSettings">
             <h1>Game settings</h1>
@@ -25,7 +25,7 @@
                 <h3>Speed</h3>
                 <input type="range"id="speed" min="0" max="1" step="0.1" value="0.3"><span id="speedOut">0.3</span>
                 <h3>Bullet speed multiplier</h3>
-                <input type="range" id="bulletSpeedmultiplier" min="0.5" max ="2" step="0.1" value="1"><span id="bulletSpeedmultiplierOut">1</span>
+                <input type="range" id="bulletSpeedMultiplier" min="0.5" max ="2" step="0.1" value="1"><span id="bulletSpeedMultiplierOut">1</span>
                 <h3>Grid</h3>
                 <input type="number" id="grid" value="8">
                 <h3>Bullet lifetime (in milliseconds)</h3>

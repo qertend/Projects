@@ -4,8 +4,10 @@ const canvasLab = document.getElementById('labyrinthGen');
 const ctxLab = canvasLab.getContext("2d");
 let grid = 8; // number of rows and coloumns in labyrinth
 let speed = 0.3; // sets the movement and turn speed of the tanks
+bulletSpeedMultiplier = 1; //bullet speed relative to tank speed
 let bulletLifetime = 3500; // bullet lifetime in milliseconds
 let maxBulletCount = 3;//max number of bullets per player
+let hardcoreMode = false;
 let p1Forward = "KeyW";
 let p1Backward = "KeyS";
 let p1Left = "KeyA";
@@ -139,6 +141,9 @@ class Tank {
                         let i2 = Math.floor(ls1[1]/(canvas.height/grid));
                         let j = Math.floor(x_/(canvas.height/grid));
                         if (hWalls[i1][j] || hWalls[i2][j]) { // if there is a wall at either point
+                            if (hardcoreMode) {
+                                this.dead();
+                            }
                             return false;
                         }
                         else {
@@ -152,6 +157,9 @@ class Tank {
                         let i2 = Math.floor(ls2[1]/(canvas.height/grid));
                         let j = Math.floor(x_/(canvas.height/grid))+1;
                         if (hWalls[i1][j] || hWalls[i2][j]) { // if there is a wall at either point
+                            if (hardcoreMode) {
+                                this.dead();
+                            }
                             return false;
                         }
                         else {
@@ -183,6 +191,9 @@ class Tank {
         if (this.check("v", this.rotation + speed, this.x) && this.check("h", this.rotation + speed, this.y)) {
             this.rotation += speed;
         }
+    }
+    dead() {
+        console.log("magnificent death animation");
     }
 }
 
@@ -389,12 +400,38 @@ function generateLabyrinth() {
     ctxLab.stroke();
 }
 
+function refreshSettings() {
+    speed = Number(document.getElementById('speed').value);
+    document.getElementById('speedOut').innerHTML = speed;
+    bulletSpeedMultiplier = Number(document.getElementById('bulletSpeedMultiplier').value);
+    document.getElementById('bulletSpeedMultiplierOut').innerHTML = bulletSpeedMultiplier;
+    if (Number(document.getElementById('grid').value) != grid) {
+        grid = Number(document.getElementById('grid').value);
+        generateLabyrinth();
+    }
+    bulletLifetime = Number(document.getElementById('bulletLifetime').value);
+    maxBulletCount = Number(document.getElementById('maxBulletCount').value);
+
+}
+
 function gameSettings() {
     if (document.getElementById('gameSettings').style.display == 'none') {
         document.getElementById('gameSettings').style.display = 'block';
     }
     else {
+        refreshSettings();
         document.getElementById('gameSettings').style.display = 'none';
+    }
+}
+
+function hardcoreModeToggle() {
+    if (hardcoreMode) {
+        hardcoreMode = false;
+        document.getElementById('hardcoreMode').style.backgroundColor = "lightgray";
+    }
+    else {
+        hardcoreMode = true;
+        document.getElementById('hardcoreMode').style.backgroundColor = "red";
     }
 }
 

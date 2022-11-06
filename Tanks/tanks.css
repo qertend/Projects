@@ -3,7 +3,6 @@
     margin: auto;
     margin-top: 2%;
     padding: 10px;
-    border: 2px solid red;
 }
 #map {
     float: left;
@@ -14,18 +13,24 @@
     margin: 10px;
     margin-top: 0;
     text-align: center;
+    background-color: white;
 }
 .sidebarIcon {
     margin: 2px;
     width: 25px;
     height: 25px;
 }
-
+#settings {
+    background-color: lightgray;
+}
 #regen {
     width: 41px;
     height: 38px;
+    background-color: lightgray;
 }
-
+#hardcoreMode {
+    background-color: lightgray;
+}
 #canvas {
     border:1px solid grey;
 }
