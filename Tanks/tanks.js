@@ -50,7 +50,8 @@ class Bullet { // very much incomplete and incorrect
 }
 
 class Tank {
-    constructor(width, height, x, y, rotation, keyForward, keyBackward, keyLeft, keyRight, keyShoot) {
+    constructor(image, width, height, x, y, rotation, keyForward, keyBackward, keyLeft, keyRight, keyShoot) {
+        this.image = image;
         this.width = width;
         this.height = height;
         this.x = x;
@@ -193,7 +194,9 @@ class Tank {
         }
     }
     dead() {
+        this.image.src = "boom.png";
         console.log("magnificent death animation");
+        restart();
     }
 }
 
@@ -206,8 +209,8 @@ blueTankImg.src = "blueTank.png";
 blueTankImg.width /= (grid*1.5); // adjusts Tank image X size to half of grid size
 blueTankImg.height /= (grid*1.5); // adjusts Tank image Y size to half of grid size
 
-const redTank = new Tank(redTankImg.width, redTankImg.height, 50, 50, 180, p1Forward, p1Backward, p1Left, p1Right, p1Shoot); // replace static values with variables e.g. p1Forward
-const blueTank = new Tank(blueTankImg.width, blueTankImg.height, 750, 750, 0, p2Forward, p2Backward, p2Left, p2Right, p2Shoot); // replace static values with variables e.g. p1Forward
+const redTank = new Tank(redTankImg, redTankImg.width, redTankImg.height, 50, 50, 180, p1Forward, p1Backward, p1Left, p1Right, p1Shoot); // replace static values with variables e.g. p1Forward
+const blueTank = new Tank(blueTankImg, blueTankImg.width, blueTankImg.height, 750, 750, 0, p2Forward, p2Backward, p2Left, p2Right, p2Shoot); // replace static values with variables e.g. p1Forward
 
 
 // DO NOT ASK HOW IT WORKS, IT JUST DOES. I SPENT WAY TOO MUCH TIME ON IT TO KNOW ANYMORE
@@ -338,6 +341,11 @@ function mcd(direction, width_, height_, rotation_, rectCoord, x_) { // mcd stan
             return [l1, l2];
         }
     }
+}
+
+function restart() {
+    generateLabyrinth();
+    
 }
 
 function generateLabyrinth() {
