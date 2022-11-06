@@ -65,9 +65,9 @@ class Tank {
         else if (!keyBuffer[this.keyShoot]) {
             this.keyShootPressed = false;
         }
-        for (x in this.bullets) {
+        for (let x of this.bullets) {
             console.log("bullet for loop called")
-            if (Date.now() - this.bullets[x].timeShot > bulletLifetime) {
+            if (Date.now() - x.timeShot > bulletLifetime) {
                 this.bullets.delete(x);
             }
         }
@@ -156,6 +156,7 @@ class Tank {
         console.log("shoot() called")
         if (this.bullets.size < maxBulletCount) {
             this.bullets.add(new Bullet(this.rotation, this.x, this.y));
+            console.log(this.bullets)
         }
     }
     move(speed) {
