@@ -1,0 +1,36 @@
+#gameSettings {
+    width: 400px;
+    margin: auto;
+    padding: 10px;
+    padding-left: 30px;
+    padding-right: 30px;
+    border: 2px solid gray;
+    border-radius: 5px;
+}
+h1 {
+    text-align: center;
+}
+h2 {
+    text-align: center;
+}
+h3 {
+    text-decoration: underline;
+}
+.controlsDiv {
+    margin: auto;
+    margin-top: 10px;
+    width: 60%;
+}
+p {
+    margin: 0;
+    margin-right: 10px;
+    width: fit-content;
+    float: left;
+}
+.controls {
+    text-align: center;
+    float: inline-end;
+    width: 40%;
+    border: 2px solid gray;
+    border-radius: 5px;
+}

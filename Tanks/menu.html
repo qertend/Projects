@@ -5,9 +5,55 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="menu.css">
 </head>
 <body>
-    <h1 id="keyPressed">Press a key</h1>
+    <div id="gameSettings">
+        <h1>Game settings</h1>
+        <h3>Speed</h3>
+        <input type="range"id="speed" min="0" max="1" step="0.1" value="0.3"><span id="speedOut">0.3</span>
+        <h3>Bullet speed multiplier</h3>
+        <input type="range" id="bulletSpeedmultiplier" min="0.5" max ="2" step="0.1" value="1"><span id="bulletSpeedmultiplierOut">1</span>
+        <h3>Grid</h3>
+        <input type="number" id="grid" value="8">
+        <h3>Bullet lifetime (in milliseconds)</h3>
+        <input type="number" id="bulletLifetime" value="5000">
+        <h3>Max bullets per player</h3>
+        <input type="number" id="maxBulletCount" value="3">
+        <div class="controlsDiv">
+            <h2>Controls</h2>
+            <h3 >Player 1</h3>
+            <p>Forward</p><span id="p1Forward" class="controls">KeyW</span> <br>
+        </div>
+        <div class="controlsDiv">
+            <p>Backward</p><span id="p1Backward" class="controls">KeyS</span> <br>
+        </div>
+        <div class="controlsDiv">
+            <p>Left</p><span id="p1Left" class="controls">KeyA</span> <br>
+        </div>
+        <div class="controlsDiv">
+            <p>Right</p><span id="p1Right" class="controls">KeyD</span> <br>
+        </div>
+        <div class="controlsDiv">
+            <p>Shoot</p><span id="p1Shoot" class="controls">Space</span> <br>
+        </div>
+        <div class="controlsDiv">
+            <h3 >Player 2</h3>
+            <p>Forward</p><span id="p2Forward" class="controls">ArrowUp</span> <br>
+        </div>
+        <div class="controlsDiv">
+            <p>Backward</p><span id="p2Backward" class="controls">ArrowDown</span> <br>
+        </div>
+        <div class="controlsDiv">
+            <p>Left</p><span id="p2Left" class="controls">ArrowLeft</span> <br>
+        </div>
+        <div class="controlsDiv">
+            <p>Right</p><span id="p2Right" class="controls">ArrowRight</span> <br>
+        </div>
+        <div class="controlsDiv">
+            <p>Shoot</p><span id="p2Shoot" class="controls">Numpad0</span> <br>
+        </div>
+    </div>
 </body>
 <script src="menu.js"></script>
 </html>
