@@ -2,10 +2,20 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext("2d");
 const canvasLab = document.getElementById('labyrinthGen');
 const ctxLab = canvasLab.getContext("2d");
-let grid = 8; // number of rows and coloumns in labyrinth, will be modifiable by user
-let speed = 0.3; // sets the movement and turn speed of the tanks, will be modifiable by user
-let bulletLifetime = 3500; // bullet lifetime in milliseconds, will be modifiable by user
-let maxBulletCount = 3;//max number of bullets per player, will be modifiable by user
+let grid = 8; // number of rows and coloumns in labyrinth
+let speed = 0.3; // sets the movement and turn speed of the tanks
+let bulletLifetime = 3500; // bullet lifetime in milliseconds
+let maxBulletCount = 3;//max number of bullets per player
+let p1Forward = "KeyW";
+let p1Backward = "KeyS";
+let p1Left = "KeyA";
+let p1Right = "KeyD";
+let p1Shoot = "Space";
+let p2Forward = "ArrowUp";
+let p2Backward = "ArrowDown";
+let p2Left = "ArrowLeft";
+let p2Right = "ArrowRight";
+let p2Shoot = "Numpad0";
 let keyBuffer = [];
 let hWalls = []; // array of horizontal walls
 let vWalls = []; // array of vertical walls
@@ -155,7 +165,7 @@ class Tank {
         }
     }
     move(speed) {
-        let rotationRad = redTank.rotation*Math.PI/180;
+        let rotationRad = this.rotation*Math.PI/180;
         if (this.check("v", this.rotation, this.x + speed * Math.sin(-rotationRad)) && this.check("h", this.rotation, this.y + speed * Math.cos(-rotationRad))) {
             // checks if out of bounds on X axis
             if (this.x + speed * Math.sin(-rotationRad) < canvas.width && this.x + speed * Math.sin(-rotationRad) > 0) {
@@ -178,8 +188,14 @@ const redTankImg = new Image(); // creates red tank sprite
 redTankImg.src = "redTank.png";
 redTankImg.width /= (grid*1.5); // adjusts Tank image X size to half of grid size
 redTankImg.height /= (grid*1.5); // adjusts Tank image Y size to half of grid size
+const blueTankImg = new Image(); // creates red tank sprite
+blueTankImg.src = "blueTank.png";
+blueTankImg.width /= (grid*1.5); // adjusts Tank image X size to half of grid size
+blueTankImg.height /= (grid*1.5); // adjusts Tank image Y size to half of grid size
 
-const redTank = new Tank(redTankImg.width, redTankImg.height, 350, 350, "KeyW", "KeyS", "KeyA", "KeyD", "Space"); // replace static values with variables e.g. p1Forward
+const redTank = new Tank(redTankImg.width, redTankImg.height, 50, 50, p1Forward, p1Backward, p1Left, p1Right, p1Shoot); // replace static values with variables e.g. p1Forward
+const blueTank = new Tank(blueTankImg.width, blueTankImg.height, 650, 650, p2Forward, p2Backward, p2Left, p2Right, p2Shoot); // replace static values with variables e.g. p1Forward
+
 
 // DO NOT ASK HOW IT WORKS, IT JUST DOES. I SPENT WAY TOO MUCH TIME ON IT TO KNOW ANYMORE
 function mcd(direction, width_, height_, rotation_, rectCoord, x_) { // mcd stands for Magic Collision Detector
@@ -316,8 +332,19 @@ function generateLabyrinth() {
     ctxLab.lineCap = "round";
     ctxLab.clearRect(0,0,canvasLab.width, canvasLab.height); // resets hidden labyrinth canvas
     hWalls = {};
+    hWalls[0] = [];
+    hWalls[grid+1] = [];
     vWalls = {};
-    for (i=0; i<grid; i++) { // generates random walls and puts them in arrays
+    vWalls[0] = [];
+    vWalls[grid+1] = [];
+    for (i=0; i<grid; i++) {
+        hWalls[0][i] = true;
+        vWalls[0][i] = true;
+        hWalls[grid+1][i] = true;
+        vWalls[grid+1][i] = true;
+    }
+
+    for (i=1; i<grid; i++) { // generates random walls and puts them in arrays
         hWalls[i] = [];
         vWalls[i] = [];
         for (j=0; j<grid; j++) {
@@ -368,17 +395,22 @@ renderFrame();
 function renderFrame() { 
     requestAnimationFrame(renderFrame);
     redTank.update();
+    blueTank.update();
     ctx.setTransform(1, 0, 0, 1, 0, 0); // resets rotation and translate
     ctx.clearRect(0,0, canvas.width, canvas.height); // resets image on canvas
     ctx.drawImage(document.getElementById("labyrinthGen"),0,0); // draws labyrinth
     ctx.translate(redTank.x, redTank.y); // places 0,0 at tank
     ctx.rotate(redTank.rotation*Math.PI/180); // rotates to tank direction
     ctx.drawImage(redTankImg, -redTank.width/2, -redTank.height/2, redTank.width, redTank.height); // draws image
+    ctx.setTransform(1, 0, 0, 1, 0, 0); // resets rotation and translate
+    ctx.translate(blueTank.x, blueTank.y); // places 0,0 at tank
+    ctx.rotate(blueTank.rotation*Math.PI/180); // rotates to tank direction
+    ctx.drawImage(blueTankImg, -blueTank.width/2, -blueTank.height/2, blueTank.width, blueTank.height); // draws image
 }
 /* 
 TODO
 create Game Settings menu
 -create mode where labyrinth changes every so often
-
+-create hardcore mode: tanks and bullets die when hitting a wall
 
 */
