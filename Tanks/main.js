@@ -37,7 +37,6 @@ class Bullet { // very much incomplete and incorrect
 
 class Tank {
     constructor(width, height, x, y, keyForward, keyBackward, keyLeft, keyRight, keyShoot) {
-        this.bullets = new Set();
         this.width = width;
         this.height = height;
         this.x = x;
@@ -48,18 +47,27 @@ class Tank {
         this.keyLeft = keyLeft;
         this.keyRight = keyRight;
         this.keyShoot = keyShoot;
+        this.bullets = new Set();
         this.keyShootPressed = false;
+        keyBuffer[this.keyForward] = false;
+        keyBuffer[this.keyBackward] = false;
+        keyBuffer[this.keyLeft] = false;
+        keyBuffer[this.keyRight] = false;
+        keyBuffer[this.keyShoot] = false;
+        console.log("constructor called")
     }
     update() {
         if (keyBuffer[this.keyShoot] && !this.keyShootPressed) { // Shoot
+            console.log("bullet shot")
             this.shoot();
             this.keyShootPressed = true;
         }
         else if (!keyBuffer[this.keyShoot]) {
             this.keyShootPressed = false;
         }
-        for (let x of this.bullets) {
-            if (Date.now() - x.timeShot > bulletLifetime) {
+        for (x in this.bullets) {
+            console.log("bullet for loop called")
+            if (Date.now() - this.bullets[x].timeShot > bulletLifetime) {
                 this.bullets.delete(x);
             }
         }
@@ -121,7 +129,6 @@ class Tank {
                         let i1 = Math.floor(ls1[0]/(canvas.height/grid));
                         let i2 = Math.floor(ls1[1]/(canvas.height/grid));
                         let j = Math.floor(x_/(canvas.height/grid));
-                        console.log(i1, i2, j, hWalls[i1][j], hWalls[i2][j])
                         if (hWalls[i1][j] || hWalls[i2][j]) { // if there is a wall at either point
                             return false;
                         }
@@ -135,7 +142,6 @@ class Tank {
                         let i1 = Math.floor(ls2[0]/(canvas.height/grid));
                         let i2 = Math.floor(ls2[1]/(canvas.height/grid));
                         let j = Math.floor(x_/(canvas.height/grid))+1;
-                        console.log(i1, i2, j, hWalls[i1][j], hWalls[i2][j])
                         if (hWalls[i1][j] || hWalls[i2][j]) { // if there is a wall at either point
                             return false;
                         }
@@ -147,8 +153,9 @@ class Tank {
         }
     }
     shoot() {
+        console.log("shoot() called")
         if (this.bullets.size < maxBulletCount) {
-            this.bullets.add(new Bullet(this.rotation));
+            this.bullets.add(new Bullet(this.rotation, this.x, this.y));
         }
     }
     move(speed) {
@@ -360,6 +367,9 @@ function generateLabyrinth() {
 // render first frame
 generateLabyrinth();
 renderFrame();
+
+
+
 
 // renders the current frame on main canvas when called
 function renderFrame() { 

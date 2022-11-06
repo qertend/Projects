@@ -1,0 +1,1 @@
+window.addEventListener("keydown", function(event){document.getElementById("keyPressed").innerHTML = event.code})
