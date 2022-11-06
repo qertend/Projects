@@ -1,16 +1,20 @@
+Art:
+--------
 Tank design:
 http://pixelartmaker.com/art/b956f82739a0e47
+Explosion:
+https://www.pngall.com/boom-png/download/48197
 Settings cogwheel:
 https://svgsilh.com/image/147414.html
 Hardcore mode icon:
 https://iconarchive.com/show/ios7-icons-by-icons8/Healthcare-Skull-icon.html
 
+Code:
+---------
 Key press detection:
 https://stackoverflow.com/questions/5203407/how-to-detect-if-multiple-keys-are-pressed-at-once-using-javascript
-
 Helped with the animation:
 https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Basic_animations
 https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Advanced_animations
-
 Game menu:
 https://www.w3schools.com/howto/howto_js_curtain_menu.asp
