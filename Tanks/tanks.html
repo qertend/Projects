@@ -14,9 +14,10 @@
             <p>Use Mozilla Firefox for best experience</p>
         </div>
         <div id="sidebar">
-            <button onclick="gameSettings()" title="Settings" id="settings"><img class="sidebarIcon" src="cogwheel.svg"></button><br>
-            <button onclick="hardcoreModeToggle()" title="Hardcore mode" id="hardcoreMode"><img class="sidebarIcon" src="Hardocore-mode-icon.png"></button> <br>
-            <button id="regen" title="Generate new map">Gen map</button>
+            <button onclick="gameSettings()" title="Settings" id="settings" class="sidebarButton"><img class="sidebarIcon" src="cogwheel.svg"></button><br>
+            <button onclick="hardcoreModeToggle()" title="Hardcore mode" id="hardcoreMode" class="sidebarButton"><img class="sidebarIcon" src="Hardocore-mode-icon.png"></button> <br>
+            <button onclick="randomWallsModeToggle()" title="Random walls mode" id="randomWallsMode" class="sidebarButton"><img class="sidebarIcon" src="random-walls-mode-icon.svg"></button> <br>
+            <button id="regen"  class="sidebarButton" title="Generate new map">Gen map</button>
         </div>
         <div id="gameSettings">
             <h1>Game settings</h1>
@@ -68,7 +69,7 @@
                     <p>Shoot</p><span id="p2Shoot" class="controls">Numpad0</span> <br>
                 </div>
             </div>
-            <p>If you can't see the tanks, try reloading the site or try a different browser</p>
+            <p>If you can't see the tanks, try <a onclick="location.reload()">reloading the site</a> or try a different browser</p>
         </div>
     </div>
     <canvas id="labyrinthGen" width="800" height="800"></canvas>

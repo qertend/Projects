@@ -26,6 +26,9 @@ let vWalls = []; // array of vertical walls
 window.addEventListener("keydown", function(event) {keyBuffer[event.code] = event.type == "keydown";});
 window.addEventListener("keyup", function(event) {keyBuffer[event.code] = event.type == "keydown";});
 document.getElementById("regen").addEventListener("click", generateLabyrinth);
+for (x of document.getElementsByClassName("controls")) {
+    x.addEventListener("click", function(event) {this.style.backgroundColor = "red"});
+}
 
 
 
@@ -345,7 +348,7 @@ function mcd(direction, width_, height_, rotation_, rectCoord, x_) { // mcd stan
 
 function restart() {
     generateLabyrinth();
-    
+
 }
 
 function generateLabyrinth() {
@@ -419,6 +422,19 @@ function refreshSettings() {
     }
     bulletLifetime = Number(document.getElementById('bulletLifetime').value);
     maxBulletCount = Number(document.getElementById('maxBulletCount').value);
+    //controls
+    //player 1
+    document.getElementById('p1Forward').innerHTML = p1Forward;
+    document.getElementById('p1Backward').innerHTML = p1Backward;
+    document.getElementById('p1Left').innerHTML = p1Left;
+    document.getElementById('p1Right').innerHTML = p1Right;
+    document.getElementById('p1Shoot').innerHTML = p1Shoot;
+    //player 2
+    document.getElementById('p2Forward').innerHTML = p2Forward;
+    document.getElementById('p2Backward').innerHTML = p2Backward;
+    document.getElementById('p2Left').innerHTML = p2Left;
+    document.getElementById('p2Right').innerHTML = p2Right;
+    document.getElementById('p2Shoot').innerHTML = p2Shoot;
 
 }
 
@@ -430,6 +446,10 @@ function gameSettings() {
         refreshSettings();
         document.getElementById('gameSettings').style.display = 'none';
     }
+}
+function changeControl(event) {
+    console.log("success");
+    this.innerHTML = event.code;
 }
 
 function hardcoreModeToggle() {

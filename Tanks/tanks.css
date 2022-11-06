@@ -20,16 +20,13 @@
     width: 25px;
     height: 25px;
 }
-#settings {
+.sidebarButton {
     background-color: lightgray;
+    margin-bottom: 5px;
 }
 #regen {
     width: 41px;
     height: 38px;
-    background-color: lightgray;
-}
-#hardcoreMode {
-    background-color: lightgray;
 }
 #canvas {
     border:1px solid grey;
@@ -39,12 +36,11 @@
 }
 #gameSettings {
     display: none;
-    position: fixed;
-    left: 25%;
-    top: 50px;
+    position: absolute;
+    margin: auto;
+    top: 5%;
     z-index: 1;
     width: 40%;
-    margin: auto;
     padding: 10px;
     padding-left: 30px;
     padding-right: 30px;
@@ -84,4 +80,14 @@ p {
     width: 40%;
     border: 2px solid gray;
     border-radius: 5px;
+}
+.controls:hover {
+    cursor: pointer;
+}
+a {
+    color: blue;
+    text-decoration: underline;
+}
+a:hover {
+    cursor: pointer;
 }
