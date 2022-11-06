@@ -54,11 +54,9 @@ class Tank {
         keyBuffer[this.keyLeft] = false;
         keyBuffer[this.keyRight] = false;
         keyBuffer[this.keyShoot] = false;
-        console.log("constructor called")
     }
     update() {
         if (keyBuffer[this.keyShoot] && !this.keyShootPressed) { // Shoot
-            console.log("bullet shot")
             this.shoot();
             this.keyShootPressed = true;
         }
@@ -66,7 +64,6 @@ class Tank {
             this.keyShootPressed = false;
         }
         for (let x of this.bullets) {
-            console.log("bullet for loop called")
             if (Date.now() - x.timeShot > bulletLifetime) {
                 this.bullets.delete(x);
             }
@@ -153,10 +150,8 @@ class Tank {
         }
     }
     shoot() {
-        console.log("shoot() called")
         if (this.bullets.size < maxBulletCount) {
             this.bullets.add(new Bullet(this.rotation, this.x, this.y));
-            console.log(this.bullets)
         }
     }
     move(speed) {
@@ -375,7 +370,7 @@ renderFrame();
 // renders the current frame on main canvas when called
 function renderFrame() { 
     requestAnimationFrame(renderFrame);
-    redTank.update();
+    //redTank.update();
     document.getElementById("w").innerHTML = keyBuffer["KeyW"];
     document.getElementById("s").innerHTML = keyBuffer["KeyS"];
     document.getElementById("a").innerHTML = keyBuffer["KeyA"];
