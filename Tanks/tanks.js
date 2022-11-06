@@ -363,9 +363,9 @@ function generateLabyrinth() {
     vWalls[0] = [];
     vWalls[grid+1] = [];
     for (i=0; i<grid; i++) {
-        hWalls[0][i] = true;
+        hWalls[i][0] = true;
         vWalls[0][i] = true;
-        hWalls[grid+1][i] = true;
+        hWalls[i][grid+1] = true;
         vWalls[grid+1][i] = true;
     }
 
