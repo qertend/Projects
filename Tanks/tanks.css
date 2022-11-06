@@ -1,13 +1,29 @@
 #gameDiv {
     width: fit-content;
+    height: fit-content;
     margin: auto;
+    margin-top: 2%;
+    border: 2px solid red;
+    background-color: blue;
 }
 #map {
     float: left;
 }
 #sidebar {
+    width: fit-content;
     float: inline-start;
+    margin: 10px;
+    margin-top: 0;
+    text-align: center;
 }
+.sidebarIcon {
+    margin: 2px;
+}
+#settings {
+    width: 25px;
+    height: 25px;
+}
+
 #canvas {
     border:1px solid grey;
 }

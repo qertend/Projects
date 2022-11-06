@@ -1,5 +1,7 @@
 Tank design:
 http://pixelartmaker.com/art/b956f82739a0e47
+Settings cogwheel:
+https://svgsilh.com/image/147414.html
 
 Key press detection:
 https://stackoverflow.com/questions/5203407/how-to-detect-if-multiple-keys-are-pressed-at-once-using-javascript
