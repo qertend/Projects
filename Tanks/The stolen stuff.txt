@@ -2,6 +2,8 @@ Tank design:
 http://pixelartmaker.com/art/b956f82739a0e47
 Settings cogwheel:
 https://svgsilh.com/image/147414.html
+Hardcore mode icon:
+https://iconarchive.com/show/ios7-icons-by-icons8/Healthcare-Skull-icon.html
 
 Key press detection:
 https://stackoverflow.com/questions/5203407/how-to-detect-if-multiple-keys-are-pressed-at-once-using-javascript

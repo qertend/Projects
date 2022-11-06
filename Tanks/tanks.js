@@ -25,6 +25,8 @@ window.addEventListener("keydown", function(event) {keyBuffer[event.code] = even
 window.addEventListener("keyup", function(event) {keyBuffer[event.code] = event.type == "keydown";});
 document.getElementById("regen").addEventListener("click", generateLabyrinth);
 
+
+
 class Bullet { // very much incomplete and incorrect
     constructor(direction, x, y) {
         this.direction = direction;
@@ -46,12 +48,12 @@ class Bullet { // very much incomplete and incorrect
 }
 
 class Tank {
-    constructor(width, height, x, y, keyForward, keyBackward, keyLeft, keyRight, keyShoot) {
+    constructor(width, height, x, y, rotation, keyForward, keyBackward, keyLeft, keyRight, keyShoot) {
         this.width = width;
         this.height = height;
         this.x = x;
         this.y = y;
-        this.rotation = 0;
+        this.rotation = rotation;
         this.keyForward = keyForward;
         this.keyBackward = keyBackward;
         this.keyLeft = keyLeft;
@@ -193,8 +195,8 @@ blueTankImg.src = "blueTank.png";
 blueTankImg.width /= (grid*1.5); // adjusts Tank image X size to half of grid size
 blueTankImg.height /= (grid*1.5); // adjusts Tank image Y size to half of grid size
 
-const redTank = new Tank(redTankImg.width, redTankImg.height, 50, 50, p1Forward, p1Backward, p1Left, p1Right, p1Shoot); // replace static values with variables e.g. p1Forward
-const blueTank = new Tank(blueTankImg.width, blueTankImg.height, 750, 750, p2Forward, p2Backward, p2Left, p2Right, p2Shoot); // replace static values with variables e.g. p1Forward
+const redTank = new Tank(redTankImg.width, redTankImg.height, 50, 50, 180, p1Forward, p1Backward, p1Left, p1Right, p1Shoot); // replace static values with variables e.g. p1Forward
+const blueTank = new Tank(blueTankImg.width, blueTankImg.height, 750, 750, 0, p2Forward, p2Backward, p2Left, p2Right, p2Shoot); // replace static values with variables e.g. p1Forward
 
 
 // DO NOT ASK HOW IT WORKS, IT JUST DOES. I SPENT WAY TOO MUCH TIME ON IT TO KNOW ANYMORE
@@ -387,6 +389,15 @@ function generateLabyrinth() {
     ctxLab.stroke();
 }
 
+function gameSettings() {
+    if (document.getElementById('gameSettings').style.display == 'none') {
+        document.getElementById('gameSettings').style.display = 'block';
+    }
+    else {
+        document.getElementById('gameSettings').style.display = 'none';
+    }
+}
+
 // render first frame
 generateLabyrinth();
 renderFrame();
@@ -409,7 +420,6 @@ function renderFrame() {
 }
 /* 
 TODO
-create Game Settings menu
 -create mode where labyrinth changes every so often
 -create hardcore mode: tanks and bullets die when hitting a wall
 
