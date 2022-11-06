@@ -1,0 +1,16 @@
+#gameDiv {
+    width: fit-content;
+    margin: auto;
+}
+#map {
+    float: left;
+}
+#sidebar {
+    float: inline-start;
+}
+#canvas {
+    border:1px solid grey;
+}
+#labyrinthGen {
+    display: none;
+}

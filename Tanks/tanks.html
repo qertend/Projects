@@ -5,18 +5,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tanks</title>
-    <style>
-
-    </style>
+    <link rel="stylesheet" href="tanks.css">
 </head>
 <body >
-    <div style="width:fit-content; float:left;">
-        <canvas id="canvas" width="800" height="800" style="border:1px solid grey;">Looks like this browser doesn't support canvas, try a different one</canvas>
-        <p>*Only tested on Firefox</p>
-        <p>If you can't see the tanks, try reloading the site or try a different browser</p>
-        <button id="regen">Regen</button>
+    <div id="gameDiv">
+        <div id="map">
+            <canvas id="canvas" width="800" height="800">Looks like this browser doesn't support canvas, try a different one</canvas>
+            <p>*Only tested on Firefox</p>
+            <p>If you can't see the tanks, try reloading the site or try a different browser</p>
+        </div>
+        <div id="sidebar" >
+            <button id="regen">Regen</button>
+        </div>
     </div>
-    <canvas id="labyrinthGen" width="800" height="800" style="display: none;"></canvas>
+    <canvas id="labyrinthGen" width="800" height="800"></canvas>
 </body>
 <script src="tanks.js"></script>
 </html>
