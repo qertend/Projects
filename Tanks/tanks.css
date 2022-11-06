@@ -30,7 +30,7 @@
     display: none;
 }
 #gameSettings {
-    display: none;
+    display: block;
     position: fixed;
     left: 25%;
     top: 50px;

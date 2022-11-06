@@ -194,7 +194,7 @@ blueTankImg.width /= (grid*1.5); // adjusts Tank image X size to half of grid si
 blueTankImg.height /= (grid*1.5); // adjusts Tank image Y size to half of grid size
 
 const redTank = new Tank(redTankImg.width, redTankImg.height, 50, 50, p1Forward, p1Backward, p1Left, p1Right, p1Shoot); // replace static values with variables e.g. p1Forward
-const blueTank = new Tank(blueTankImg.width, blueTankImg.height, 650, 650, p2Forward, p2Backward, p2Left, p2Right, p2Shoot); // replace static values with variables e.g. p1Forward
+const blueTank = new Tank(blueTankImg.width, blueTankImg.height, 750, 750, p2Forward, p2Backward, p2Left, p2Right, p2Shoot); // replace static values with variables e.g. p1Forward
 
 
 // DO NOT ASK HOW IT WORKS, IT JUST DOES. I SPENT WAY TOO MUCH TIME ON IT TO KNOW ANYMORE
