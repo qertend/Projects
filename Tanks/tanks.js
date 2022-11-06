@@ -18,16 +18,17 @@ let p2Backward = "ArrowDown";
 let p2Left = "ArrowLeft";
 let p2Right = "ArrowRight";
 let p2Shoot = "Numpad0";
+let controlChange = "";
 let keyBuffer = [];
 let hWalls = []; // array of horizontal walls
 let vWalls = []; // array of vertical walls
 
 // initialize event listeners
-window.addEventListener("keydown", function(event) {keyBuffer[event.code] = event.type == "keydown";});
-window.addEventListener("keyup", function(event) {keyBuffer[event.code] = event.type == "keydown";});
+window.addEventListener("keydown", function(event) {if (controlChange == "") {keyBuffer[event.code] = event.type == "keydown";}});
+window.addEventListener("keyup", function(event) {if (controlChange == "") {keyBuffer[event.code] = event.type == "keydown";}});
 document.getElementById("regen").addEventListener("click", generateLabyrinth);
 for (x of document.getElementsByClassName("controls")) {
-    x.addEventListener("click", function(event) {this.style.backgroundColor = "red"});
+    x.addEventListener("click", function(event) {changeControlsToggle(event, this)});
 }
 
 
@@ -447,10 +448,49 @@ function gameSettings() {
         document.getElementById('gameSettings').style.display = 'none';
     }
 }
-function changeControl(event) {
-    console.log("success");
-    this.innerHTML = event.code;
+function changeControlsToggle(event) {
+    controlChange = event.target.id;
+    event.target.style.backgroundColor = "yellow";
+    window.addEventListener("keydown", changeControls, {once: true});
 }
+function changeControls(event) {
+    switch (controlChange) {
+        case "p1Forward":
+            p1Forward = event.code;
+            break;
+        case "p1Backward":
+            p1Backward = event.code;
+            break;
+        case "p1Left":
+            p1Left = event.code;
+            break;
+        case "p1Right":
+            p1Right = event.code;
+            break;
+        case "p1Shoot":
+            p1Shoot = event.code;
+            break;
+        case "p2Forward":
+            p2Forward = event.code;
+            break;
+        case "p2Backward":
+            p2Backward = event.code;
+            break;
+        case "p2Left":
+            p2Left = event.code;
+            break;
+        case "p2Right":
+            p2Right = event.code;
+            break;
+        case "p2Shoot":
+            p2Shoot = event.code;
+            break;
+    }
+    refreshSettings();
+    document.getElementById(controlChange).style.backgroundColor = 'rgb(245, 245, 245)';
+    controlChange = "";
+}
+
 
 function hardcoreModeToggle() {
     if (hardcoreMode) {
