@@ -555,7 +555,6 @@ function hardcoreModeToggle() {
 }
 
 // render first frame
-    console.log("init");
     generateLabyrinth();
     renderFrame();
     document.getElementById('gameSettingsButton').dispatchEvent(new MouseEvent("click"));
