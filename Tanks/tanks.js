@@ -91,8 +91,8 @@ class Tank {
         }
         if (keyBuffer[this.keyForward]) { this.move(-speed*(canvas.width/(grid*100)));} // Forwards
         if (keyBuffer[this.keyBackward]) { this.move(speed*(canvas.width/(grid*100)));} // Backwards
-        if (keyBuffer[this.keyLeft]) { this.rotate(-speed);} // Left
-        if (keyBuffer[this.keyRight]) { this.rotate(speed);} // Right
+        if (keyBuffer[this.keyLeft]) { this.rotate(-speed*1.2);} // Left
+        if (keyBuffer[this.keyRight]) { this.rotate(speed*1.2);} // Right
     }
     check(direction, rotation_, x_) {
         //returns true if move is valid, false if invalid
