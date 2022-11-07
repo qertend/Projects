@@ -20,13 +20,14 @@ let p2Left = "ArrowLeft";
 let p2Right = "ArrowRight";
 let p2Shoot = "Numpad0";
 let controlChange = "";
+let menuOpen = false;
 let keyBuffer = [];
 let hWalls = []; // array of horizontal walls
 let vWalls = []; // array of vertical walls
 
 // initialize event listeners
-window.addEventListener("keydown", function(event) {if (controlChange == "") {keyBuffer[event.code] = event.type == "keydown";}});
-window.addEventListener("keyup", function(event) {if (controlChange == "") {keyBuffer[event.code] = event.type == "keydown";}});
+window.addEventListener("keydown", function(event) {if (!menuOpen) {keyBuffer[event.code] = event.type == "keydown";}});
+window.addEventListener("keyup", function(event) {if (!menuOpen) {keyBuffer[event.code] = event.type == "keydown";}});
 document.getElementById("regen").addEventListener("click", generateLabyrinth);
 for (x of document.getElementsByClassName("controls")) {
     x.addEventListener("click", function(event) {changeControlsToggle(event, this)});
@@ -88,8 +89,8 @@ class Tank {
                 this.bullets.delete(x);
             }
         }
-        if (keyBuffer[this.keyForward]) { this.move(-speed);} // Forwards
-        if (keyBuffer[this.keyBackward]) { this.move(speed);} // Backwards
+        if (keyBuffer[this.keyForward]) { this.move(-speed*(canvas.width/(grid*100)));} // Forwards
+        if (keyBuffer[this.keyBackward]) { this.move(speed*(canvas.width/(grid*100)));} // Backwards
         if (keyBuffer[this.keyLeft]) { this.rotate(-speed);} // Left
         if (keyBuffer[this.keyRight]) { this.rotate(speed);} // Right
     }
@@ -213,12 +214,12 @@ class Tank {
 
 const redTankImg = new Image(); // creates red tank sprite
 redTankImg.src = "redTank.png";
-redTankImg.width /= (grid*1.5); // adjusts Tank image X size to half of grid size
-redTankImg.height /= (grid*1.5); // adjusts Tank image Y size to half of grid size
+redTankImg.width = canvas.width / (grid*1.2) *.48; // adjusts Tank image X
+redTankImg.height = canvas.height / (grid*1.2) *.63; // adjusts Tank image Y
 const blueTankImg = new Image(); // creates red tank sprite
 blueTankImg.src = "blueTank.png";
-blueTankImg.width /= (grid*1.5); // adjusts Tank image X size to half of grid size
-blueTankImg.height /= (grid*1.5); // adjusts Tank image Y size to half of grid size
+blueTankImg.width = canvas.width / (grid*1.2) *.48; // adjusts Tank image X
+blueTankImg.height = canvas.width / (grid*1.2) *.63; // adjusts Tank image Y
 
 const redTank = new Tank(redTankImg, redTankImg.width, redTankImg.height, 50, 50, 180, p1Forward, p1Backward, p1Left, p1Right, p1Shoot); // replace static values with variables e.g. p1Forward
 const blueTank = new Tank(blueTankImg, blueTankImg.width, blueTankImg.height, 750, 750, 0, p2Forward, p2Backward, p2Left, p2Right, p2Shoot); // replace static values with variables e.g. p1Forward
@@ -360,6 +361,14 @@ function restart() {
 }
 
 function generateLabyrinth() {
+    redTankImg.width = canvas.width / (grid*1.2) *.48; // adjusts Tank image X
+    redTankImg.height = canvas.height / (grid*1.2) *.63; // adjusts Tank image Y
+    redTank.width = redTankImg.width;
+    redTank.height = redTankImg.height;
+    blueTankImg.width = canvas.width / (grid*1.2) *.48; // adjusts Tank image X
+    blueTankImg.height = canvas.height / (grid*1.2) *.63; // adjusts Tank image Y
+    blueTank.width = redTankImg.width;
+    blueTank.height = redTankImg.height;
     ctxLab.lineWidth = canvasLab.width/grid/16;
     ctxLab.lineCap = "round";
     ctxLab.clearRect(0,0,canvasLab.width, canvasLab.height); // resets hidden labyrinth canvas
@@ -448,9 +457,11 @@ function refreshSettings() {
 
 function gameSettings() {
     if (document.getElementById('gameSettings').style.display == 'none') {
+        menuOpen = true;
         document.getElementById('gameSettings').style.display = 'block';
     }
     else {
+        menuOpen = false;
         refreshSettings();
         document.getElementById('gameSettings').style.display = 'none';
     }
@@ -517,7 +528,9 @@ renderFrame();
 // renders the current frame on main canvas when called
 function renderFrame() { 
     requestAnimationFrame(renderFrame);
-    refreshSettings();
+    if (menuOpen){
+        refreshSettings();
+    }
     redTank.update();
     blueTank.update();
     ctx.setTransform(1, 0, 0, 1, 0, 0); // resets rotation and translate
@@ -533,6 +546,7 @@ function renderFrame() {
 }
 /* 
 TODO
+-create bullets
 -create mode where labyrinth changes every so often
 -create hardcore mode: tanks and bullets die when hitting a wall
 
