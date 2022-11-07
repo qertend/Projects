@@ -28,7 +28,6 @@ let vWalls = []; // array of vertical walls
 // initialize event listeners
 window.addEventListener("keydown", function(event) {if (!menuOpen) {keyBuffer[event.code] = event.type == "keydown";}});
 window.addEventListener("keyup", function(event) {if (!menuOpen) {keyBuffer[event.code] = event.type == "keydown";}});
-document.getElementById("regen").addEventListener("click", generateLabyrinth);
 for (x of document.getElementsByClassName("controls")) {
     x.addEventListener("click", function(event) {changeControlsToggle(event, this)});
 }
@@ -116,9 +115,11 @@ class Tank {
                             if (hardcoreMode) {
                                 this.dead();
                             }
+                            console.log(false, ls1)
                             return false;
                         }
                         else {
+                            console.log(true)
                             return true;
                         }
                     }
@@ -132,9 +133,11 @@ class Tank {
                             if (hardcoreMode) {
                                 this.dead();
                             }
+                            console.log(false, ls2)
                             return false;
                         }
                         else {
+                            console.log(true)
                             return true;
                         }
                     }
@@ -408,8 +411,8 @@ function generateLabyrinth() {
 
     // draws labyrinth on hidden canvas
     ctxLab.beginPath();
-    for (i=0; i<grid; i++) {
-        for (j=0; j<grid; j++) {
+    for (i=0; i<=grid; i++) {
+        for (j=0; j<=grid; j++) {
             if (hWalls[i][j]){
                 ctxLab.moveTo(i*(canvasLab.width/grid), j*(canvasLab.height/grid));
                 ctxLab.lineTo((i+1)*(canvasLab.width/grid), j*(canvasLab.height/grid));
@@ -423,6 +426,7 @@ function generateLabyrinth() {
     ctxLab.stroke();
 }
 
+//updates values on Game settings window
 function refreshSettings() {
     speed = Number(document.getElementById('speed').value);
     document.getElementById('speedOut').innerHTML = speed;
@@ -455,8 +459,12 @@ function refreshSettings() {
 
 }
 
+//open and close Game settings
 function gameSettings() {
     if (document.getElementById('gameSettings').style.display == 'none') {
+        if (menuOpen) {
+            closeAllMenus();
+        }
         menuOpen = true;
         document.getElementById('gameSettings').style.display = 'block';
     }
@@ -466,11 +474,37 @@ function gameSettings() {
         document.getElementById('gameSettings').style.display = 'none';
     }
 }
+
+//open and close Info menu
+function infoMenu() {
+    if (document.getElementById('infoMenu').style.display == 'none') {
+        if (menuOpen) {
+            closeAllMenus();
+        }
+        menuOpen = true;
+        document.getElementById('infoMenu').style.display = 'block';
+    }
+    else {
+        menuOpen = false;
+        document.getElementById('infoMenu').style.display = 'none';
+    }
+}
+
+//close all menus
+function closeAllMenus() {
+    document.getElementById('gameSettings').style.display = 'none';
+    document.getElementById('infoMenu').style.display = 'none';
+    menuOpen = false;
+}
+
+//toggles control change on specific action and puts it in 'cotrolChange'
 function changeControlsToggle(event) {
     controlChange = event.target.id;
     event.target.style.backgroundColor = "yellow";
     window.addEventListener("keydown", changeControls, {once: true});
 }
+
+//changes input of action specified in 'controlChange' variable
 function changeControls(event) {
     switch (controlChange) {
         case "p1Forward":
@@ -508,8 +542,7 @@ function changeControls(event) {
     document.getElementById(controlChange).style.backgroundColor = 'rgb(245, 245, 245)';
     controlChange = "";
 }
-
-
+//toggles hardcore mode
 function hardcoreModeToggle() {
     if (hardcoreMode) {
         hardcoreMode = false;
@@ -547,7 +580,11 @@ function renderFrame() {
 /* 
 TODO
 -create bullets
+
 -create mode where labyrinth changes every so often
+->add timer selector
+
 -create hardcore mode: tanks and bullets die when hitting a wall
+->add lives slider
 
 */

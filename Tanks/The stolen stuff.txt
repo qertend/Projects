@@ -10,6 +10,8 @@ Hardcore mode icon:
 https://iconarchive.com/show/ios7-icons-by-icons8/Healthcare-Skull-icon.html
 Random walls mode icon:
 By User:Stannered - Image:Question mark alternate.png, Public Domain, https://commons.wikimedia.org/w/index.php?curid=1765574
+Info icon:
+https://www.onlinewebfonts.com/icon/28891
 
 Code:
 ---------

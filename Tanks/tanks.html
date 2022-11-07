@@ -11,17 +11,18 @@
     <div id="gameDiv">
         <div id="map">
             <canvas id="canvas" width="800" height="800">Looks like this browser doesn't support canvas, try a different one</canvas> <br>
-            <p>Use Mozilla Firefox for best experience</p>
+            <p>Currently only works on <a href="https://    www.mozilla.org/en-US/firefox/new/">Mozilla Firefox</a></p>
         </div>
         <div id="sidebar">
-            <button onclick="gameSettings()" title="Settings" id="settings" class="sidebarButton"><img class="sidebarIcon" src="cogwheel.svg"></button><br>
+            <button onclick="gameSettings()" title="Settings" id="gameSettingsButton" class="sidebarButton"><img class="sidebarIcon" src="cogwheel.svg"></button><br>
             <button onclick="hardcoreModeToggle()" title="Hardcore mode" id="hardcoreMode" class="sidebarButton"><img class="sidebarIcon" src="Hardocore-mode-icon.png"></button> <br>
             <button onclick="randomWallsModeToggle()" title="Random walls mode" id="randomWallsMode" class="sidebarButton"><img class="sidebarIcon" src="random-walls-mode-icon.svg"></button> <br>
-            <button id="regen"  class="sidebarButton" title="Generate new map">Gen map</button>
+            <button onclick="generateLabyrinth()" title="Generate new map" id="regen"  class="sidebarButton">Gen map</button> <br>
+            <button onclick="infoMenu()" title="Info" id="infoMenuButton" class="sidebarButton"><img class="sidebarIcon" src="info-icon.svg"></button><br>
         </div>
-        <div id="gameSettings">
+        <div id="gameSettings" class="menu">
             <h1>Game settings</h1>
-            <button id="closeGameSettings" onclick="gameSettings()">X</button>
+            <button id="closeGameSettings" class="closeMenu" onclick="gameSettings()">X</button>
             <div style="float: left; width: 50%;">
                 <h3>Speed</h3>
                 <input type="range"id="speed" min="0.05" max="1" step="0.05" value="0.4"><span id="speedOut">0.4</span>
@@ -72,6 +73,19 @@
                 </div>
             </div>
             <p>If you can't see the tanks, try <a onclick="location.reload()">reloading the site</a> or try a different browser</p>
+        </div>
+        <div id="infoMenu" class="menu">
+            <button id="closeInfoMenu" class="closeMenu" onclick="infoMenu()">X</button>
+            <h1>Info</h1>
+            <h3>"Features"</h3>
+            <p>Driving into the end of a wall might cause your tank to get stuck on said wall</p> <br>
+            <h2>Modes [Coming soon]</h2>
+            <h3>Hardcore</h3>
+            <p>Tanks lose lives(default: 1) when hitting a wall and bullets don't bounce</p> <br>
+            <h3>Random walls</h3>
+            <p>Walls change periodically(default: 15s)</p>
+
+
         </div>
     </div>
     <canvas id="labyrinthGen" width="800" height="800"></canvas>
