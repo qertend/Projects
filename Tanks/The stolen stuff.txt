@@ -12,6 +12,8 @@ Random walls mode icon:
 By User:Stannered - Image:Question mark alternate.png, Public Domain, https://commons.wikimedia.org/w/index.php?curid=1765574
 Info icon:
 https://www.onlinewebfonts.com/icon/28891
+Favicon:
+https://www.shareicon.net/miscellaneous-weapon-canon-war-tank-wars-weapons-signaling-tanks-838200
 
 Code:
 ---------
