@@ -555,8 +555,11 @@ function hardcoreModeToggle() {
 }
 
 // render first frame
-generateLabyrinth();
-renderFrame();
+    console.log("init");
+    generateLabyrinth();
+    renderFrame();
+    document.getElementById('gameSettingsButton').dispatchEvent(new MouseEvent("click"));
+    document.getElementById('infoMenuButton').click();
 
 // renders the current frame on main canvas when called
 function renderFrame() { 
