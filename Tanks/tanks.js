@@ -583,6 +583,7 @@ TODO
 
 -create mode where labyrinth changes every so often
 ->add timer selector
+->redesign button icon
 
 -create hardcore mode: tanks and bullets die when hitting a wall
 ->add lives slider
