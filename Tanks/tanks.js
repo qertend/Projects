@@ -209,18 +209,18 @@ class Tank {
         }
     }
     dead() {
-        this.image.src = "boom.png";
+        this.image.src = "assets/boom.png";
         console.log("magnificent death animation");
         restart();
     }
 }
 
 const redTankImg = new Image(); // creates red tank sprite
-redTankImg.src = "redTank.png";
+redTankImg.src = "assets/redTank.png";
 redTankImg.width = canvas.width / (grid*1.2) *.48; // adjusts Tank image X
 redTankImg.height = canvas.height / (grid*1.2) *.63; // adjusts Tank image Y
 const blueTankImg = new Image(); // creates red tank sprite
-blueTankImg.src = "blueTank.png";
+blueTankImg.src = "assets/blueTank.png";
 blueTankImg.width = canvas.width / (grid*1.2) *.48; // adjusts Tank image X
 blueTankImg.height = canvas.width / (grid*1.2) *.63; // adjusts Tank image Y
 
