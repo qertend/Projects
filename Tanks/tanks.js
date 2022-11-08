@@ -39,7 +39,6 @@ class Bullet { // very much incomplete and incorrect
         this.y = y;
         this.timeShot = Date.now();
         this.lastBounced = [];
-        this.lastBounced = [];
     }
     update() {
         this.move()
@@ -54,6 +53,25 @@ class Bullet { // very much incomplete and incorrect
     }
     move() {
         let rotationRad = this.rotation*Math.PI/180;
+
+        //VERTICAL BOUNCE
+        //changed coloumn to the right
+        if (Math.floor(this.x/(canvas.width/grid)) < Math.floor((this.x + speed * Math.sin(rotationRad) * bulletSpeedMultiplier)/(canvas.width/grid)) && this.lastBounced != ["v", [Math.floor(this.x/(canvas.width/grid))+1, Math.floor(this.y/(canvas.height/grid))]]) {
+            if (vWalls[Math.floor(this.x/(canvas.width/grid))+1][Math.floor(this.y/(canvas.height/grid))]) {
+                console.log(this.lastBounced)
+                this.verticalBounce();
+                this.lastBounced = ["v", [Math.floor(this.x/(canvas.width/grid))+1, Math.floor(this.y/(canvas.height/grid))]];
+            }
+        }
+        //changed coloumn to the left
+        else if (Math.floor(this.x/(canvas.width/grid)) > Math.floor((this.x + speed * Math.sin(rotationRad) * bulletSpeedMultiplier)/(canvas.width/grid)) && this.lastBounced != ["v", [Math.floor(this.x/(canvas.width/grid)), Math.floor(this.y/(canvas.height/grid))]]) {
+            if (vWalls[Math.floor(this.x/(canvas.width/grid))][Math.floor(this.y/(canvas.height/grid))]) {
+                console.log(this.lastBounced)
+                this.verticalBounce();
+                this.lastBounced = ["v", [Math.floor(this.x/(canvas.width/grid)), Math.floor(this.y/(canvas.height/grid))]];
+            }
+        }
+        //HORIZONTAL BOUNCE
         this.x += speed * Math.sin(rotationRad) * bulletSpeedMultiplier;
         this.y -= speed * Math.cos(rotationRad) * bulletSpeedMultiplier;
     }
