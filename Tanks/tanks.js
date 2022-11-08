@@ -52,6 +52,9 @@ class Bullet { // very much incomplete and incorrect
             this.direction = 540 - this.direction;
         }
     }
+    move() {
+
+    }
 }
 
 class Tank {
@@ -133,11 +136,9 @@ class Tank {
                             if (hardcoreMode) {
                                 this.dead();
                             }
-                            console.log(false, ls2)
                             return false;
                         }
                         else {
-                            console.log(true)
                             return true;
                         }
                     }
@@ -186,21 +187,16 @@ class Tank {
         }
     }
     shoot() {
+        let rotationRad = this.rotation*Math.PI/180;
         if (this.bullets.size < maxBulletCount) {
-            this.bullets.add(new Bullet(this.rotation, this.x, this.y));
+            this.bullets.add(new Bullet(this.rotation, this.x + (this.height/1.94) * Math.sin(rotationRad), this.y - (this.height/1.94) * Math.cos(rotationRad)));
         }
     }
     move(speed) {
         let rotationRad = this.rotation*Math.PI/180;
         if (this.check("v", this.rotation, this.x + speed * Math.sin(-rotationRad)) && this.check("h", this.rotation, this.y + speed * Math.cos(-rotationRad))) {
-            // checks if out of bounds on X axis
-            if (this.x + speed * Math.sin(-rotationRad) < canvas.width && this.x + speed * Math.sin(-rotationRad) > 0) {
-                this.x += speed * Math.sin(-rotationRad);
-            }
-            // checks if out of bounds on Y axis
-            if (this.y + speed * Math.cos(-rotationRad) < canvas.height && this.y + speed * Math.cos(-rotationRad ) > 0) {
-                this.y += speed * Math.cos(-rotationRad);
-            }
+            this.x += speed * Math.sin(-rotationRad);
+            this.y += speed * Math.cos(-rotationRad);
         }
     }
     rotate(speed) {
@@ -571,6 +567,17 @@ function renderFrame() {
     ctx.setTransform(1, 0, 0, 1, 0, 0); // resets rotation and translate
     ctx.clearRect(0,0, canvas.width, canvas.height); // resets image on canvas
     ctx.drawImage(document.getElementById("labyrinthGen"),0,0); // draws labyrinth
+    ctx.fillStyle = "purple";
+    for (i of redTank.bullets) { //draws red bullets
+        ctx.beginPath();
+        ctx.ellipse(i.x, i.y, 5, 5, 0, 0, Math.PI * 2);
+        ctx.fill();
+    }
+    for (i of blueTank.bullets) { //draws red bullets
+        ctx.beginPath();
+        ctx.ellipse(i.x, i.y, 5, 5, 0, 0, Math.PI * 2);
+        ctx.fill();
+    }
     ctx.translate(redTank.x, redTank.y); // places 0,0 at tank
     ctx.rotate(redTank.rotation*Math.PI/180); // rotates to tank direction
     ctx.drawImage(redTankImg, -redTank.width/2, -redTank.height/2, redTank.width, redTank.height); // draws image
