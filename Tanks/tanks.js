@@ -38,37 +38,37 @@ class Bullet { // very much incomplete and incorrect
         this.x = x;
         this.y = y;
         this.timeShot = Date.now();
-        this.lastBounced = [];
+        this.lastBouncedV = ["", []];
+        this.lastBouncedH = ["", []];
     }
     update() {
         this.move()
     }
     verticalBounce() {
         this.rotation %= 360; this.rotation += 360; this.rotation %= 360;
-        this.rotation += 90;
+        this.rotation = 360 - this.rotation;
     }
     horizontalBounce() {
         this.rotation %= 360; this.rotation += 360; this.rotation %= 360;
-        this.rotation -= 90;
+        this.rotation = 0;
     }
     move() {
         let rotationRad = this.rotation*Math.PI/180;
 
         //VERTICAL BOUNCE
         //changed coloumn to the right
-        console.log(this.lastBounced)
+        console.log(this.lastBouncedV[1][0], this.lastBouncedV[1][1])
         if (Math.floor(this.x/(canvas.width/grid)) < Math.floor((this.x + speed * Math.sin(rotationRad) * bulletSpeedMultiplier)/(canvas.width/grid))) {
-            if (vWalls[Math.floor(this.x/(canvas.width/grid))+1][Math.floor(this.y/(canvas.height/grid))] && this.lastBounced[1] != [Math.floor(this.x/(canvas.width/grid))+1, Math.floor(this.y/(canvas.height/grid))]) {
+            if (vWalls[Math.floor(this.x/(canvas.width/grid))+1][Math.floor(this.y/(canvas.height/grid))] && this.lastBouncedV[1] != [Math.floor(this.x/(canvas.width/grid))+1, Math.floor(this.y/(canvas.height/grid))]) {
                 this.verticalBounce();
-                this.lastBounced = ["v", [Math.floor(this.x/(canvas.width/grid))+1, Math.floor(this.y/(canvas.height/grid))]];
+                this.lastBouncedV = ["v", [Math.floor(this.x/(canvas.width/grid))+1, Math.floor(this.y/(canvas.height/grid))]];
             }
         }
         //changed coloumn to the left
-        console.log(this.lastBounced)
         else if (Math.floor(this.x/(canvas.width/grid)) > Math.floor((this.x + speed * Math.sin(rotationRad) * bulletSpeedMultiplier)/(canvas.width/grid))) {
-            if (vWalls[Math.floor(this.x/(canvas.width/grid))][Math.floor(this.y/(canvas.height/grid))] && this.lastBounced[1] != [Math.floor(this.x/(canvas.width/grid)), Math.floor(this.y/(canvas.height/grid))]) {
+            if (vWalls[Math.floor(this.x/(canvas.width/grid))][Math.floor(this.y/(canvas.height/grid))] && this.lastBouncedV[1] != [Math.floor(this.x/(canvas.width/grid)), Math.floor(this.y/(canvas.height/grid))]) {
                 this.verticalBounce();
-                this.lastBounced = ["v", [Math.floor(this.x/(canvas.width/grid)), Math.floor(this.y/(canvas.height/grid))]];
+                this.lastBouncedV = ["v", [Math.floor(this.x/(canvas.width/grid)), Math.floor(this.y/(canvas.height/grid))]];
             }
         }
         //HORIZONTAL BOUNCE
