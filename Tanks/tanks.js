@@ -57,11 +57,14 @@ class Bullet { // very much incomplete and incorrect
 
         //VERTICAL BOUNCE
         //changed coloumn to the right
-        console.log(this.lastBouncedV[1][0], this.lastBouncedV[1][1])
         if (Math.floor(this.x/(canvas.width/grid)) < Math.floor((this.x + speed * Math.sin(rotationRad) * bulletSpeedMultiplier)/(canvas.width/grid))) {
             if (vWalls[Math.floor(this.x/(canvas.width/grid))+1][Math.floor(this.y/(canvas.height/grid))] && this.lastBouncedV[1] != [Math.floor(this.x/(canvas.width/grid))+1, Math.floor(this.y/(canvas.height/grid))]) {
                 this.verticalBounce();
                 this.lastBouncedV = ["v", [Math.floor(this.x/(canvas.width/grid))+1, Math.floor(this.y/(canvas.height/grid))]];
+                console.log(Math.floor(this.x/(canvas.width/grid))+1, Math.floor(this.y/(canvas.height/grid)))
+            }
+            else {
+                console.log(vWalls[Math.floor(this.x/(canvas.width/grid))+1][Math.floor(this.y/(canvas.height/grid))], this.lastBouncedV[1] != [Math.floor(this.x/(canvas.width/grid))+1, Math.floor(this.y/(canvas.height/grid))])
             }
         }
         //changed coloumn to the left
@@ -139,11 +142,9 @@ class Tank {
                             if (hardcoreMode) {
                                 this.dead();
                             }
-                            console.log(false, ls1)
                             return false;
                         }
                         else {
-                            console.log(true)
                             return true;
                         }
                     }
@@ -578,10 +579,10 @@ function hardcoreModeToggle() {
 
 // renders the current frame on main canvas when called
 function renderFrame() { 
-    requestAnimationFrame(renderFrame);
     if (menuOpen){
         refreshSettings();
     }
+    console.log("--- new frame ---")
     redTank.update();
     blueTank.update();
     ctx.setTransform(1, 0, 0, 1, 0, 0); // resets rotation and translate
@@ -605,6 +606,7 @@ function renderFrame() {
     ctx.translate(blueTank.x, blueTank.y); // places 0,0 at tank
     ctx.rotate(blueTank.rotation*Math.PI/180); // rotates to tank direction
     ctx.drawImage(blueTankImg, -blueTank.width/2, -blueTank.height/2, blueTank.width, blueTank.height); // draws image
+    requestAnimationFrame(renderFrame);
 }
 /* 
 TODO
