@@ -597,4 +597,6 @@ TODO
 -create hardcore mode: tanks and bullets die when hitting a wall
 ->add lives slider
 
+-create discovery mode: players can only see tiles they visited 
+
 */
