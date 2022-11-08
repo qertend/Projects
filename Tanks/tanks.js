@@ -6,7 +6,7 @@ let grid = 8; // number of rows and coloumns in labyrinth
 let density = 0.3; //labyrinth density
 let speed = 0.3; // sets the movement and turn speed of the tanks
 bulletSpeedMultiplier = 1; //bullet speed relative to tank speed
-let bulletLifetime = 3500; // bullet lifetime in milliseconds
+let bulletLifetime = 10000; // bullet lifetime in milliseconds
 let maxBulletCount = 3;//max number of bullets per player
 let hardcoreMode = false;
 let p1Forward = "KeyW";
@@ -32,28 +32,30 @@ for (x of document.getElementsByClassName("controls")) {
     x.addEventListener("click", function(event) {changeControlsToggle(event, this)});
 }
 
-
-
 class Bullet { // very much incomplete and incorrect
-    constructor(direction, x, y) {
-        this.direction = direction;
+    constructor(rotation, x, y) {
+        this.rotation = rotation;
         this.x = x;
         this.y = y;
         this.timeShot = Date.now();
+        this.lastBounced = [];
+        this.lastBounced = [];
+    }
+    update() {
+        this.move()
     }
     verticalBounce() {
-        this.direction = 360 - this.direction;
+        this.rotation %= 360; this.rotation += 360; this.rotation %= 360;
+        this.rotation += 90;
     }
     horizontalBounce() {
-        if (this.direction < 180) {
-            this.direction = 180 - this.direction;
-        }
-        else {
-            this.direction = 540 - this.direction;
-        }
+        this.rotation %= 360; this.rotation += 360; this.rotation %= 360;
+        this.rotation -= 90;
     }
     move() {
-
+        let rotationRad = this.rotation*Math.PI/180;
+        this.x += speed * Math.sin(rotationRad) * bulletSpeedMultiplier;
+        this.y -= speed * Math.cos(rotationRad) * bulletSpeedMultiplier;
     }
 }
 
@@ -86,10 +88,11 @@ class Tank {
         else if (!keyBuffer[this.keyShoot]) {
             this.keyShootPressed = false;
         }
-        for (let x of this.bullets) {
-            if (Date.now() - x.timeShot > bulletLifetime) {
-                this.bullets.delete(x);
+        for (let bullet of this.bullets) {
+            if (Date.now() - bullet.timeShot > bulletLifetime) {
+                this.bullets.delete(bullet);
             }
+            bullet.update();
         }
         if (keyBuffer[this.keyForward]) { this.move(-speed*(canvas.width/(grid*100)));} // Forwards
         if (keyBuffer[this.keyBackward]) { this.move(speed*(canvas.width/(grid*100)));} // Backwards
@@ -222,7 +225,6 @@ blueTankImg.height = canvas.width / (grid*1.2) *.63; // adjusts Tank image Y
 
 const redTank = new Tank(redTankImg, redTankImg.width, redTankImg.height, 50, 50, 180, p1Forward, p1Backward, p1Left, p1Right, p1Shoot); // replace static values with variables e.g. p1Forward
 const blueTank = new Tank(blueTankImg, blueTankImg.width, blueTankImg.height, 750, 750, 0, p2Forward, p2Backward, p2Left, p2Right, p2Shoot); // replace static values with variables e.g. p1Forward
-
 
 // DO NOT ASK HOW IT WORKS, IT JUST DOES. I SPENT WAY TOO MUCH TIME ON IT TO KNOW ANYMORE
 function mcd(direction, width_, height_, rotation_, rectCoord, x_) { // mcd stands for Magic Collision Detector
@@ -437,7 +439,7 @@ function refreshSettings() {
         document.getElementById('densityOut').innerHTML = density;
         generateLabyrinth();
     }
-    bulletLifetime = Number(document.getElementById('bulletLifetime').value);
+    bulletLifetime = Number(document.getElementById('bulletLifetime').value)*1000;
     maxBulletCount = Number(document.getElementById('maxBulletCount').value);
     //controls
     //player 1
