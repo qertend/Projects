@@ -35,7 +35,8 @@ for (x of document.getElementsByClassName("controls")) {
 }
 
 class Bullet { // very much incomplete and incorrect
-    constructor(rotation, x, y) {
+    constructor(parent, rotation, x, y) {
+        this.parent = parent;
         this.rotation = rotation;
         this.x = x;
         this.y = y;
@@ -90,6 +91,7 @@ class Bullet { // very much incomplete and incorrect
 
 class Tank {
     constructor(image, width, height, x, y, rotation, keyForward, keyBackward, keyLeft, keyRight, keyShoot) {
+        this.points = 0;
         this.image = image;
         this.width = width;
         this.height = height;
@@ -110,6 +112,7 @@ class Tank {
         keyBuffer[this.keyShoot] = false;
     }
     update() {
+        let ls;
         if (keyBuffer[this.keyShoot] && !this.keyShootPressed) { // Shoot
             this.shoot();
             this.keyShootPressed = true;
@@ -122,6 +125,19 @@ class Tank {
                 this.bullets.delete(bullet);
             }
             bullet.update();
+            ls = mcd("v", this.enemy.width, this.enemy.height, this.enemy.rotation, this.enemy.y, bullet.x - this.enemy.x);
+            if (ls[0] > ls[1]) {ls.reverse();}
+            if (ls[0] < bullet.y && ls[1] > bullet.y) {
+                this.enemy.dead();
+                this.points++;
+            }
+            ls = mcd("v", this.width, this.height, this.rotation, this.y, bullet.x - this.x);
+            if (ls[0] > ls[1]) {ls.reverse();}
+            if (ls[0] < bullet.y && ls[1] > bullet.y) {
+                this.dead();
+                this.enemy.points++;
+            }
+            
         }
         if (keyBuffer[this.keyForward]) { this.move(-speed*(canvas.width/(grid*100)));} // Forwards
         if (keyBuffer[this.keyBackward]) { this.move(speed*(canvas.width/(grid*100)));} // Backwards
@@ -217,9 +233,10 @@ class Tank {
         }
     }
     shoot() {
+        console.log(this.rotation);
         let rotationRad = this.rotation*Math.PI/180;
         if (this.bullets.size < maxBulletCount) {
-            this.bullets.add(new Bullet(this.rotation, this.x + (this.height/1.94) * Math.sin(rotationRad), this.y - (this.height/1.94) * Math.cos(rotationRad)));
+            this.bullets.add(new Bullet(this, this.rotation, this.x + (this.height/1.8) * Math.cos(rotationRad), this.y - (this.height/1.8) * Math.cos(rotationRad)));
         }
     }
     move(speed) {
@@ -237,7 +254,7 @@ class Tank {
     dead() {
         this.image.src = "assets/boom.png";
         console.log("magnificent death animation");
-        setTimeout(restart, 1000);
+        restart();
     }
 }
 
@@ -252,6 +269,9 @@ blueTankImg.height = canvas.width / (grid*1.2) *.63; // adjusts Tank image Y
 
 const redTank = new Tank(redTankImg, redTankImg.width, redTankImg.height, 50, 50, 180, p1Forward, p1Backward, p1Left, p1Right, p1Shoot); // replace static values with variables e.g. p1Forward
 const blueTank = new Tank(blueTankImg, blueTankImg.width, blueTankImg.height, 750, 750, 0, p2Forward, p2Backward, p2Left, p2Right, p2Shoot); // replace static values with variables e.g. p1Forward
+redTank.enemy = blueTank;
+blueTank.enemy = redTank;
+
 
 // DO NOT ASK HOW IT WORKS, IT JUST DOES. I SPENT WAY TOO MUCH TIME ON IT TO KNOW ANYMORE
 function mcd(direction, width_, height_, rotation_, rectCoord, x_) { // mcd stands for Magic Collision Detector
@@ -387,6 +407,7 @@ function randInt(min, max) {
     return Math.floor(Math.random()*(max+1-min)+min);
 }
 
+//restarts game
 function restart() {
     //reset red tank
     redTankImg.src = "./assets/redTank.png"
@@ -402,8 +423,21 @@ function restart() {
     blueTank.width = redTankImg.width;
     blueTank.height = redTankImg.height;
     blueTank.bullets = new Set();
-    ctxLab.lineWidth = canvasLab.width/grid/16;
+    //generate new map
     generateLabyrinth();
+    //check for connecting tiles
+    availableTiles = [];
+    tiles = new Set();
+    checkTiles(randInt(0, grid-1)* grid + randInt(0, grid), new Set());
+    while (tiles.size < 3) {
+        tiles = new Set();
+        checkTiles(randInt(0, grid-1)* grid + randInt(0, grid), new Set());
+    }
+    checkTiles(randInt(0, grid-1)* grid + randInt(0, grid), new Set());
+    for (x of tiles) {
+        availableTiles.push([Math.floor(x/grid), x%grid]);
+    }
+    //choose tiles for tanks
     let redCoords = availableTiles[randInt(0, availableTiles.length-1)];
     redTank.x = redCoords[0]*(canvas.width/grid) + (canvas.width/grid)/2;
     redTank.y = redCoords[1]*(canvas.height/grid) + (canvas.height/grid)/2;
@@ -425,8 +459,6 @@ function restart() {
 //checks if a tile has connecting tiles and saves them in tiles as numbers
 function checkTiles(lastTile) {
     tiles.add(lastTile)
-    console.log(lastTile, tiles.has(lastTile));
-    console.log(tiles);
     //if tile to the left
     if (!vWalls[Math.floor(lastTile/grid)][lastTile % grid] && !tiles.has(lastTile - grid)) {
         checkTiles(lastTile-grid);
@@ -447,6 +479,7 @@ function checkTiles(lastTile) {
 
 function generateLabyrinth() {
     ctxLab.lineCap = "round";
+    ctxLab.lineWidth = canvasLab.width/grid/16;
     ctxLab.clearRect(0,0,canvasLab.width, canvasLab.height); // resets hidden labyrinth canvas
     hWalls = {};
     hWalls[0] = [];
@@ -497,20 +530,6 @@ function generateLabyrinth() {
         }
     }
     ctxLab.stroke();
-    console.log("new checkTiles tree");
-    availableTiles = [];
-    tiles = new Set();
-    checkTiles(randInt(0, grid-1)* grid + randInt(0, grid), new Set());
-    while (tiles.size < 3) {
-        tiles = new Set();
-        checkTiles(randInt(0, grid-1)* grid + randInt(0, grid), new Set());
-    }
-    checkTiles(randInt(0, grid-1)* grid + randInt(0, grid), new Set());
-    console.log(tiles, Array(tiles))
-    for (x of tiles) {
-        availableTiles.push([Math.floor(x/grid), x%grid]);
-    }
-    console.log(availableTiles);
 }
 
 //updates values on Game settings window
@@ -644,6 +663,9 @@ function hardcoreModeToggle() {
 // render first frame
     restart();
     renderFrame();
+    //click buttons once... for reasons
+    document.getElementById("gameSettingsButton").click();
+    document.getElementById("infoMenuButton").click();
 
 // renders the current frame on main canvas when called
 function renderFrame() { 

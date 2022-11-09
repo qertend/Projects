@@ -4,6 +4,12 @@
     margin-top: 2%;
     padding: 10px;
 }
+#redScore {
+    text-align: left;
+}
+#blueScore {
+    text-align: right;
+}
 #map {
     float: left;
 }
