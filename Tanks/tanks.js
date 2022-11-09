@@ -661,33 +661,43 @@ function changeControls(event) {
     switch (controlChange) {
         case "p1Forward":
             p1Forward = event.code;
+            redTank.keyForward = p1Forward;
             break;
         case "p1Backward":
             p1Backward = event.code;
+            redTank.keyBackward = p1Backward;
             break;
         case "p1Left":
             p1Left = event.code;
+            redTank.keyLeft = p1Left;
             break;
         case "p1Right":
             p1Right = event.code;
+            redTank.keyRight = p1Right;
             break;
         case "p1Shoot":
             p1Shoot = event.code;
+            redTank.keyShoot = p1Shoot;
             break;
         case "p2Forward":
             p2Forward = event.code;
+            blueTank.keyForward = p2Forward;
             break;
         case "p2Backward":
             p2Backward = event.code;
+            blueTank.keyBackward = p2Backward;
             break;
         case "p2Left":
             p2Left = event.code;
+            blueTank.keyLeft = p2Left;
             break;
         case "p2Right":
             p2Right = event.code;
+            blueTank.keyRight = p2Right;
             break;
         case "p2Shoot":
             p2Shoot = event.code;
+            blueTank.keyShoot = p2Shoot;
             break;
     }
     refreshSettings();
