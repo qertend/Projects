@@ -5,10 +5,10 @@
     padding: 10px;
 }
 #redScore {
-    text-align: left;
+    color: red;
 }
 #blueScore {
-    text-align: right;
+    color: blue;
 }
 #map {
     float: left;

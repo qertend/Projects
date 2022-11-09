@@ -130,14 +130,12 @@ class Tank {
             if (ls[0] > ls[1]) {ls.reverse();}
             if (ls[0] < bullet.y && ls[1] > bullet.y) {
                 this.enemy.dead();
-                this.points++;
             }
             ls = mcd("v", this.width, this.height, this.rotation, this.y, bullet.x - this.x);
             if (ls[0] > ls[1]) {ls.reverse();}
             if (ls[0] < bullet.y && ls[1] > bullet.y) {
                 if (bullet.leftCannon || Date.now() - bullet.timeShot > 100) {
                     this.dead();
-                    this.enemy.points++;
                 }
             }
             else {
@@ -259,6 +257,7 @@ class Tank {
     }
     dead() {
         this.image.src = "assets/boom.png";
+        this.enemy.points++;
         console.log("magnificent death animation");
         restart();
     }
@@ -415,6 +414,9 @@ function randInt(min, max) {
 
 //restarts game
 function restart() {
+    //update points
+    document.getElementById("redScore").innerHTML = redTank.points;
+    document.getElementById("blueScore").innerHTML = blueTank.points;
     //reset red tank
     redTankImg.src = "./assets/redTank.png"
     redTankImg.width = canvas.width / (grid*1.2) *.48; // adjusts Tank image X
