@@ -18,10 +18,12 @@ let p2Forward = "ArrowUp";
 let p2Backward = "ArrowDown";
 let p2Left = "ArrowLeft";
 let p2Right = "ArrowRight";
-let p2Shoot = "Numpad0";
+let p2Shoot = "NumpadEnter";
 let controlChange = "";
 let menuOpen = false;
 let keyBuffer = [];
+let availableTiles = [];
+let tiles = new Set();
 let hWalls = []; // array of horizontal walls
 let vWalls = []; // array of vertical walls
 
@@ -38,19 +40,15 @@ class Bullet { // very much incomplete and incorrect
         this.x = x;
         this.y = y;
         this.timeShot = Date.now();
-        this.lastBouncedV = ["", []];
-        this.lastBouncedH = ["", []];
     }
     update() {
         this.move()
     }
     verticalBounce() {
-        this.rotation %= 360; this.rotation += 360; this.rotation %= 360;
         this.rotation = 360 - this.rotation;
     }
     horizontalBounce() {
-        this.rotation %= 360; this.rotation += 360; this.rotation %= 360;
-        this.rotation = 0;
+        this.rotation = 180 - this.rotation;
     }
     move() {
         let rotationRad = this.rotation*Math.PI/180;
@@ -58,23 +56,33 @@ class Bullet { // very much incomplete and incorrect
         //VERTICAL BOUNCE
         //changed coloumn to the right
         if (Math.floor(this.x/(canvas.width/grid)) < Math.floor((this.x + speed * Math.sin(rotationRad) * bulletSpeedMultiplier)/(canvas.width/grid))) {
-            if (vWalls[Math.floor(this.x/(canvas.width/grid))+1][Math.floor(this.y/(canvas.height/grid))] && this.lastBouncedV[1] != [Math.floor(this.x/(canvas.width/grid))+1, Math.floor(this.y/(canvas.height/grid))]) {
+            if (vWalls[Math.floor(this.x/(canvas.width/grid))+1][Math.floor(this.y/(canvas.height/grid))]) {
                 this.verticalBounce();
-                this.lastBouncedV = ["v", [Math.floor(this.x/(canvas.width/grid))+1, Math.floor(this.y/(canvas.height/grid))]];
-                console.log(Math.floor(this.x/(canvas.width/grid))+1, Math.floor(this.y/(canvas.height/grid)))
-            }
-            else {
-                console.log(vWalls[Math.floor(this.x/(canvas.width/grid))+1][Math.floor(this.y/(canvas.height/grid))], this.lastBouncedV[1] != [Math.floor(this.x/(canvas.width/grid))+1, Math.floor(this.y/(canvas.height/grid))])
+                rotationRad = this.rotation*Math.PI/180;
             }
         }
         //changed coloumn to the left
         else if (Math.floor(this.x/(canvas.width/grid)) > Math.floor((this.x + speed * Math.sin(rotationRad) * bulletSpeedMultiplier)/(canvas.width/grid))) {
-            if (vWalls[Math.floor(this.x/(canvas.width/grid))][Math.floor(this.y/(canvas.height/grid))] && this.lastBouncedV[1] != [Math.floor(this.x/(canvas.width/grid)), Math.floor(this.y/(canvas.height/grid))]) {
+            if (vWalls[Math.floor(this.x/(canvas.width/grid))][Math.floor(this.y/(canvas.height/grid))]) {
                 this.verticalBounce();
-                this.lastBouncedV = ["v", [Math.floor(this.x/(canvas.width/grid)), Math.floor(this.y/(canvas.height/grid))]];
+                rotationRad = this.rotation*Math.PI/180;
             }
         }
         //HORIZONTAL BOUNCE
+        //changed row down
+        if (Math.floor(this.y/(canvas.height/grid)) < Math.floor((this.y - speed * Math.cos(rotationRad) * bulletSpeedMultiplier)/(canvas.height/grid))) {
+            if (hWalls[Math.floor(this.x/(canvas.width/grid))][Math.floor(this.y/(canvas.height/grid))+1]) {
+                this.horizontalBounce();
+                rotationRad = this.rotation*Math.PI/180;
+            }
+        }
+        //changed row up
+        else if (Math.floor(this.y/(canvas.width/grid)) > Math.floor((this.y - speed * Math.cos(rotationRad) * bulletSpeedMultiplier)/(canvas.height/grid))) {
+            if (hWalls[Math.floor(this.x/(canvas.width/grid))][Math.floor(this.y/(canvas.height/grid))]) {
+                this.horizontalBounce();
+                rotationRad = this.rotation*Math.PI/180;
+            }
+        }
         this.x += speed * Math.sin(rotationRad) * bulletSpeedMultiplier;
         this.y -= speed * Math.cos(rotationRad) * bulletSpeedMultiplier;
     }
@@ -229,7 +237,7 @@ class Tank {
     dead() {
         this.image.src = "assets/boom.png";
         console.log("magnificent death animation");
-        restart();
+        setTimeout(restart, 1000);
     }
 }
 
@@ -375,21 +383,69 @@ function mcd(direction, width_, height_, rotation_, rectCoord, x_) { // mcd stan
     }
 }
 
-function restart() {
-    generateLabyrinth();
-
+function randInt(min, max) {
+    return Math.floor(Math.random()*(max+1-min)+min);
 }
 
-function generateLabyrinth() {
+function restart() {
+    //reset red tank
+    redTankImg.src = "./assets/redTank.png"
     redTankImg.width = canvas.width / (grid*1.2) *.48; // adjusts Tank image X
     redTankImg.height = canvas.height / (grid*1.2) *.63; // adjusts Tank image Y
     redTank.width = redTankImg.width;
     redTank.height = redTankImg.height;
+    redTank.bullets = new Set();
+    //reset blue tank
+    blueTankImg.src = "./assets/blueTank.png"
     blueTankImg.width = canvas.width / (grid*1.2) *.48; // adjusts Tank image X
     blueTankImg.height = canvas.height / (grid*1.2) *.63; // adjusts Tank image Y
     blueTank.width = redTankImg.width;
     blueTank.height = redTankImg.height;
+    blueTank.bullets = new Set();
     ctxLab.lineWidth = canvasLab.width/grid/16;
+    generateLabyrinth();
+    let redCoords = availableTiles[randInt(0, availableTiles.length-1)];
+    redTank.x = redCoords[0]*(canvas.width/grid) + (canvas.width/grid)/2;
+    redTank.y = redCoords[1]*(canvas.height/grid) + (canvas.height/grid)/2;
+    let blueCoords = availableTiles[randInt(0, availableTiles.length-1)];
+    redTank.rotation = randInt(0, 360);
+    let counter = 0;
+    while (blueCoords[0] == redCoords[0] && blueCoords[1] == redCoords[1] && counter <= grid*2) {
+        counter++;
+        blueCoords = availableTiles[randInt(0, availableTiles.length-1)];
+    }
+    blueTank.x = blueCoords[0]*(canvas.width/grid) + (canvas.width/grid)/2;
+    blueTank.y = blueCoords[1]*(canvas.height/grid) + (canvas.height/grid)/2;
+    blueTank.rotation = randInt(0, 360);
+    if (counter == grid*2) {
+        restart();
+    }
+}
+
+//checks if a tile has connecting tiles and saves them in tiles as numbers
+function checkTiles(lastTile) {
+    tiles.add(lastTile)
+    console.log(lastTile, tiles.has(lastTile));
+    console.log(tiles);
+    //if tile to the left
+    if (!vWalls[Math.floor(lastTile/grid)][lastTile % grid] && !tiles.has(lastTile - grid)) {
+        checkTiles(lastTile-grid);
+    }
+    //if tile to the right
+    if (!vWalls[Math.floor(lastTile/grid) + 1][lastTile % grid] && !tiles.has(lastTile + grid)) {
+        checkTiles(lastTile + grid);
+    }
+    //if tile above
+    if (!hWalls[Math.floor(lastTile/grid)][lastTile % grid] && !tiles.has(lastTile-1)) {
+        checkTiles(lastTile-1);
+    }
+    //if tile below
+    if (!hWalls[Math.floor(lastTile/grid)][lastTile % grid +1 ] && !tiles.has(lastTile+1)) {
+        checkTiles(lastTile+1);
+    }
+}
+
+function generateLabyrinth() {
     ctxLab.lineCap = "round";
     ctxLab.clearRect(0,0,canvasLab.width, canvasLab.height); // resets hidden labyrinth canvas
     hWalls = {};
@@ -441,6 +497,20 @@ function generateLabyrinth() {
         }
     }
     ctxLab.stroke();
+    console.log("new checkTiles tree");
+    availableTiles = [];
+    tiles = new Set();
+    checkTiles(randInt(0, grid-1)* grid + randInt(0, grid), new Set());
+    while (tiles.size < 3) {
+        tiles = new Set();
+        checkTiles(randInt(0, grid-1)* grid + randInt(0, grid), new Set());
+    }
+    checkTiles(randInt(0, grid-1)* grid + randInt(0, grid), new Set());
+    console.log(tiles, Array(tiles))
+    for (x of tiles) {
+        availableTiles.push([Math.floor(x/grid), x%grid]);
+    }
+    console.log(availableTiles);
 }
 
 //updates values on Game settings window
@@ -572,17 +642,14 @@ function hardcoreModeToggle() {
 }
 
 // render first frame
-    generateLabyrinth();
+    restart();
     renderFrame();
-    document.getElementById('gameSettingsButton').dispatchEvent(new MouseEvent("click"));
-    document.getElementById('infoMenuButton').click();
 
 // renders the current frame on main canvas when called
 function renderFrame() { 
     if (menuOpen){
         refreshSettings();
     }
-    console.log("--- new frame ---")
     redTank.update();
     blueTank.update();
     ctx.setTransform(1, 0, 0, 1, 0, 0); // resets rotation and translate
@@ -610,7 +677,6 @@ function renderFrame() {
 }
 /* 
 TODO
--create bullets
 
 -create mode where labyrinth changes every so often
 ->add timer selector
