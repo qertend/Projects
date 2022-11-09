@@ -9,15 +9,17 @@
 }
 #blueScore {
     color: blue;
+    float: right;
 }
 #map {
     float: left;
 }
 #sidebar {
+
     width: fit-content;
     float: inline-start;
     margin: 10px;
-    margin-top: 0;
+    margin-top: 17px;
     text-align: center;
     background-color: white;
 }
