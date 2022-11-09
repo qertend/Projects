@@ -9,6 +9,7 @@ bulletSpeedMultiplier = 1; //bullet speed relative to tank speed
 let bulletLifetime = 10000; // bullet lifetime in milliseconds
 let maxBulletCount = 3;//max number of bullets per player
 let hardcoreMode = false;
+let hardcoreLives = 1;
 let p1Forward = "KeyW";
 let p1Backward = "KeyS";
 let p1Left = "KeyA";
@@ -47,10 +48,20 @@ class Bullet { // very much incomplete and incorrect
         this.move()
     }
     verticalBounce() {
-        this.rotation = 360 - this.rotation;
+        if (!hardcoreMode) {
+            this.rotation = 360 - this.rotation;
+        }
+        else {
+            this.parent.bullets.delete(this);
+        }
     }
     horizontalBounce() {
-        this.rotation = 180 - this.rotation;
+        if (!hardcoreMode) {
+            this.rotation = 180 - this.rotation;
+        }
+        else {
+            this.parent.bullets.delete(this);
+        }
     }
     move() {
         let rotationRad = this.rotation*Math.PI/180;
@@ -93,6 +104,7 @@ class Bullet { // very much incomplete and incorrect
 class Tank {
     constructor(image, width, height, x, y, rotation, keyForward, keyBackward, keyLeft, keyRight, keyShoot) {
         this.points = 0;
+        this.lives = hardcoreLives;
         this.image = image;
         this.width = width;
         this.height = height;
@@ -106,6 +118,7 @@ class Tank {
         this.keyShoot = keyShoot;
         this.bullets = new Set();
         this.keyShootPressed = false;
+        this.hittingWall = false;
         keyBuffer[this.keyForward] = false;
         keyBuffer[this.keyBackward] = false;
         keyBuffer[this.keyLeft] = false;
@@ -151,12 +164,14 @@ class Tank {
     check(direction, rotation_, x_) {
         //returns true if move is valid, false if invalid
         let ls1, ls2;
+        console.log(this.lives, this.hittingWall)
         switch (direction) {
             //collisions with vertical lines
             case "v":
                 ls1 = mcd("v", this.width, this.height, rotation_, this.y, (x_ % (canvas.width/grid))); //wall to the left
                 ls2 = mcd("v", this.width, this.height, rotation_, this.y, (x_ % (canvas.width/grid)-(canvas.width/grid))); //wall to the right
                 if (!ls1 && !ls2) {
+                    this.hittingWall = false;
                     return true;
                 }
                 else {
@@ -167,12 +182,17 @@ class Tank {
                         let j1 = Math.floor(ls1[0]/(canvas.width/grid));
                         let j2 = Math.floor(ls1[1]/(canvas.width/grid));
                         if (vWalls[i][j1] || vWalls[i][j2]) { // if there is a wall at either point
-                            if (hardcoreMode) {
-                                this.dead();
+                            if (hardcoreMode && !this.hittingWall) {
+                                this.lives--;
+                                if (this.lives == 0) {
+                                    this.dead();
+                                }
                             }
+                            this.hittingWall = true;
                             return false;
                         }
                         else {
+                            this.hittingWall = false;
                             return true;
                         }
                     }
@@ -183,12 +203,17 @@ class Tank {
                         let j1 = Math.floor(ls2[0]/(canvas.width/grid));
                         let j2 = Math.floor(ls2[1]/(canvas.width/grid));
                         if (vWalls[i][j1] || vWalls[i][j2]) { // if there is a wall at either point
-                            if (hardcoreMode) {
-                                this.dead();
+                            if (hardcoreMode && !this.hittingWall) {
+                                this.lives--;
+                                if (this.lives == 0) {
+                                    this.dead();
+                                }
                             }
+                            this.hittingWall = true;
                             return false;
                         }
                         else {
+                            this.hittingWall = false;
                             return true;
                         }
                     }
@@ -198,6 +223,7 @@ class Tank {
                 ls1 = mcd("h", this.width, this.height, rotation_, this.x, (x_ % (canvas.height/grid))); // wall above
                 ls2 = mcd("h", this.width, this.height, rotation_, this.x, (x_ % (canvas.height/grid)-(canvas.height/grid))); // wall below
                 if (!ls1 && !ls2) {
+                    this.hittingWall = false;
                     return true;
                 }
                 else {
@@ -208,12 +234,17 @@ class Tank {
                         let i2 = Math.floor(ls1[1]/(canvas.height/grid));
                         let j = Math.floor(x_/(canvas.height/grid));
                         if (hWalls[i1][j] || hWalls[i2][j]) { // if there is a wall at either point
-                            if (hardcoreMode) {
-                                this.dead();
+                            if (hardcoreMode && !this.hittingWall) {
+                                this.lives--;
+                                if (this.lives == 0) {
+                                    this.dead();
+                                }
                             }
+                            this.hittingWall = true;
                             return false;
                         }
                         else {
+                            this.hittingWall = false;
                             return true;
                         }
                     }
@@ -224,12 +255,17 @@ class Tank {
                         let i2 = Math.floor(ls2[1]/(canvas.height/grid));
                         let j = Math.floor(x_/(canvas.height/grid))+1;
                         if (hWalls[i1][j] || hWalls[i2][j]) { // if there is a wall at either point
-                            if (hardcoreMode) {
-                                this.dead();
+                            if (hardcoreMode && !this.hittingWall) {
+                                this.lives--;
+                                if (this.lives == 0) {
+                                    this.dead();
+                                }
                             }
+                            this.hittingWall = true;
                             return false;
                         }
                         else {
+                            this.hittingWall = false;
                             return true;
                         }
                     }
@@ -423,6 +459,7 @@ function restart() {
     redTank.width = redTankImg.width;
     redTank.height = redTankImg.height;
     redTank.bullets = new Set();
+    redTank.lives = hardcoreLives;
     //reset blue tank
     blueTankImg.src = "./assets/blueTank.png"
     blueTankImg.width = canvas.width / (grid*1.2) *.48; // adjusts Tank image X
@@ -430,6 +467,7 @@ function restart() {
     blueTank.width = redTankImg.width;
     blueTank.height = redTankImg.height;
     blueTank.bullets = new Set();
+    blueTank.lives = hardcoreLives;
     //generate new map
     generateLabyrinth();
     //check for connecting tiles
@@ -440,12 +478,6 @@ function restart() {
         tiles = new Set();
         availableTiles = [];
         checkTiles(randInt(0, grid-1)* grid + randInt(0, grid-1), new Set());
-    }
-
-    ctxLab.fillStyle = "yellow";
-    for (x of availableTiles) {
-
-        ctxLab.fillRect(x[0]*(canvas.width/grid) + 30, x[1]*(canvas.height/grid) + 30, (canvas.width/grid) - 60, (canvas.height/grid) - 60);
     }
 
     //choose tiles for tanks
@@ -550,14 +582,16 @@ function refreshSettings() {
     document.getElementById('speedOut').innerHTML = speed;
     bulletSpeedMultiplier = Number(document.getElementById('bulletSpeedMultiplier').value);
     document.getElementById('bulletSpeedMultiplierOut').innerHTML = bulletSpeedMultiplier;
+    hardcoreLives = Number(document.getElementById('hardcoreLives').value);
+    document.getElementById('hardcoreLivesOut').innerHTML = hardcoreLives;
     if (Number(document.getElementById('grid').value) != grid) {
         grid = Number(document.getElementById('grid').value);
-        generateLabyrinth();
+        restart();
     }
     if (Number(document.getElementById('density').value) != density) {
         density = Number(document.getElementById('density').value);
         document.getElementById('densityOut').innerHTML = density;
-        generateLabyrinth();
+        restart();
     }
     bulletLifetime = Number(document.getElementById('bulletLifetime').value)*1000;
     maxBulletCount = Number(document.getElementById('maxBulletCount').value);
