@@ -41,6 +41,7 @@ class Bullet { // very much incomplete and incorrect
         this.x = x;
         this.y = y;
         this.timeShot = Date.now();
+        this.leftCannon = false;
     }
     update() {
         this.move()
@@ -134,8 +135,13 @@ class Tank {
             ls = mcd("v", this.width, this.height, this.rotation, this.y, bullet.x - this.x);
             if (ls[0] > ls[1]) {ls.reverse();}
             if (ls[0] < bullet.y && ls[1] > bullet.y) {
-                this.dead();
-                this.enemy.points++;
+                if (bullet.leftCannon || Date.now() - bullet.timeShot > 100) {
+                    this.dead();
+                    this.enemy.points++;
+                }
+            }
+            else {
+                bullet.leftCannon = true;
             }
             
         }
@@ -236,7 +242,7 @@ class Tank {
         console.log(this.rotation);
         let rotationRad = this.rotation*Math.PI/180;
         if (this.bullets.size < maxBulletCount) {
-            this.bullets.add(new Bullet(this, this.rotation, this.x + (this.height/1.8) * Math.cos(rotationRad), this.y - (this.height/1.8) * Math.cos(rotationRad)));
+            this.bullets.add(new Bullet(this, this.rotation, this.x + (this.height/2) * Math.sin(rotationRad), this.y - (this.height/2) * Math.cos(rotationRad)));
         }
     }
     move(speed) {
@@ -428,10 +434,10 @@ function restart() {
     //check for connecting tiles
     availableTiles = [];
     tiles = new Set();
-    checkTiles(randInt(0, grid-1)* grid + randInt(0, grid), new Set());
+    checkTiles(randInt(0, grid-1)* grid + randInt(0, grid-1), new Set());
     while (tiles.size < 3) {
         tiles = new Set();
-        checkTiles(randInt(0, grid-1)* grid + randInt(0, grid), new Set());
+        checkTiles(randInt(0, grid-1)* grid + randInt(0, grid-1), new Set());
     }
     checkTiles(randInt(0, grid-1)* grid + randInt(0, grid), new Set());
     for (x of tiles) {
@@ -458,7 +464,8 @@ function restart() {
 
 //checks if a tile has connecting tiles and saves them in tiles as numbers
 function checkTiles(lastTile) {
-    tiles.add(lastTile)
+    console.log(lastTile/grid, lastTile%grid);
+    tiles.add(lastTile);
     //if tile to the left
     if (!vWalls[Math.floor(lastTile/grid)][lastTile % grid] && !tiles.has(lastTile - grid)) {
         checkTiles(lastTile-grid);
@@ -472,7 +479,7 @@ function checkTiles(lastTile) {
         checkTiles(lastTile-1);
     }
     //if tile below
-    if (!hWalls[Math.floor(lastTile/grid)][lastTile % grid +1 ] && !tiles.has(lastTile+1)) {
+    if (!hWalls[Math.floor(lastTile/grid)][(lastTile % grid) + 1] && !tiles.has(lastTile+1)) {
         checkTiles(lastTile+1);
     }
 }
