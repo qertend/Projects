@@ -237,7 +237,6 @@ class Tank {
         }
     }
     shoot() {
-        console.log(this.rotation);
         let rotationRad = this.rotation*Math.PI/180;
         if (this.bullets.size < maxBulletCount) {
             this.bullets.add(new Bullet(this, this.rotation, this.x + (this.height/2) * Math.sin(rotationRad), this.y - (this.height/2) * Math.cos(rotationRad)));
@@ -439,12 +438,16 @@ function restart() {
     checkTiles(randInt(0, grid-1)* grid + randInt(0, grid-1), new Set());
     while (tiles.size < 3) {
         tiles = new Set();
+        availableTiles = [];
         checkTiles(randInt(0, grid-1)* grid + randInt(0, grid-1), new Set());
     }
-    checkTiles(randInt(0, grid-1)* grid + randInt(0, grid), new Set());
-    for (x of tiles) {
-        availableTiles.push([Math.floor(x/grid), x%grid]);
+
+    ctxLab.fillStyle = "yellow";
+    for (x of availableTiles) {
+
+        ctxLab.fillRect(x[0]*(canvas.width/grid) + 30, x[1]*(canvas.height/grid) + 30, (canvas.width/grid) - 60, (canvas.height/grid) - 60);
     }
+
     //choose tiles for tanks
     let redCoords = availableTiles[randInt(0, availableTiles.length-1)];
     redTank.x = redCoords[0]*(canvas.width/grid) + (canvas.width/grid)/2;
@@ -466,7 +469,7 @@ function restart() {
 
 //checks if a tile has connecting tiles and saves them in tiles as numbers
 function checkTiles(lastTile) {
-    console.log(lastTile/grid, lastTile%grid);
+    availableTiles.push([Math.floor(lastTile/grid), lastTile%grid]);
     tiles.add(lastTile);
     //if tile to the left
     if (!vWalls[Math.floor(lastTile/grid)][lastTile % grid] && !tiles.has(lastTile - grid)) {
