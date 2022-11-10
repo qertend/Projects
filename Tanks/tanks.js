@@ -594,7 +594,7 @@ function refreshSettings() {
     document.getElementById('hardcoreLivesOut').innerHTML = hardcoreLives;
     //random walls timer
     randomWallsModeTimer = Number(document.getElementById('randomWallsTimer').value)*1000;
-    document.getElementById('randomWallsTimerOut').innerHTML = randomWallsModeTimer;
+    document.getElementById('randomWallsTimerOut').innerHTML = randomWallsModeTimer/1000;
     //grid
     if (Number(document.getElementById('grid').value) != grid) {
         grid = Number(document.getElementById('grid').value);
