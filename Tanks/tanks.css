@@ -5,25 +5,30 @@
 #labyrinthGen {
     display: none;
 }
-#gameDiv {
-    width: fit-content;
-    margin: auto;
-    padding: 10px;
+#scoreboard {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: auto;
 }
 #redScore {
     color: red;
-    float: left;
     font-size: xx-large;
+    text-align: left;
 }
 #randomWallsCountdown {
-    margin-left: 46%;
-    margin-right: 46%;
+    display: inline-block;
+    margin: auto;
     font-size: xx-large;
 }
 #blueScore {
     color: blue;
-    float: right;
     font-size: xx-large;
+    text-align: right;
+}
+#gameDiv {
+    width: fit-content;
+    margin: auto;
+    padding: 10px;
 }
 #map {
     float: left;

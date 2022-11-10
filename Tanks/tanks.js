@@ -297,7 +297,7 @@ class Tank {
         this.image.src = "assets/boom.png";
         this.enemy.points++;
         console.log("magnificent death animation");
-        restart();
+        restart(this.enemy);
     }
 }
 
@@ -452,11 +452,19 @@ function randInt(min, max) {
 }
 
 //restarts game
-function restart() {
+function restart(won) {
     bulletWidth = canvas.width/grid/16;
     //update points
-    document.getElementById("redScore").innerHTML = redTank.points;
-    document.getElementById("blueScore").innerHTML = blueTank.points;
+    switch (won) {
+        case redTank:
+            document.getElementById("redScore").innerHTML = redTank.points + "(+1)";
+            document.getElementById("blueScore").innerHTML = blueTank.points;
+            break;
+        case blueTank:
+            document.getElementById("redScore").innerHTML = redTank.points;
+            document.getElementById("blueScore").innerHTML = blueTank.points + "(+1)";
+            break;
+    }
     //reset red tank
     redTankImg.src = "./assets/redTank.png"
     redTankImg.width = canvas.width / (grid*1.2) *.48; // adjusts Tank image X
