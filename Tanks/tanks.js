@@ -478,7 +478,6 @@ function restart() {
     //generate new map
     generateLabyrinth();
     //check for connecting tiles
-    console.log("new tree")
     tiles = new Set();
     availableTiles = [];
     checkTiles(randInt(0, grid-2)* grid + randInt(0, grid-1), new Set());
@@ -518,7 +517,6 @@ function checkTiles(lastTile) {
         checkTiles(lastTile-grid);
     }
     //if tile to the right
-    console.log("index:", Math.floor(lastTile/grid) + 1, "tile", lastTile)
     if (!vWalls[Math.floor(lastTile/grid) + 1][lastTile % grid] && !tiles.has(lastTile + grid)) {
         checkTiles(lastTile + grid);
     }
@@ -795,12 +793,8 @@ function renderFrame() {
     requestAnimationFrame(renderFrame);
 }
 /* 
+currently around 21.5K characters long lol
 TODO
-check tank hitboxes
-
--create mode where labyrinth changes every so often
-->add timer selector
-
 -create discovery mode: players can only see tiles they visited 
 
 */
