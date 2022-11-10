@@ -1,3 +1,10 @@
+#canvas {
+    border:1px solid gray;
+    background-color: #808080;
+}
+#labyrinthGen {
+    display: none;
+}
 #gameDiv {
     width: fit-content;
     margin: auto;
@@ -5,6 +12,12 @@
 }
 #redScore {
     color: red;
+    float: left;
+    font-size: xx-large;
+}
+#randomWallsCountdown {
+    margin-left: 46%;
+    margin-right: 46%;
     font-size: xx-large;
 }
 #blueScore {
@@ -36,13 +49,6 @@
     width: 41px;
     height: 38px;
 }
-#canvas {
-    border:1px solid gray;
-    background-color: #808080;
-}
-#labyrinthGen {
-    display: none;
-}
 .menu {
     position: absolute;
     margin: auto;
@@ -56,26 +62,13 @@
     border-radius: 5px;
     background-color: #f5f5f5;
 }
-#gameSettings {
-    display: none;
-}
-#infoMenu {
-    display: none;
-}
 .closeMenu {
     position: absolute;
     top: 20px;
     right: 20px;
 }
-h1 {
-    text-align: center;
-    margin-top: 3px;
-}
-h2 {
-    text-align: center;
-}
-h3 {
-    text-decoration: underline;
+#gameSettings {
+    display: none;
 }
 .controlsDiv {
     margin: auto;
@@ -97,6 +90,23 @@ h3 {
 }
 .controls:hover {
     cursor: pointer;
+}
+#infoMenu {
+    display: none;
+}
+.infoP {
+    margin-top: 8px;
+    margin-bottom: 0;
+}
+h1 {
+    text-align: center;
+    margin-top: 3px;
+}
+h2 {
+    text-align: center;
+}
+h3 {
+    text-decoration: underline;
 }
 a {
     color: blue;

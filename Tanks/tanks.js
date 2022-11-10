@@ -3,19 +3,23 @@ const ctx = canvas.getContext("2d");
 const canvasLab = document.getElementById('labyrinthGen');
 const ctxLab = canvasLab.getContext("2d");
 let grid = 8; // number of rows and coloumns in labyrinth
-let density = 0.3; //labyrinth density
-let speed = 0.3; // sets the movement and turn speed of the tanks
-bulletSpeedMultiplier = 1; //bullet speed relative to tank speed
-let bulletLifetime = 10000; // bullet lifetime in milliseconds
-let maxBulletCount = 3;//max number of bullets per player
+let density = 0.4; //labyrinth density
+let speed = 0.4; // sets the movement and turn speed of the tanks
+bulletSpeedMultiplier = 2; //bullet speed relative to tank speed
+let bulletLifetime = 5000; // bullet lifetime in milliseconds
+let maxBulletCount = 3; //max number of bullets per player
+let bulletWidth = canvas.width/grid/16;
 let hardcoreMode = false;
 let hardcoreLives = 1;
-let p1Forward = "KeyW";
+let randomWallsMode = false;
+let randomWallsModeTimer = 15000;
+let randomWallsModeLastActive = Date.now();
+let p1Forward = "KeyW"; //player 1 controls (red)
 let p1Backward = "KeyS";
 let p1Left = "KeyA";
 let p1Right = "KeyD";
 let p1Shoot = "Space";
-let p2Forward = "ArrowUp";
+let p2Forward = "ArrowUp"; //player 2 controls (blue)
 let p2Backward = "ArrowDown";
 let p2Left = "ArrowLeft";
 let p2Right = "ArrowRight";
@@ -35,7 +39,7 @@ for (x of document.getElementsByClassName("controls")) {
     x.addEventListener("click", function(event) {changeControlsToggle(event, this)});
 }
 
-class Bullet { // very much incomplete and incorrect
+class Bullet {
     constructor(parent, rotation, x, y) {
         this.parent = parent;
         this.rotation = rotation;
@@ -45,7 +49,7 @@ class Bullet { // very much incomplete and incorrect
         this.leftCannon = false;
     }
     update() {
-        this.move()
+        this.move(speed*(canvas.width/(grid*100)));
     }
     verticalBounce() {
         if (!hardcoreMode) {
@@ -63,19 +67,19 @@ class Bullet { // very much incomplete and incorrect
             this.parent.bullets.delete(this);
         }
     }
-    move() {
+    move(speed_) {
         let rotationRad = this.rotation*Math.PI/180;
 
         //VERTICAL BOUNCE
         //changed coloumn to the right
-        if (Math.floor(this.x/(canvas.width/grid)) < Math.floor((this.x + speed * Math.sin(rotationRad) * bulletSpeedMultiplier)/(canvas.width/grid))) {
+        if (Math.floor(this.x/(canvas.width/grid)) < Math.floor((this.x + speed_ * Math.sin(rotationRad) * bulletSpeedMultiplier)/(canvas.width/grid))) {
             if (vWalls[Math.floor(this.x/(canvas.width/grid))+1][Math.floor(this.y/(canvas.height/grid))]) {
                 this.verticalBounce();
                 rotationRad = this.rotation*Math.PI/180;
             }
         }
         //changed coloumn to the left
-        else if (Math.floor(this.x/(canvas.width/grid)) > Math.floor((this.x + speed * Math.sin(rotationRad) * bulletSpeedMultiplier)/(canvas.width/grid))) {
+        else if (Math.floor(this.x/(canvas.width/grid)) > Math.floor((this.x + speed_ * Math.sin(rotationRad) * bulletSpeedMultiplier)/(canvas.width/grid))) {
             if (vWalls[Math.floor(this.x/(canvas.width/grid))][Math.floor(this.y/(canvas.height/grid))]) {
                 this.verticalBounce();
                 rotationRad = this.rotation*Math.PI/180;
@@ -83,21 +87,21 @@ class Bullet { // very much incomplete and incorrect
         }
         //HORIZONTAL BOUNCE
         //changed row down
-        if (Math.floor(this.y/(canvas.height/grid)) < Math.floor((this.y - speed * Math.cos(rotationRad) * bulletSpeedMultiplier)/(canvas.height/grid))) {
+        if (Math.floor(this.y/(canvas.height/grid)) < Math.floor((this.y - speed_ * Math.cos(rotationRad) * bulletSpeedMultiplier)/(canvas.height/grid))) {
             if (hWalls[Math.floor(this.x/(canvas.width/grid))][Math.floor(this.y/(canvas.height/grid))+1]) {
                 this.horizontalBounce();
                 rotationRad = this.rotation*Math.PI/180;
             }
         }
         //changed row up
-        else if (Math.floor(this.y/(canvas.width/grid)) > Math.floor((this.y - speed * Math.cos(rotationRad) * bulletSpeedMultiplier)/(canvas.height/grid))) {
+        else if (Math.floor(this.y/(canvas.width/grid)) > Math.floor((this.y - speed_ * Math.cos(rotationRad) * bulletSpeedMultiplier)/(canvas.height/grid))) {
             if (hWalls[Math.floor(this.x/(canvas.width/grid))][Math.floor(this.y/(canvas.height/grid))]) {
                 this.horizontalBounce();
                 rotationRad = this.rotation*Math.PI/180;
             }
         }
-        this.x += speed * Math.sin(rotationRad) * bulletSpeedMultiplier;
-        this.y -= speed * Math.cos(rotationRad) * bulletSpeedMultiplier;
+        this.x += speed_ * Math.sin(rotationRad) * bulletSpeedMultiplier;
+        this.y -= speed_ * Math.cos(rotationRad) * bulletSpeedMultiplier;
     }
 }
 
@@ -164,7 +168,6 @@ class Tank {
     check(direction, rotation_, x_) {
         //returns true if move is valid, false if invalid
         let ls1, ls2;
-        console.log(this.lives, this.hittingWall)
         switch (direction) {
             //collisions with vertical lines
             case "v":
@@ -443,12 +446,14 @@ function mcd(direction, width_, height_, rotation_, rectCoord, x_) { // mcd stan
     }
 }
 
+//returns a random integer between min and max, min and max included
 function randInt(min, max) {
-    return Math.floor(Math.random()*(max+1-min)+min);
+    return Math.round(Math.random()*(max+1-min)+min);
 }
 
 //restarts game
 function restart() {
+    bulletWidth = canvas.width/grid/16;
     //update points
     document.getElementById("redScore").innerHTML = redTank.points;
     document.getElementById("blueScore").innerHTML = blueTank.points;
@@ -523,7 +528,7 @@ function checkTiles(lastTile) {
 
 function generateLabyrinth() {
     ctxLab.lineCap = "round";
-    ctxLab.lineWidth = canvasLab.width/grid/16;
+    ctxLab.lineWidth = bulletWidth;
     ctxLab.clearRect(0,0,canvasLab.width, canvasLab.height); // resets hidden labyrinth canvas
     hWalls = {};
     hWalls[0] = [];
@@ -578,24 +583,33 @@ function generateLabyrinth() {
 
 //updates values on Game settings window
 function refreshSettings() {
+    //speed
     speed = Number(document.getElementById('speed').value);
     document.getElementById('speedOut').innerHTML = speed;
+    //bullet speed multiplier
     bulletSpeedMultiplier = Number(document.getElementById('bulletSpeedMultiplier').value);
     document.getElementById('bulletSpeedMultiplierOut').innerHTML = bulletSpeedMultiplier;
+    //hardcore lives
     hardcoreLives = Number(document.getElementById('hardcoreLives').value);
     document.getElementById('hardcoreLivesOut').innerHTML = hardcoreLives;
+    //random walls timer
+    randomWallsModeTimer = Number(document.getElementById('randomWallsTimer').value)*1000;
+    document.getElementById('randomWallsTimerOut').innerHTML = randomWallsModeTimer;
+    //grid
     if (Number(document.getElementById('grid').value) != grid) {
         grid = Number(document.getElementById('grid').value);
         restart();
     }
+    //labyrinth density
     if (Number(document.getElementById('density').value) != density) {
         density = Number(document.getElementById('density').value);
         document.getElementById('densityOut').innerHTML = density;
         restart();
     }
+    //bullet props
     bulletLifetime = Number(document.getElementById('bulletLifetime').value)*1000;
     maxBulletCount = Number(document.getElementById('maxBulletCount').value);
-    //controls
+    //CONTROLS
     //player 1
     document.getElementById('p1Forward').innerHTML = p1Forward;
     document.getElementById('p1Backward').innerHTML = p1Backward;
@@ -704,6 +718,7 @@ function changeControls(event) {
     document.getElementById(controlChange).style.backgroundColor = 'rgb(245, 245, 245)';
     controlChange = "";
 }
+
 //toggles hardcore mode
 function hardcoreModeToggle() {
     if (hardcoreMode) {
@@ -713,6 +728,19 @@ function hardcoreModeToggle() {
     else {
         hardcoreMode = true;
         document.getElementById('hardcoreMode').style.backgroundColor = "red";
+    }
+}
+
+//toggles random walls mode
+function randomWallsModeToggle() {
+    if (randomWallsMode) {
+        randomWallsMode = false;
+        document.getElementById('randomWallsMode').style.backgroundColor = "lightgray";
+    }
+    else {
+        randomWallsMode = true;
+        randomWallsModeLastActive = Date.now();
+        document.getElementById('randomWallsMode').style.backgroundColor = "green";
     }
 }
 
@@ -728,6 +756,13 @@ function renderFrame() {
     if (menuOpen){
         refreshSettings();
     }
+    if (randomWallsMode) {
+        document.getElementById("randomWallsCountdown").innerHTML = Math.floor(randomWallsModeTimer/1000 - (Date.now() - randomWallsModeLastActive)/1000);
+        if (Date.now() - randomWallsModeLastActive > randomWallsModeTimer) {
+            randomWallsModeLastActive = Date.now();
+            generateLabyrinth();
+        }
+    }
     redTank.update();
     blueTank.update();
     ctx.setTransform(1, 0, 0, 1, 0, 0); // resets rotation and translate
@@ -736,12 +771,12 @@ function renderFrame() {
     ctx.fillStyle = "purple";
     for (i of redTank.bullets) { //draws red bullets
         ctx.beginPath();
-        ctx.ellipse(i.x, i.y, 5, 5, 0, 0, Math.PI * 2);
+        ctx.ellipse(i.x, i.y, bulletWidth, bulletWidth, 0, 0, Math.PI * 2);
         ctx.fill();
     }
     for (i of blueTank.bullets) { //draws red bullets
         ctx.beginPath();
-        ctx.ellipse(i.x, i.y, 5, 5, 0, 0, Math.PI * 2);
+        ctx.ellipse(i.x, i.y, bulletWidth, bulletWidth, 0, 0, Math.PI * 2);
         ctx.fill();
     }
     ctx.translate(redTank.x, redTank.y); // places 0,0 at tank
@@ -758,10 +793,6 @@ TODO
 
 -create mode where labyrinth changes every so often
 ->add timer selector
-->redesign button icon
-
--create hardcore mode: tanks and bullets die when hitting a wall
-->add lives slider
 
 -create discovery mode: players can only see tiles they visited 
 
