@@ -448,7 +448,7 @@ function mcd(direction, width_, height_, rotation_, rectCoord, x_) { // mcd stan
 
 //returns a random integer between min and max, min and max included
 function randInt(min, max) {
-    return Math.round(Math.random()*(max+1-min)+min);
+    return Math.floor(Math.random()*(max+.99-min)+min);
 }
 
 //restarts game
@@ -473,20 +473,22 @@ function restart() {
     blueTank.height = redTankImg.height;
     blueTank.bullets = new Set();
     blueTank.lives = hardcoreLives;
+    //reset random wall countdown
+    randomWallsModeLastActive = Date.now();
     //generate new map
     generateLabyrinth();
     //check for connecting tiles
-    availableTiles = [];
+    console.log("new tree")
     tiles = new Set();
-    checkTiles(randInt(0, grid-1)* grid + randInt(0, grid-1), new Set());
+    availableTiles = [];
+    checkTiles(randInt(0, grid-2)* grid + randInt(0, grid-1), new Set());
     while (tiles.size < 3) {
         tiles = new Set();
         availableTiles = [];
-        checkTiles(randInt(0, grid-1)* grid + randInt(0, grid-1), new Set());
+        checkTiles(randInt(0, grid-2)* grid + randInt(0, grid-1), new Set());
     }
-
     //choose tiles for tanks
-    let redCoords = availableTiles[randInt(0, availableTiles.length-1)];
+    let redCoords = availableTiles[randInt(0, randInt(0, availableTiles.length-1))];
     redTank.x = redCoords[0]*(canvas.width/grid) + (canvas.width/grid)/2;
     redTank.y = redCoords[1]*(canvas.height/grid) + (canvas.height/grid)/2;
     let blueCoords = availableTiles[randInt(0, availableTiles.length-1)];
@@ -496,12 +498,15 @@ function restart() {
         counter++;
         blueCoords = availableTiles[randInt(0, availableTiles.length-1)];
     }
-    blueTank.x = blueCoords[0]*(canvas.width/grid) + (canvas.width/grid)/2;
-    blueTank.y = blueCoords[1]*(canvas.height/grid) + (canvas.height/grid)/2;
-    blueTank.rotation = randInt(0, 360);
     if (counter == grid*2) {
         restart();
     }
+    else {
+        blueTank.x = blueCoords[0]*(canvas.width/grid) + (canvas.width/grid)/2;
+        blueTank.y = blueCoords[1]*(canvas.height/grid) + (canvas.height/grid)/2;
+        blueTank.rotation = randInt(0, 360);
+    }
+
 }
 
 //checks if a tile has connecting tiles and saves them in tiles as numbers
@@ -513,6 +518,7 @@ function checkTiles(lastTile) {
         checkTiles(lastTile-grid);
     }
     //if tile to the right
+    console.log("index:", Math.floor(lastTile/grid) + 1, "tile", lastTile)
     if (!vWalls[Math.floor(lastTile/grid) + 1][lastTile % grid] && !tiles.has(lastTile + grid)) {
         checkTiles(lastTile + grid);
     }
@@ -790,6 +796,7 @@ function renderFrame() {
 }
 /* 
 TODO
+check tank hitboxes
 
 -create mode where labyrinth changes every so often
 ->add timer selector

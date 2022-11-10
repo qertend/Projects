@@ -12,9 +12,9 @@
     <div id="gameDiv">
         <div id="map">
             <div id="scoreboard">
-                <span id="redScore" class="score">0</span>
-                <span id="randomWallsCountdown">15</span>
-                <span id="blueScore" class="score">0</span>
+                <span id="redScore" class="score " title="Red score">0</span>
+                <span id="randomWallsCountdown" title="Random walls mode countdown">?</span>
+                <span id="blueScore" class="score" title="Blue score">0</span>
             </div>
             <canvas id="canvas" width="800" height="800">Looks like this browser doesn't support canvas, try a different one</canvas> <br>
             <p>Currently only works on <a href="https://www.mozilla.org/en-US/firefox/new/">Mozilla Firefox</a></p>
@@ -44,7 +44,7 @@
                 <input type="number" id="maxBulletCount" value="3">
                 <h3>Hardcore: Lives</h3>
                 <input type="range" id="hardcoreLives" min="1" max="5" step="1" value="1"><span id="hardcoreLivesOut">1</span>
-                <h3>Random walls: timer</h3>
+                <h3>Random walls: timer (in seconds)</h3>
                 <input type="range" id="randomWallsTimer" min="1" max="30" step="1" value="15"><span id="randomWallsTimerOut">1</span>
             </div>
             <div style="float: inline-start; width: 50%;">
@@ -92,10 +92,11 @@
             <p class="infoP">Driving forward at low relative bullet speeds while shooting might result in death</p> <br>
             <h2>Modes</h2>
             <h3>Hardcore</h3>
-            <p class="infoP">Tanks lose lives(default: 1) when hitting a wall and bullets don't bounce</p> <br>
+            <p class="infoP">Tanks lose lives (default: 1) when hitting a wall and bullets don't bounce</p> <br>
             <p class="infoP">Turning while touching a wall will cause instant death regardless of how many lives you have left</p> <br>
-            <h3>Random walls [Coming soon]</h3>
-            <p class="infoP">Walls change periodically(default: 15s)</p>
+            <h3>Random walls</h3>
+            <p class="infoP">Walls change periodically (default: 15s)</p> <br>
+            <p class="infoP">If a wall appears through your tank or you get stuck in a box, you'll have to wait until it changes again</p>
             <h3>Discovery [Coming soon]</h3>
             <p class="infoP">You can only see the tiles you've been to</p>
 

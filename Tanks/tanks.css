@@ -76,12 +76,12 @@
     width: 60%;
 }
 .controlsP {
-    margin: 0;
-    margin-right: 10px;
+    margin: 2px;
     width: fit-content;
     float: left;
 }
 .controls {
+    margin: 2px;
     text-align: center;
     float: inline-end;
     width: 40%;
