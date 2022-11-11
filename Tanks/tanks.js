@@ -9,24 +9,34 @@ bulletSpeedMultiplier = 2; //bullet speed relative to tank speed
 let bulletLifetime = 5000; // bullet lifetime in milliseconds
 let maxBulletCount = 3; //max number of bullets per player
 let bulletWidth = canvas.width/grid/16;
+//hardcore mode
 let hardcoreMode = false;
 let hardcoreLives = 1;
+//random walls mode
 let randomWallsMode = false;
 let randomWallsModeTimer = 15000;
 let randomWallsModeLastActive = Date.now();
-let p1Forward = "KeyW"; //player 1 controls (red)
+//discovery mode
+let discoveryMode = false;
+let discoveredTiles = [];
+//player 1 controls (red)
+let p1Forward = "KeyW";
 let p1Backward = "KeyS";
 let p1Left = "KeyA";
 let p1Right = "KeyD";
 let p1Shoot = "Space";
-let p2Forward = "ArrowUp"; //player 2 controls (blue)
+//player 2 controls (blue)
+let p2Forward = "ArrowUp";
 let p2Backward = "ArrowDown";
 let p2Left = "ArrowLeft";
 let p2Right = "ArrowRight";
 let p2Shoot = "NumpadEnter";
+//game settings stuff
 let controlChange = "";
 let menuOpen = false;
+//needed for smooth controls
 let keyBuffer = [];
+//labyrinth generation
 let availableTiles = [];
 let tiles = new Set();
 let hWalls = []; // array of horizontal walls
@@ -753,6 +763,20 @@ function randomWallsModeToggle() {
         randomWallsMode = true;
         randomWallsModeLastActive = Date.now();
         document.getElementById('randomWallsMode').style.backgroundColor = "green";
+    }
+}
+
+//toggles discovery mode
+function discoveryModeToggle() {
+    if (discoveryMode) {
+        discoveryMode = false;
+        document.getElementById('discoveryMode').style.backgroundColor = "lightgray";
+    }
+    else {
+        discoveryMode = true;
+        restart();
+        discoveredTiles = [];
+        document.getElementById('discoveryMode').style.backgroundColor = "blue";
     }
 }
 
