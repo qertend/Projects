@@ -800,6 +800,7 @@ function randomWallsModeToggle() {
 function discoveryModeToggle() {
     if (discoveryMode) {
         discoveryMode = false;
+        restart();
         document.getElementById('discoveryMode').style.backgroundColor = "lightgray";
     }
     else {
@@ -810,6 +811,7 @@ function discoveryModeToggle() {
     }
 }
 
+//only update when tanks go to unexplored tiles to save resources
 function discoveryModeUpdate() {
     ctxDisc.clearRect(0, 0, canvasDisc.width, canvasDisc.height);
     for (x of undiscoveredTiles) {
