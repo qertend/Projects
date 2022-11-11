@@ -2,10 +2,7 @@
     border:1px solid gray;
     background-color: #808080;
 }
-#labyrinthGen {
-    display: none;
-}
-#canvasDisc {
+.invisible {
     display: none;
 }
 #scoreboard {
