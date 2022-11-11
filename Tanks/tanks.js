@@ -1,7 +1,12 @@
+//visible canvas
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext("2d");
+//labyrinth
 const canvasLab = document.getElementById('labyrinthGen');
 const ctxLab = canvasLab.getContext("2d");
+//discovery mode overlay
+const canvasDisc = document.getElementById('canvasDisc');
+const ctxDisc = canvasDisc.getContext("2d");
 let grid = 8; // number of rows and coloumns in labyrinth
 let density = 0.4; //labyrinth density
 let speed = 0.4; // sets the movement and turn speed of the tanks
@@ -209,7 +214,9 @@ class Tank {
                         }
                         else {
                             this.hittingWall = false;
-                            undiscoveredTiles.delete((Math.floor(x_/(canvas.width/grid))-1) * grid + Math.floor(this.y/(canvas.width/grid)));
+                            if (undiscoveredTiles.delete((Math.floor(x_/(canvas.width/grid))-1) * grid + Math.floor(this.y/(canvas.width/grid)))) {
+                                discoveryModeUpdate();
+                            }
                             return true;
                         }
                     }
@@ -231,7 +238,9 @@ class Tank {
                         }
                         else {
                             this.hittingWall = false;
-                            undiscoveredTiles.delete((Math.floor(x_/(canvas.width/grid))+1) * grid + Math.floor(this.y/(canvas.width/grid)));
+                            if (undiscoveredTiles.delete((Math.floor(x_/(canvas.width/grid))+1) * grid + Math.floor(this.y/(canvas.width/grid)))) {
+                                discoveryModeUpdate();
+                            }
                             return true;
                         }
                     }
@@ -264,7 +273,9 @@ class Tank {
                         }
                         else {
                             this.hittingWall = false;
-                            undiscoveredTiles.delete(Math.floor(this.x/(canvas.width/grid)) * grid + Math.floor(x_/(canvas.width/grid))-1);
+                            if (undiscoveredTiles.delete(Math.floor(this.x/(canvas.width/grid)) * grid + Math.floor(x_/(canvas.width/grid))-1)) {
+                                discoveryModeUpdate();
+                            }
                             return true;
                         }
                     }
@@ -286,7 +297,9 @@ class Tank {
                         }
                         else {
                             this.hittingWall = false;
-                            undiscoveredTiles.delete(Math.floor(this.x/(canvas.width/grid)) * grid + Math.floor(x_/(canvas.width/grid))+1);
+                            if (undiscoveredTiles.delete(Math.floor(this.x/(canvas.width/grid)) * grid + Math.floor(x_/(canvas.width/grid))+1)) {
+                                discoveryModeUpdate();
+                            }
                             return true;
                         }
                     }
@@ -532,6 +545,7 @@ function restart(won) {
         blueTank.y = blueCoords[1]*(canvas.height/grid) + (canvas.height/grid)/2;
         blueTank.rotation = randInt(0, 360);
         undiscoveredTiles.delete(blueCoords[0]*grid + blueCoords[1]);
+        discoveryModeUpdate();
     }
 
 }
@@ -791,7 +805,15 @@ function discoveryModeToggle() {
     else {
         discoveryMode = true;
         restart();
+        discoveryModeUpdate();
         document.getElementById('discoveryMode').style.backgroundColor = "blue";
+    }
+}
+
+function discoveryModeUpdate() {
+    ctxDisc.clearRect(0, 0, canvasDisc.width, canvasDisc.height);
+    for (x of undiscoveredTiles) {
+        ctxDisc.drawImage(undiscoveredTile, Math.floor(x/grid) * (canvas.width/grid), (x % grid) * (canvas.height/grid), (canvas.width/grid), (canvas.height/grid));
     }
 }
 
@@ -844,9 +866,7 @@ function renderFrame() {
     ctx.setTransform(1, 0, 0, 1, 0, 0); // resets rotation and translate
     //discovery mode
     if (discoveryMode) {
-        for (x of undiscoveredTiles) {
-            ctx.drawImage(undiscoveredTile, Math.floor(x/grid) * (canvas.width/grid), (x % grid) * (canvas.height/grid), (canvas.width/grid), (canvas.height/grid));
-        }
+        ctx.drawImage(document.getElementById("canvasDisc"), 0, 0);
     }
 
     //send "ready for next frame"

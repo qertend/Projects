@@ -5,6 +5,9 @@
 #labyrinthGen {
     display: none;
 }
+#canvasDisc {
+    display: none;
+}
 #scoreboard {
     display: grid;
     grid-auto-flow: column;
