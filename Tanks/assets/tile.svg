@@ -2,16 +2,15 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="26.45833mm"
-   height="26.458334mm"
-   viewBox="0 0 26.45833 26.458334"
+   width="29.334095mm"
+   height="29.334093mm"
+   viewBox="0 0 29.334095 29.334093"
    version="1.1"
    id="svg5"
    inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
    sodipodi:docname="tile.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
   <sodipodi:namedview
@@ -25,8 +24,8 @@
      inkscape:document-units="mm"
      showgrid="false"
      inkscape:zoom="6.3998878"
-     inkscape:cx="34.297477"
-     inkscape:cy="55.547849"
+     inkscape:cx="38.047542"
+     inkscape:cy="60.70419"
      inkscape:window-width="1858"
      inkscape:window-height="1057"
      inkscape:window-x="54"
@@ -34,75 +33,18 @@
      inkscape:window-maximized="1"
      inkscape:current-layer="layer1" />
   <defs
-     id="defs2">
-    <linearGradient
-       id="linearGradient6086"
-       inkscape:swatch="solid">
-      <stop
-         style="stop-color:#000000;stop-opacity:1;"
-         offset="0"
-         id="stop6084" />
-    </linearGradient>
-    <linearGradient
-       id="inner"
-       inkscape:swatch="solid">
-      <stop
-         style="stop-color:#696969;stop-opacity:1;"
-         offset="0"
-         id="stop4848" />
-    </linearGradient>
-    <marker
-       style="overflow:visible"
-       id="Arrow1Lstart"
-       refX="0"
-       refY="0"
-       orient="auto"
-       inkscape:stockid="Arrow1Lstart"
-       inkscape:isstock="true">
-      <path
-         transform="matrix(0.8,0,0,0.8,10,0)"
-         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
-         d="M 0,0 5,-5 -12.5,0 5,5 Z"
-         id="path4548" />
-    </marker>
-    <linearGradient
-       id="linearGradient4044"
-       inkscape:swatch="solid">
-      <stop
-         style="stop-color:#505050;stop-opacity:1;"
-         offset="0"
-         id="stop4042" />
-    </linearGradient>
-    <linearGradient
-       id="outer"
-       inkscape:swatch="solid">
-      <stop
-         style="stop-color:#5f5f5f;stop-opacity:1;"
-         offset="0"
-         id="stop990" />
-    </linearGradient>
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#outer"
-       id="linearGradient4046"
-       x1="31.948792"
-       y1="108.3157"
-       x2="116.88194"
-       y2="108.3157"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.27853069,0,0,0.26507016,19.291867,43.058129)" />
-  </defs>
+     id="defs2" />
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-26.789666,-58.540221)">
+     transform="translate(-60.078821,-75.292634)">
     <rect
-       style="opacity:1;fill:#696969;fill-opacity:1;stroke:url(#linearGradient4046);stroke-width:2.87575625;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers fill stroke"
-       id="rect996"
-       width="23.58268"
-       height="23.582684"
-       x="28.227491"
-       y="59.978046" />
+       style="fill:#787878;stroke:#696969;stroke-width:2.87576;paint-order:markers fill stroke;stroke-opacity:1;fill-opacity:1"
+       id="rect846"
+       width="26.458334"
+       height="26.458334"
+       x="61.516701"
+       y="76.730515" />
   </g>
 </svg>
