@@ -18,7 +18,9 @@ let randomWallsModeTimer = 15000;
 let randomWallsModeLastActive = Date.now();
 //discovery mode
 let discoveryMode = false;
-let discoveredTiles = [];
+let undiscoveredTiles = new Set();
+let undiscoveredTile = new Image();
+undiscoveredTile.src = "assets/tile.svg";
 //player 1 controls (red)
 let p1Forward = "KeyW";
 let p1Backward = "KeyS";
@@ -181,6 +183,7 @@ class Tank {
         switch (direction) {
             //collisions with vertical lines
             case "v":
+                //x_ is to-be this.x
                 ls1 = mcd("v", this.width, this.height, rotation_, this.y, (x_ % (canvas.width/grid))); //wall to the left
                 ls2 = mcd("v", this.width, this.height, rotation_, this.y, (x_ % (canvas.width/grid)-(canvas.width/grid))); //wall to the right
                 if (!ls1 && !ls2) {
@@ -206,6 +209,7 @@ class Tank {
                         }
                         else {
                             this.hittingWall = false;
+                            undiscoveredTiles.delete((Math.floor(x_/(canvas.width/grid))-1) * grid + Math.floor(this.y/(canvas.width/grid)));
                             return true;
                         }
                     }
@@ -227,12 +231,14 @@ class Tank {
                         }
                         else {
                             this.hittingWall = false;
+                            undiscoveredTiles.delete((Math.floor(x_/(canvas.width/grid))+1) * grid + Math.floor(this.y/(canvas.width/grid)));
                             return true;
                         }
                     }
                 }
             //collisions with horizontal lines
             case "h":
+                //x_ is to-be this.y
                 ls1 = mcd("h", this.width, this.height, rotation_, this.x, (x_ % (canvas.height/grid))); // wall above
                 ls2 = mcd("h", this.width, this.height, rotation_, this.x, (x_ % (canvas.height/grid)-(canvas.height/grid))); // wall below
                 if (!ls1 && !ls2) {
@@ -258,6 +264,7 @@ class Tank {
                         }
                         else {
                             this.hittingWall = false;
+                            undiscoveredTiles.delete(Math.floor(this.x/(canvas.width/grid)) * grid + Math.floor(x_/(canvas.width/grid))-1);
                             return true;
                         }
                     }
@@ -279,6 +286,7 @@ class Tank {
                         }
                         else {
                             this.hittingWall = false;
+                            undiscoveredTiles.delete(Math.floor(this.x/(canvas.width/grid)) * grid + Math.floor(x_/(canvas.width/grid))+1);
                             return true;
                         }
                     }
@@ -508,6 +516,7 @@ function restart(won) {
     let redCoords = availableTiles[randInt(0, randInt(0, availableTiles.length-1))];
     redTank.x = redCoords[0]*(canvas.width/grid) + (canvas.width/grid)/2;
     redTank.y = redCoords[1]*(canvas.height/grid) + (canvas.height/grid)/2;
+    undiscoveredTiles.delete(redCoords[0]*grid + redCoords[1]);
     let blueCoords = availableTiles[randInt(0, availableTiles.length-1)];
     redTank.rotation = randInt(0, 360);
     let counter = 0;
@@ -522,6 +531,7 @@ function restart(won) {
         blueTank.x = blueCoords[0]*(canvas.width/grid) + (canvas.width/grid)/2;
         blueTank.y = blueCoords[1]*(canvas.height/grid) + (canvas.height/grid)/2;
         blueTank.rotation = randInt(0, 360);
+        undiscoveredTiles.delete(blueCoords[0]*grid + blueCoords[1]);
     }
 
 }
@@ -548,10 +558,12 @@ function checkTiles(lastTile) {
     }
 }
 
+//generate labyrinth
 function generateLabyrinth() {
     ctxLab.lineCap = "round";
     ctxLab.lineWidth = bulletWidth;
     ctxLab.clearRect(0,0,canvasLab.width, canvasLab.height); // resets hidden labyrinth canvas
+    undiscoveredTiles = new Set();
     hWalls = {};
     hWalls[0] = [];
     hWalls[grid] = [];
@@ -566,6 +578,8 @@ function generateLabyrinth() {
         vWalls[0][i] = true;
         hWalls[i][grid] = true;
         vWalls[grid][i] = true;
+        //needed for discovery mode:
+        undiscoveredTiles.add(i);
     }
 
     for (i=1; i<grid; i++) { // generates random walls and puts them in arrays
@@ -583,6 +597,8 @@ function generateLabyrinth() {
             else {
                 vWalls[i][j] = false;
             }
+            //needed for discovery mode:
+            undiscoveredTiles.add(i*grid + j);
         }
     }
 
@@ -775,7 +791,6 @@ function discoveryModeToggle() {
     else {
         discoveryMode = true;
         restart();
-        discoveredTiles = [];
         document.getElementById('discoveryMode').style.backgroundColor = "blue";
     }
 }
@@ -805,27 +820,39 @@ function renderFrame() {
     ctx.clearRect(0,0, canvas.width, canvas.height); // resets image on canvas
     ctx.drawImage(document.getElementById("labyrinthGen"),0,0); // draws labyrinth
     ctx.fillStyle = "purple";
-    for (i of redTank.bullets) { //draws red bullets
+    //draws red bullets
+    for (i of redTank.bullets) {
         ctx.beginPath();
         ctx.ellipse(i.x, i.y, bulletWidth, bulletWidth, 0, 0, Math.PI * 2);
         ctx.fill();
     }
-    for (i of blueTank.bullets) { //draws red bullets
+    //draws red bullets
+    for (i of blueTank.bullets) {
         ctx.beginPath();
         ctx.ellipse(i.x, i.y, bulletWidth, bulletWidth, 0, 0, Math.PI * 2);
         ctx.fill();
     }
+    //draw red tank
     ctx.translate(redTank.x, redTank.y); // places 0,0 at tank
     ctx.rotate(redTank.rotation*Math.PI/180); // rotates to tank direction
     ctx.drawImage(redTankImg, -redTank.width/2, -redTank.height/2, redTank.width, redTank.height); // draws image
     ctx.setTransform(1, 0, 0, 1, 0, 0); // resets rotation and translate
+    //draw blue tank
     ctx.translate(blueTank.x, blueTank.y); // places 0,0 at tank
     ctx.rotate(blueTank.rotation*Math.PI/180); // rotates to tank direction
     ctx.drawImage(blueTankImg, -blueTank.width/2, -blueTank.height/2, blueTank.width, blueTank.height); // draws image
+    ctx.setTransform(1, 0, 0, 1, 0, 0); // resets rotation and translate
+    //discovery mode
+    if (discoveryMode) {
+        for (x of undiscoveredTiles) {
+            ctx.drawImage(undiscoveredTile, Math.floor(x/grid) * (canvas.width/grid), (x % grid) * (canvas.height/grid), (canvas.width/grid), (canvas.height/grid));
+        }
+    }
+
+    //send "ready for next frame"
     requestAnimationFrame(renderFrame);
 }
-/* 
-currently around 21.5K characters long lol
+/*
 TODO
 -create discovery mode: players can only see tiles they visited 
 
