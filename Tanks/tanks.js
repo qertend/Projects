@@ -876,6 +876,4 @@ function renderFrame() {
 }
 /*
 TODO
--create discovery mode: players can only see tiles they visited 
-
 */
