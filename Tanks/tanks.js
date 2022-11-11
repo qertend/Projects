@@ -889,4 +889,6 @@ TODO
 make it local (on different devices) multiplayer
 "how hard can it be?"
 OH GOD
+
+Try to use setInterval() again
 */
