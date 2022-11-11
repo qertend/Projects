@@ -885,4 +885,8 @@ function renderFrame() {
 }
 /*
 TODO
+
+make it local (on different devices) multiplayer
+"how hard can it be?"
+OH GOD
 */
