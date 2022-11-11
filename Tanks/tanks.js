@@ -214,6 +214,7 @@ class Tank {
                         }
                         else {
                             this.hittingWall = false;
+                            //discovery mode update
                             if (undiscoveredTiles.delete((Math.floor(x_/(canvas.width/grid))-1) * grid + Math.floor(this.y/(canvas.width/grid)))) {
                                 discoveryModeUpdate();
                             }
@@ -238,6 +239,7 @@ class Tank {
                         }
                         else {
                             this.hittingWall = false;
+                            //discovery mode update
                             if (undiscoveredTiles.delete((Math.floor(x_/(canvas.width/grid))+1) * grid + Math.floor(this.y/(canvas.width/grid)))) {
                                 discoveryModeUpdate();
                             }
@@ -273,6 +275,7 @@ class Tank {
                         }
                         else {
                             this.hittingWall = false;
+                            //discovery mode update
                             if (undiscoveredTiles.delete(Math.floor(this.x/(canvas.width/grid)) * grid + Math.floor(x_/(canvas.width/grid))-1)) {
                                 discoveryModeUpdate();
                             }
@@ -297,6 +300,7 @@ class Tank {
                         }
                         else {
                             this.hittingWall = false;
+                            //discovery mode update
                             if (undiscoveredTiles.delete(Math.floor(this.x/(canvas.width/grid)) * grid + Math.floor(x_/(canvas.width/grid))+1)) {
                                 discoveryModeUpdate();
                             }
@@ -832,10 +836,15 @@ function renderFrame() {
         refreshSettings();
     }
     if (randomWallsMode) {
+        //random walls update
         document.getElementById("randomWallsCountdown").innerHTML = Math.floor(randomWallsModeTimer/1000 - (Date.now() - randomWallsModeLastActive)/1000);
         if (Date.now() - randomWallsModeLastActive > randomWallsModeTimer) {
             randomWallsModeLastActive = Date.now();
             generateLabyrinth();
+            //discovery mode compatibility
+            undiscoveredTiles.delete(Math.floor(redTank.x/(canvas.width/grid))*grid + Math.floor(redTank.y/(canvas.height/grid)));
+            undiscoveredTiles.delete(Math.floor(blueTank.x/(canvas.width/grid))*grid + Math.floor(blueTank.y/(canvas.height/grid)));
+            discoveryModeUpdate();
         }
     }
     redTank.update();
