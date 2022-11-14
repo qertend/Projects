@@ -24,3 +24,6 @@ https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Basic_anima
 https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Advanced_animations
 Game menu:
 https://www.w3schools.com/howto/howto_js_curtain_menu.asp
+
+Server basics:
+https://medium.com/@mohammedijas/host-websites-using-node-js-5b3a0832c94c
