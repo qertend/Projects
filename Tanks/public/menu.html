@@ -5,11 +5,37 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tanks</title>
-    <link rel="stylesheet" href="menu.css">
-    <link rel="shortcut icon" href="../assets/cogwheel.svg" type="image/x-icon">
+    <link rel="shortcut icon" href="../assets/favicon.svg" type="image/x-icon">
+    <style>
+        html, body {
+            width: 100%;
+            height: 50%;
+        }
+        #main-div {
+            width: 20%;
+            height: 40%;
+            margin: auto;
+            margin-top: 15%;
+        }
+        h1 {
+            text-align: center;
+            font-size: xx-large;
+        }
+        button {
+            width: 100%;
+            height: 100%;
+            background-color: #5f9ea0;
+            border: 2px solid #008c91;
+            margin: 2px;
+            font-size: xx-large;
+        }
+    </style>
 </head>
 <body>
-    Hello
+    <div id="main-div">
+        <h1>TANKS</h1>
+        <button onclick="document.location = './join.html'">JOIN</button> <br>
+        <button onclick="document.location = './host.html'">HOST</button>
+    </div>
 </body>
-<script src="menu.js"></script>
 </html>
