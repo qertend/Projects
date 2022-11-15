@@ -38,13 +38,23 @@ const server = http.createServer((req, res) => {
             res.setHeader('Content-Type', 'text/javasctipt');
             fs.createReadStream(filePath).pipe(res);
         }
+        else if (req.url == '/favicon.ico') {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'image/x-icon');
+            fs.createReadStream(path.resolve('./assets' + fileUrl)).pipe(res);
+        }
         else {
+            console.log("404 request not found", req.url);
             filePath = path.resolve('./public/404.html');
             res.statusCode = 404;
             res.setHeader('Content-Type', 'text/html');
             fs.createReadStream(filePath).pipe(res);
         }
     }
+    else if (req.method == 'POST') {
+        console.log(req.url);
+    }
+
     else {
         filePath = path.resolve('./public/404.html');
         res.statusCode = 404;
