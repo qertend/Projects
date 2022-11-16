@@ -1,5 +1,9 @@
 use 'connection' event
 check if you can use nested server creation
 
+Display latency with websocket ping?
+
+Check websocket events
+
 learn Node.js
 https://www.tutorialspoint.com/nodejs/nodejs_event_emitter.htm
