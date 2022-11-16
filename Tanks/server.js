@@ -2,9 +2,11 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const url = require('url');
+const wss = require('wss');
+const crypto = require('crypto');
 
 //change to qertend.ddns.net
-const hostname = 'localhost';
+const hostname = '192.168.1.2';
 const port = 3000;
 
 let clients = new Set();
@@ -67,14 +69,11 @@ server.listen(port, hostname, () => {
 });
 
 //on new client connect
-server.on('connection', (stream) => {
-    console.log("new client");
-    clients.add(stream);
-    console.log(clients.size);
-});
-
-//on client disconnect
-server.on('', (stream) => {
-    clients.delete(stream);
-    console.log(clients.size);
+server.on('upgrade', (req, socket, head) => {
+    console.log("hello");
+    if (req.headers['Upgrade'] === 'websocket') {
+        console.log("client wants an upgrade");
+    }
+    let hash = crypto.createHash('sha1').update(req.headers['sec-websocket-key'] + '258EAFA5-E914-47DA-95CA-C5AB0DC85B11', 'binary').digest('base64');
+    socket.write([ 'HTTP/1.1 101 Web Socket Protocol Handshake', 'Upgrade: websocket', 'Connection: Upgrade', `Sec-WebSocket-Accept: ${hash}`].join('\r\n') + '\r\n\r\n');
 });

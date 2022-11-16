@@ -5,6 +5,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script>
+        let socket = new WebSocket("ws://192.168.1.2:3000/");
+        socket.addEventListener('open', () => {
+            console.log("socket open, LETS GOOOOO");
+            socket.send()
+    })
+    </script>
 </head>
 <body>
     <form action="join.html" method="get">

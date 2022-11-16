@@ -8,5 +8,8 @@
     "start": "node server.js"
   },
   "author": "qertend",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "wss": "^3.3.4"
+  }
 }
