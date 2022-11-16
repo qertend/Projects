@@ -27,3 +27,6 @@ https://www.w3schools.com/howto/howto_js_curtain_menu.asp
 
 Server basics:
 https://medium.com/@mohammedijas/host-websites-using-node-js-5b3a0832c94c
+
+websocket Tutorial(idk why its green):
+https://medium.com/hackernoon/implementing-a-websocket-server-with-node-js-d9b78ec5ffa8
