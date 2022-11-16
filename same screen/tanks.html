@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tanks</title>
+    <link rel="stylesheet" href="tanks.css">
+    <link rel="icon" href="assets/favicon.svg">
+</head>
+<body>
+    <div id="gameDiv">
+        <div id="map">
+            <div id="scoreboard">
+                <span id="redScore" class="score " title="Red score">0</span>
+                <span id="randomWallsCountdown" title="Random walls mode countdown">?</span>
+                <span id="blueScore" class="score" title="Blue score">0</span>
+            </div>
+            <canvas id="canvas" width="800" height="800">Looks like this browser doesn't support canvas, try a different one</canvas> <br>
+            <p>Currently only works on <a href="https://www.mozilla.org/en-US/firefox/new/">Mozilla Firefox</a></p>
+        </div>
+        <div id="sidebar">
+            <button onclick="gameSettings()" title="Settings" id="gameSettingsButton" class="sidebarButton"><img class="sidebarIcon" src="assets/cogwheel.svg"></button><br>
+            <button onclick="hardcoreModeToggle()" title="Hardcore mode" id="hardcoreMode" class="sidebarButton"><img class="sidebarIcon" src="assets/Hardocore-mode-icon.png"></button> <br>
+            <button onclick="randomWallsModeToggle()" title="Random walls mode" id="randomWallsMode" class="sidebarButton"><img class="sidebarIcon" src="assets/random-walls-mode-icon.svg"></button> <br>
+            <button onclick="discoveryModeToggle()" title="Discovery mode" id="discoveryMode" class="sidebarButton"><img class="sidebarIcon" src="assets/discovery-mode-icon.svg"></button> <br>
+            <button onclick="restart()" title="Generate new map" id="regen"  class="sidebarButton">Gen map</button> <br>
+            <button onclick="infoMenu()" title="Info" id="infoMenuButton" class="sidebarButton"><img class="sidebarIcon" src="assets/info-icon.svg"></button><br>
+        </div>
+        <div id="gameSettings" class="menu">
+            <h1>Game settings</h1>
+            <button id="closeGameSettings" class="closeMenu" onclick="gameSettings()">X</button>
+            <div style="float: left; width: 50%;">
+                <h3>Speed</h3>
+                <input type="range"id="speed" min="0.05" max="1" step="0.05" value="0.4"><span id="speedOut">0.4</span>
+                <h3>Bullet speed multiplier</h3>
+                <input type="range" id="bulletSpeedMultiplier" min="0.5" max ="4" step="0.05" value="2"><span id="bulletSpeedMultiplierOut">2</span>
+                <h3>Grid</h3>
+                <input type="number" id="grid" min="4" max="32" value="8">
+                <h3>Labyrinth density</h3>
+                <input type="range" id="density" min="0" max="0.9" step="0.05" value="0.4"><span id="densityOut">0.4</span>
+                <h3>Bullet lifetime (in seconds)</h3>
+                <input type="number" id="bulletLifetime" min="0" max="30" value="5">
+                <h3>Max bullets per player</h3>
+                <input type="number" id="maxBulletCount" value="3">
+                <h3>Hardcore: Lives</h3>
+                <input type="range" id="hardcoreLives" min="1" max="5" step="1" value="1"><span id="hardcoreLivesOut">1</span>
+                <h3>Random walls: timer (in seconds)</h3>
+                <input type="range" id="randomWallsTimer" min="1" max="30" step="1" value="15"><span id="randomWallsTimerOut">1</span>
+            </div>
+            <div style="float: inline-start; width: 50%;">
+                <h2>Controls</h2>
+                <div class="controlsDiv">
+                    <h3 >Player 1</h3>
+                    <p class="controlsP">Forward</p><span id="p1Forward" class="controls">KeyW</span> <br>
+                </div>
+                <div class="controlsDiv">
+                    <p class="controlsP">Backward</p><span id="p1Backward" class="controls">KeyS</span> <br>
+                </div>
+                <div class="controlsDiv">
+                    <p class="controlsP">Left</p><span id="p1Left" class="controls">KeyA</span> <br>
+                </div>
+                <div class="controlsDiv">
+                    <p class="controlsP">Right</p><span id="p1Right" class="controls">KeyD</span> <br>
+                </div>
+                <div class="controlsDiv">
+                    <p class="controlsP">Shoot</p><span id="p1Shoot" class="controls">Space</span> <br>
+                </div>
+                <div class="controlsDiv">
+                    <h3 >Player 2</h3>
+                    <p class="controlsP">Forward</p><span id="p2Forward" class="controls">ArrowUp</span> <br>
+                </div>
+                <div class="controlsDiv">
+                    <p class="controlsP">Backward</p><span id="p2Backward" class="controls">ArrowDown</span> <br>
+                </div>
+                <div class="controlsDiv">
+                    <p class="controlsP">Left</p><span id="p2Left" class="controls">ArrowLeft</span> <br>
+                </div>
+                <div class="controlsDiv">
+                    <p class="controlsP">Right</p><span id="p2Right" class="controls">ArrowRight</span> <br>
+                </div>
+                <div class="controlsDiv">
+                    <p class="controlsP">Shoot</p><span id="p2Shoot" class="controls">Numpad0</span> <br>
+                </div>
+            </div>
+            <p>If you can't see the tanks, try <a onclick="location.reload()">reloading the site</a> or try a different browser</p>
+        </div>
+        <div id="infoMenu" class="menu">
+            <button id="closeInfoMenu" class="closeMenu" onclick="infoMenu()">X</button>
+            <h1>Info</h1>
+            <h3>"Features" and good-to-knows</h3>
+            <p class="infoP">Driving into the end of a wall might cause your tank to get stuck on said wall</p> <br>
+            <p class="infoP">Driving forward at low relative bullet speeds while shooting might result in death</p> <br>
+            <h2>Modes</h2>
+            <h3>Hardcore</h3>
+            <p class="infoP">Tanks lose lives (default: 1) when hitting a wall and bullets don't bounce</p> <br>
+            <p class="infoP">Turning while touching a wall will cause instant death regardless of how many lives you have left</p> <br>
+            <h3>Random walls</h3>
+            <p class="infoP">Walls change periodically (default: 15s)</p> <br>
+            <p class="infoP">If a wall appears through your tank or you get stuck in a box, you'll have to wait until it changes again</p>
+            <h3>Discovery</h3>
+            <p class="infoP">You can only see the tiles you've been to</p>
+
+
+        </div>
+    </div>
+    <canvas id="labyrinthGen" class="invisible" width="800" height="800"></canvas>
+    <canvas id="canvasDisc" class="invisible" width="800" height="800"></canvas>
+</body>
+<script src="tanks.js"></script>
+</html>

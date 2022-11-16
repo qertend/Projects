@@ -1,18 +1,21 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const url = require('url');
 
 //change to qertend.ddns.net
 const hostname = 'localhost';
 const port = 3000;
 
+let clients = new Set();
+
 const server = http.createServer((req, res) => {
     console.log('Request for ' + req.url + ' by method ' + req.method);
     if (req.method == 'GET') {
-        var fileUrl;
+        let fileUrl;
         if (req.url == '/') fileUrl = '/menu.html';
-        else fileUrl = req.url;
-        var filePath = path.resolve('./public' + fileUrl);
+        else fileUrl = url.parse(req.url).pathname;
+        let filePath = path.resolve('./public' + fileUrl);
         const fileExt = path.extname(filePath);
         if (fileExt == '.html') {
             fs.exists(filePath, (exists) => {
@@ -51,10 +54,6 @@ const server = http.createServer((req, res) => {
             fs.createReadStream(filePath).pipe(res);
         }
     }
-    else if (req.method == 'POST') {
-        console.log(req.url);
-    }
-
     else {
         filePath = path.resolve('./public/404.html');
         res.statusCode = 404;
@@ -63,7 +62,19 @@ const server = http.createServer((req, res) => {
     }
 });
 
-
 server.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
+});
+
+//on new client connect
+server.on('connection', (stream) => {
+    console.log("new client");
+    clients.add(stream);
+    console.log(clients.size);
+});
+
+//on client disconnect
+server.on('', (stream) => {
+    clients.delete(stream);
+    console.log(clients.size);
 });
