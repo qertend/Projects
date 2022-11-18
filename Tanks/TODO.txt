@@ -1,5 +1,1 @@
-use 'connection' event
-check if you can use nested server creation
-
-learn Node.js
-https://www.tutorialspoint.com/nodejs/nodejs_event_emitter.htm
+recreate Websocket server with wss or ws
