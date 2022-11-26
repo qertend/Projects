@@ -68,12 +68,15 @@ server.listen(port, hostname, () => {
 });
 
 const webserver = ws.createServer(function (conn) {
-        console.log("New connection")
-        conn.on("text", function (str) {
-            console.log("Received "+str)
-            conn.sendText(str.toUpperCase()+"!!!")
-        })
-        conn.on("close", function (code, reason) {
-            console.log("Connection closed")
-        })
-    }).listen(8001)
+    //new client    
+    console.log("New connection");
+    clients.add(conn);
+    conn.on("text", function (str) {
+        console.log("Received "+str);
+        conn.sendText(str.toUpperCase()+"!!!");
+    })
+    conn.on("close", function (code, reason) {
+        clients.delete(conn);
+        console.log("Connection closed");
+    })
+}).listen(8001);
