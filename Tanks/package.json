@@ -11,6 +11,6 @@
   "license": "ISC",
   "dependencies": {
     "nodejs-websocket": "^1.7.2",
-    "wss": "^3.3.4"
+    "wss": "^0.0.2"
   }
 }

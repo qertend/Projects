@@ -3,7 +3,6 @@ const fs = require('fs');
 const path = require('path');
 const url = require('url');
 const ws = require('nodejs-websocket');
-const crypto = require('crypto');
 
 //change to qertend.ddns.net
 const hostname = '192.168.1.2';
