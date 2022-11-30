@@ -5,17 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script>
-        let socket = new WebSocket("ws://192.168.1.2:8001/");
-        socket.addEventListener('open', () => {
-            console.log("socket open, LETS GOOOOO");
-            console.log("prot.", socket.protocol, '\n Bin. type', socket.binaryType);
-            socket.send("test message");
-            socket.addEventListener('message', (event) => {
-                console.log(event.data);
-            });
-    });
-    </script>
 </head>
 <body>
     <form action="join.html" method="get">

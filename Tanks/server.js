@@ -5,7 +5,7 @@ const url = require('url');
 const ws = require('nodejs-websocket');
 
 //change to qertend.ddns.net
-const hostname = '192.168.1.2';
+const hostname = 'localhost';
 const port = 3000;
 
 let clients = new Set();
@@ -42,10 +42,20 @@ const server = http.createServer((req, res) => {
             res.setHeader('Content-Type', 'text/javasctipt');
             fs.createReadStream(filePath).pipe(res);
         }
-        else if (req.url == '/favicon.ico') {
+        else if (fileExt == '.ico') {
             res.statusCode = 200;
             res.setHeader('Content-Type', 'image/x-icon');
-            fs.createReadStream(path.resolve('./assets' + fileUrl)).pipe(res);
+            fs.createReadStream(path.resolve(filePath)).pipe(res);
+        }
+        else if (fileExt == '.png') {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'image/png');
+            fs.createReadStream(path.resolve(filePath)).pipe(res);
+        }
+        else if (fileExt == '.svg') {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'image/svg+xml');
+            fs.createReadStream(path.resolve(filePath)).pipe(res);
         }
         else {
             console.log("404 request not found", req.url);
@@ -70,12 +80,14 @@ server.listen(port, hostname, () => {
 const webserver = ws.createServer(function (conn) {
     //new client    
     console.log("New connection");
+    conn.interval = setInterval(() => {conn.sendText("p1Forward: true;p1Left: false")}, 1000);
     clients.add(conn);
     conn.on("text", function (str) {
         console.log("Received "+str);
         conn.sendText(str.toUpperCase()+"!!!");
     })
     conn.on("close", function (code, reason) {
+        clearInterval(conn.interval);
         clients.delete(conn);
         console.log("Connection closed");
     })
