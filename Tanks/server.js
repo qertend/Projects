@@ -73,14 +73,10 @@ const server = http.createServer((req, res) => {
     }
 });
 
-server.listen(port, hostname, () => {
-    console.log(`Server running at http://${hostname}:${port}/`);
-});
-
 const webserver = ws.createServer(function (conn) {
     //new client    
     console.log("New connection");
-    conn.interval = setInterval(() => {conn.sendText("p1Forward: true;p1Left: false")}, 1000);
+    conn.interval = setInterval(() => {conn.sendText(JSON.stringify({"p1Forward": true, "p1Bacward": false}));}, 1000);
     clients.add(conn);
     conn.on("text", function (str) {
         console.log("Received: '"+str + "'");
@@ -91,4 +87,10 @@ const webserver = ws.createServer(function (conn) {
         clients.delete(conn);
         console.log("Connection closed");
     })
-}).listen(8001);
+});
+
+server.listen(port, hostname, () => {
+    console.log(`Server running at http://${hostname}:${port}/`);
+});
+
+webserver.listen(3001);
