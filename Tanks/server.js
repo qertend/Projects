@@ -27,6 +27,12 @@ const server = http.createServer((req, res) => {
                     fs.createReadStream(filePath).pipe(res);
                     return;
                 }
+                if (fileUrl == 'host.html') {
+
+                }
+                if (fileUrl == 'join.html') {
+
+                }
                 res.statusCode = 200;
                 res.setHeader('Content-Type', 'text/html');
                 fs.createReadStream(filePath).pipe(res);
