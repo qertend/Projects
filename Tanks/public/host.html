@@ -8,25 +8,27 @@
     <title>Lobby Creation</title>
 </head>
 <body>
-    <button onclick="document.location = './menu.html'">Go back</button>
+    <button onclick="document.location = './menu.html'">< Go back</button>
     <div id="gameSettings" class="menu">
         <h1>Create new Lobby</h1>
         <div style="float: left; width: 50%;">
             <h2>Lobby settings</h2>
             <div>
-                <label for="LobbyNameIn">Lobby Name:</label> <br>
-                <input type="text" name="LobbyName" id="LobbyNameIn" maxlength="16" placeholder="Lobby"> <br>
+                <label for="lobbyNameIn">Lobby Name:</label> <br>
+                <input type="text" name="lobbyName" id="lobbyNameIn" maxlength="16"> <br>
             </div>
             <div  title="Leave empty if not needed">
-                <label for="PasswordIn">Password:</label> <br>
-                <input type="password" name="Password" id="PasswordIn">
+                <label for="lasswordIn">Password:</label> <br>
+                <input type="password" name="password" id="passwordIn">
             </div>
             <div>
                 <h3>Modifiers</h3>
                 <input type="checkbox" name="hardcoreMode" id="hardcoreModeCheckbox"> <label for="hardcoreModeCheckbox">Hardcore</label> <br>
                 <input type="checkbox" name="randomWallsMode" id="randomWallsModeCheckbox"> <label for="randomWallsModeCheckbox">Random Walls</label> <br>
-                <input type="checkbox" name="DiscoveryMode" id="DiscoveryModeCheckbox"> <label for="DiscoveryModeCheckbox">Discovery</label>
+                <input type="checkbox" name="discoveryMode" id="discoveryModeCheckbox"> <label for="discoveryModeCheckbox">Discovery</label>
             </div>
+            <br>
+            <button id="create">CREATE</button>
         </div>
         <div style="float: inline-start; width: 50%;">
             <h2>Game settings</h2>
@@ -51,5 +53,10 @@
                 <input type="range" id="randomWallsTimer" min="1" max="30" step="1" value="15"><span id="randomWallsTimerOut">1</span>
             </div>
         </div>
+    </div>
 </body>
+<script>
+    console.log(document.getElementById("lobbyNameIn"));
+    document.getElementById("lobbyNameIn").placeholder = "Lobby#" + Math.floor(Math.random()*8999 +1000);
+</script>
 </html>

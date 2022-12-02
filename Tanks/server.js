@@ -53,11 +53,11 @@ const server = http.createServer((req, res) => {
             res.setHeader('Content-Type', 'image/x-icon');
             fs.createReadStream(path.resolve('./assets/' + fileUrl)).pipe(res);
         }
-        else if (fileExt == '.ico') {
+/*         else if (fileExt == '.ico') {
             res.statusCode = 200;
             res.setHeader('Content-Type', 'image/x-icon');
             fs.createReadStream(path.resolve(filePath)).pipe(res);
-        }
+        } */
         else if (fileExt == '.png') {
             res.statusCode = 200;
             res.setHeader('Content-Type', 'image/png');
