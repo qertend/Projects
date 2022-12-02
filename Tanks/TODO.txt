@@ -1,2 +1,2 @@
-recreate Websocket server with wss or ws
-
+Change localhost to "qertend.ddns.net" for worldwide access
+Switch to wss instead of unsafe ws
