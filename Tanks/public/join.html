@@ -4,21 +4,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="./assets/favicon.ico">
     <title>Document</title>
-    <script>
-        let socket = new WebSocket("ws://192.168.1.2:8001/");
-        socket.addEventListener('open', () => {
-            console.log("socket open, LETS GOOOOO");
-            console.log("prot.", socket.protocol, '\n Bin. type', socket.binaryType);
-            socket.send("test message");
-            socket.addEventListener('message', (event) => {
-                console.log(event.data);
-            });
-    });
-    </script>
 </head>
 <body>
-    <form action="join.html" method="get">
+    <form action="tanks.html" method="get">
         <label for="lobbyCode">Lobby Code</label> <br>
         <input type="text" id="lobbyCode" name="lobby">
         <input type="submit" value="Join">

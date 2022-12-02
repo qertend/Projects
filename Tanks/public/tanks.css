@@ -1,0 +1,122 @@
+#canvas {
+    border:1px solid gray;
+    background-color: #808080;
+}
+.invisible {
+    display: none;
+}
+#scoreboard {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: auto;
+}
+#redScore {
+    color: red;
+    font-size: xx-large;
+    text-align: left;
+}
+#randomWallsCountdown {
+    display: inline-block;
+    margin: auto;
+    font-size: xx-large;
+}
+#blueScore {
+    color: blue;
+    font-size: xx-large;
+    text-align: right;
+}
+#gameDiv {
+    width: fit-content;
+    margin: auto;
+    padding: 10px;
+}
+#map {
+    float: left;
+}
+#sidebar {
+    width: fit-content;
+    float: inline-start;
+    margin: 10px;
+    margin-top: 38px;
+    text-align: center;
+    background-color: white;
+}
+.sidebarIcon {
+    margin: 2px;
+    width: 25px;
+    height: 25px;
+}
+.sidebarButton {
+    background-color: lightgray;
+    margin-bottom: 5px;
+}
+#regen {
+    width: 41px;
+    height: 38px;
+}
+.menu {
+    position: absolute;
+    margin: auto;
+    top: 5%;
+    z-index: 1;
+    width: 40%;
+    padding: 10px;
+    padding-left: 30px;
+    padding-right: 30px;
+    border: 2px solid black;
+    border-radius: 5px;
+    background-color: #f5f5f5;
+}
+.closeMenu {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+#gameSettings {
+    display: none;
+}
+.controlsDiv {
+    margin: auto;
+    margin-top: 10px;
+    width: 60%;
+}
+.controlsP {
+    margin: 2px;
+    width: fit-content;
+    float: left;
+}
+.controls {
+    margin: 2px;
+    text-align: center;
+    float: inline-end;
+    width: 40%;
+    border: 2px solid gray;
+    border-radius: 5px;
+}
+.controls:hover {
+    cursor: pointer;
+}
+#infoMenu {
+    display: none;
+}
+.infoP {
+    margin-top: 8px;
+    margin-bottom: 0;
+}
+h1 {
+    text-align: center;
+    margin-top: 3px;
+}
+h2 {
+    text-align: center;
+}
+h3 {
+    text-decoration: underline;
+}
+a {
+    color: blue;
+    text-decoration: underline;
+}
+a:hover {
+    cursor: pointer;
+}
