@@ -33,30 +33,27 @@
         <div style="float: inline-start; width: 50%;">
             <h2>Game settings</h2>
             <h3>Speed</h3>
-            <input type="range"id="speed" min="0.05" max="1" step="0.05" value="0.4"><span id="speedOut">0.4</span>
+            <input class="slider" type="range" id="speed" min="0.05" max="1" step="0.05" value="0.4"><span id="speedOut">0.4</span>
             <h3>Bullet speed multiplier</h3>
-            <input type="range" id="bulletSpeedMultiplier" min="0.5" max ="4" step="0.05" value="2"><span id="bulletSpeedMultiplierOut">2</span>
+            <input class="slider" type="range" id="bulletSpeedMultiplier" min="0.5" max ="4" step="0.05" value="2"><span id="bulletSpeedMultiplierOut">2</span>
             <h3>Grid</h3>
             <input type="number" id="grid" min="4" max="32" value="8">
             <h3>Labyrinth density</h3>
-            <input type="range" id="density" min="0" max="0.9" step="0.05" value="0.4"><span id="densityOut">0.4</span>
+            <input class="slider" type="range" id="density" min="0" max="0.9" step="0.05" value="0.4"><span id="densityOut">0.4</span>
             <h3>Bullet lifetime (in seconds)</h3>
             <input type="number" id="bulletLifetime" min="0" max="30" value="5">
             <h3>Max bullets per player</h3>
             <input type="number" id="maxBulletCount" value="3">
             <div id="hardcoreMode">
                 <h3>Hardcore: Lives</h3>
-                <input type="range" id="hardcoreLives" min="1" max="5" step="1" value="1"><span id="hardcoreLivesOut">1</span>
+                <input class="slider" type="range" id="hardcoreLives" min="1" max="5" step="1" value="1"><span id="hardcoreLivesOut">1</span>
             </div>
             <div id="randomWallsMode">
                 <h3>Random walls: timer (in seconds)</h3>
-                <input type="range" id="randomWallsTimer" min="1" max="30" step="1" value="15"><span id="randomWallsTimerOut">1</span>
+                <input class="slider" type="range" id="randomWallsTimer" min="1" max="30" step="1" value="15"><span id="randomWallsTimerOut">1</span>
             </div>
         </div>
     </div>
 </body>
-<script>
-    console.log(document.getElementById("lobbyNameIn"));
-    document.getElementById("lobbyNameIn").placeholder = "Lobby#" + Math.floor(Math.random()*8999 +1000);
-</script>
+<script src="host.js"></script>
 </html>

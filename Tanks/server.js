@@ -27,10 +27,12 @@ const server = http.createServer((req, res) => {
                     fs.createReadStream(filePath).pipe(res);
                     return;
                 }
-                if (fileUrl == 'host.html') {
-
+                //send cookie to identify host client [not tested]
+                if (fileUrl == '/host.html') {
+                    console.log("host.html");
+                    res.setHeader('Set-Cookie', ['id=client1111']);
                 }
-                if (fileUrl == 'join.html') {
+                if (fileUrl == '/join.html') {
 
                 }
                 res.statusCode = 200;
