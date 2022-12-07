@@ -83,7 +83,7 @@ const server = http.createServer((req, res) => {
 
 const webserver = ws.createServer(function (conn) {
     //new client    
-    console.log("New connection");
+    console.log("New connection\n", conn);
     //send data at 100Hz
     conn.interval = setInterval(() => {
         //change {type: "pos", p1Bacward: false} to non-static value

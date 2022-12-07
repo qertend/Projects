@@ -1,4 +1,4 @@
-document.getElementById("lobbyNameIn").placeholder = "Lobby#" + Math.floor(Math.random()*8999 +1000);
+document.getElementById("lobbyNameIn").value = "Lobby#" + Math.floor(Math.random()*8999 +1000);
 
 function refreshSettings() {
     //speed

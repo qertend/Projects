@@ -12,23 +12,25 @@
     <div id="gameSettings" class="menu">
         <h1>Create new Lobby</h1>
         <div style="float: left; width: 50%;">
-            <h2>Lobby settings</h2>
-            <div>
-                <label for="lobbyNameIn">Lobby Name:</label> <br>
-                <input type="text" name="lobbyName" id="lobbyNameIn" maxlength="16"> <br>
-            </div>
-            <div  title="Leave empty if not needed">
-                <label for="lasswordIn">Password:</label> <br>
-                <input type="password" name="password" id="passwordIn">
-            </div>
-            <div>
-                <h3>Modifiers</h3>
-                <input type="checkbox" name="hardcoreMode" id="hardcoreModeCheckbox"> <label for="hardcoreModeCheckbox">Hardcore</label> <br>
-                <input type="checkbox" name="randomWallsMode" id="randomWallsModeCheckbox"> <label for="randomWallsModeCheckbox">Random Walls</label> <br>
-                <input type="checkbox" name="discoveryMode" id="discoveryModeCheckbox"> <label for="discoveryModeCheckbox">Discovery</label>
-            </div>
-            <br>
-            <button id="create">CREATE</button>
+            <form action="tanks.html" method="get">
+                <h2>Lobby settings</h2>
+                <div>
+                    <label for="lobbyNameIn">Lobby Name:</label> <br>
+                    <input type="text" name="lobbyName" id="lobbyNameIn" maxlength="16" required="true"> <br>
+                </div>
+                <div  title="Leave empty if not needed">
+                    <label for="lasswordIn">Password(optional):</label> <br>
+                    <input type="password" name="password" id="passwordIn">
+                </div>
+                <div>
+                    <h3>Modifiers</h3>
+                    <input type="checkbox" name="hardcoreMode" id="hardcoreModeCheckbox"> <label for="hardcoreModeCheckbox">Hardcore</label> <br>
+                    <input type="checkbox" name="randomWallsMode" id="randomWallsModeCheckbox"> <label for="randomWallsModeCheckbox">Random Walls</label> <br>
+                    <input type="checkbox" name="discoveryMode" id="discoveryModeCheckbox"> <label for="discoveryModeCheckbox">Discovery</label>
+                </div>
+                <br>
+                <button id="create">CREATE</button>
+            </form>
         </div>
         <div style="float: inline-start; width: 50%;">
             <h2>Game settings</h2>
