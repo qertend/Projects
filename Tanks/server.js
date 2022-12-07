@@ -55,11 +55,6 @@ const server = http.createServer((req, res) => {
             res.setHeader('Content-Type', 'image/x-icon');
             fs.createReadStream(path.resolve('./assets/' + fileUrl)).pipe(res);
         }
-/*         else if (fileExt == '.ico') {
-            res.statusCode = 200;
-            res.setHeader('Content-Type', 'image/x-icon');
-            fs.createReadStream(path.resolve(filePath)).pipe(res);
-        } */
         else if (fileExt == '.png') {
             res.statusCode = 200;
             res.setHeader('Content-Type', 'image/png');
@@ -89,17 +84,22 @@ const server = http.createServer((req, res) => {
 const webserver = ws.createServer(function (conn) {
     //new client    
     console.log("New connection");
-    conn.interval = setInterval(() => {conn.sendText(JSON.stringify({"p1Forward": true, "p1Bacward": false}));}, 1000);
+    //send data at 100Hz
+    conn.interval = setInterval(() => {
+        //change {type: "pos", p1Bacward: false} to non-static value
+        conn.sendText(JSON.stringify({type: "pos", p1Bacward: false}));
+    }, 10);
     clients.add(conn);
-    conn.on("text", function (str) {
-        console.log("Received: '"+str + "'");
-        conn.sendText(str.toUpperCase()+"!!!");
-    })
+    conn.on("text", function (msg) {
+        data = JSON.parse(msg);
+        console.log("Received: '"+data.msg + "'");
+        conn.sendText(data.msg.toUpperCase()+"!!!");
+    });
     conn.on("close", function (code, reason) {
         clearInterval(conn.interval);
         clients.delete(conn);
         console.log("Connection closed");
-    })
+    });
 });
 
 server.listen(port, hostname, () => {

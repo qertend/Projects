@@ -1,7 +1,10 @@
 const ws = new WebSocket('ws://localhost:3001');
 ws.onopen = () => {
-    ws.send("connection open");
-    ws.addEventListener("message", (msg) => {console.log(JSON.parse(msg.data));});
+    ws.send(JSON.stringify({msg: "hello"}));
+    ws.addEventListener("message", (msg) => {
+        const data = JSON.parse(msg.data);
+        console.log(data);
+    });
 };
 
 
