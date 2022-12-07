@@ -1,5 +1,6 @@
 const ws = new WebSocket('ws://localhost:3001');
 ws.onopen = () => {
+    
     ws.send(JSON.stringify({msg: "hello"}));
     ws.addEventListener("message", (msg) => {
         const data = JSON.parse(msg.data);
